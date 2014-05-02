@@ -1,0 +1,147 @@
+<!doctype html>
+<html dir="ltr" lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Créer un bundle - Wot</title>
+<link rel="stylesheet" media="all" href="wot.css">
+<body>
+<div class="global-wrapper">
+<header class="site-header"><div class="area-wrapper">
+	<a href="./">
+		<h1>Wot <small>[TypeScript Framework]</small></h1>
+	</a>
+	<p class="slogan">Well-Organized TypeScript.</p>
+</div></header>
+<nav class="site-menu"><div class="area-wrapper">
+	<ul class="menu-l0">
+		<li class="menu-l0-li">
+			<a class="menu-l0-li-button" href="debuter.html">Débuter</a>
+			<ul class="menu-l1">
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="application.html">Créer une application</a>
+				</li>
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="bundle.html">Créer un bundle</a>
+				</li>
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="component.html">Créer un composant</a>
+				</li>
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="service.html">Créer un service</a>
+				</li>
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="library.html">Inclure une <em>library</em></a>
+				</li>
+			</ul>
+		</li>
+		<li class="menu-l0-li">
+			<a class="menu-l0-li-button" href="extensions-wotext.html">Extensions wotext</a>
+			<ul class="menu-l1">
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="dataset.html">Les <em>datasets</em></a>
+				</li>
+			</ul>
+		</li>
+		<li class="menu-l0-li">
+			<a class="menu-l0-li-button" href="telecharger.html">Télécharger</a>
+			<ul class="menu-l1">
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="https://github.com/tarh/wot/releases/" target="_blank">Télécharger une release</a>
+				</li>
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="https://github.com/tarh/wot/" target="_blank">Contribuer sur GitHub</a>
+				</li>
+			</ul>
+		</li>
+	</ul>
+</div></nav>
+<article class="page-art">
+	<header class="art-header"><div class="area-wrapper">
+		<h1>Créer un bundle</h1>
+	</div></header>
+	<div class="area-wrapper">
+	<div class="art-body readable-art-body with-text-links">
+<p>Un bundle est un répertoire qui regroupe des <a href="service.html">services</a>, des <a href="component.html">composants</a> et des <a href="library.html">bibliothèques de programmation</a>. Il peut en outre
+	contenir d'autres bundles.</p>
+<p>Un <em>bundle de premier niveau</em> a l'application pour parent. Il peut alors contenir une classe « Main » servant de point
+	de départ à l'application. Les bundles de premier niveaux sont les unités de déploiement : l'ensemble des codes
+	JavaScript, HTML et CSS qu'ils contiennent seront chargés en bloc.</p>
+<p>En mode « w » (travail en cours, c'est-à-dire non déployé) le répertoire du bundle est suffixé par <code>.w</code>. Le répertoire du bundle « todos »
+	est alors : <code>todos.w/</code>.</p>
+<p>La configuration du bundle est décrite dans un fichier « bundle.json » situé dans le répertoire du bundle en mode développement
+	(« w »). Voici celui du bundle « todos » :</p>
+
+<pre><code>{
+	"wot": "0.5",
+	"encoding": "utf8",
+	"preload": ["ext"],
+	"embed": ["todos_List.c", "todos_Item.c"],
+	"requireLib": ["jQuery"],
+	"script": "Main.js",
+	"main": "todos.Main"
+}
+</code></pre>
+<p>Les ordonnancements des listes <code>preload</code>, <code>embed</code> et <code>requireLib</code> sont sans importance.</p>
+<p>L'élément <code>preload</code> liste les bundles de premier niveau à charger au préalable. Ici, tous les scripts présents dans
+	le bundle « todos » peuvent considérer que le bundle « ext » est déjà chargé.</p>
+<p>L'élément <code>embed</code> liste des noms de sous-répertoires : les <em>services</em> (suffixés par <code>.s</code>), les
+	<em>composants</em> (suffixés par <code>.c</code>), les <em>libraries</em> (suffixées par <code>.l</code>) et les sous-bundles
+	(suffixés par <code>.w</code> puisqu'ils sont eux-même en mode « w »).</p>
+<p>L'élément <code>requireLib</code> donne la liste des <em>libraries</em> à rendre disponible avant l'exécution du contenu du
+	bundle. Elles sont listées par leurs noms.</p>
+<h2>Cas d'un bundle exécutable</h2>
+<p>L'élément <code>script</code> (optionnel en cas d'absence d'élément <code>main</code>) mentionne le fichier JavaScript
+	« principal » du bundle, il contient une classe qui implémente <code>wot.BundleMain</code>.</p>
+<p>Le nom de la classe à exécuter est mentionné dans l'élément <code>main</code> (optionnel). Le constructeur reçoit en paramètres
+	le contexte général de l'application ainsi que l'URL du répertoire du bundle.</p>
+<h2>Le code TypeScript du bundle</h2>
+<p>Voici le code du fichier « todos.w/Main.ts » :</p>
+<pre><code>/// &lt;reference path="jquery.d.ts" /&gt;
+/// &lt;reference path="wot.d.ts" /&gt;
+/// &lt;reference path='todos_List.c/List.ts' /&gt;
+module todos {
+	'use strict';
+	export class Main implements wot.BundleMain {
+		constructor(private ac: wot.ApplicationContext) {
+		}
+		public start(element) {
+			var st = new wotext.helpers.<strong>GenericLiveState</strong>(true);
+			var list = &lt;todos.List&gt;this.ac.<strong>createComponent</strong>('todos.List', {'title': 'My First List', 'count': 3}, st);
+			$(element).append(list.getElement());
+		}
+	}
+}</code></pre>
+<p>Une seule instance de la classe « todos.Main » sera créée. Le constructeur n'est appelé qu'une seule fois, il est donc
+	l'endroit idéal pour les configurations globales des bibliothèques de programmation.</p>
+<p>Ensuite la méthode <code>start</code> est appelée autant de fois qu'un attribut <code>data-wot-exec</code> apparait dans le
+	code HTML. L'élément HTML est passé en paramètre.</p>
+<p>L'instance de <code>GenericLiveState</code> donne un état d'affichage aux composants. Grâce à lui le composant peut savoir s'il
+	est situé dans une partie de l'application affichée ou non. La méthode <code>createComponent</code> crée une instance du
+	composant <code>todos.List</code> à la ligne suivante.</p>
+<h2>À savoir</h2>
+<ol>
+<li>La notion de sous-bundle est un moyen pratique d'organiser les différents éléments. Lors du chargement, les sous-bundles sont
+	tous fusionnés dans leur bundle de premier niveau. La notion de sous-bundle n'est pas accessible depuis les différents contextes
+	d'exécution.</li>
+<li>Une fois qu'un bundle est chargé, les différents éléments à l'intérieur (<em>libraries</em>, services, composants) sont tous
+	accessibles par tous les autres éléments des autres bundles. Autrement dit, un composant n'est lié à son bundle que pour le
+	chargement. Ensuite il est utilisable de la même manière partout.</li>
+<li>Tous les éléments d'une application doivent partager le même encodage. Les encodages mentionnés dans les fichiers de
+	configuration servent à vérifier la cohérence avec ceux des autres éléments du bundle. Il ne permettent pas d'inclure des
+	éléments encodés de différentes manières.</li>
+</ol>
+<h2>Étapes suivantes</h2>
+<p>→ <a href="component.html">Créer un composant</a>.</p>
+<p>→ <a href="service.html">Créer un service</a>.</p>
+<p>→ <a href="library.html">Inclure une <em>library</em></a>.</p>
+</div>
+	</div>
+</article>
+<footer class="site-footer with-text-links"><div class="area-wrapper">
+	<p>NB. Lorsque Wot passera en version 1.0, la documentation de référence passera en anglais.</p>
+	<p>Wot et le contenu de ce site sont dans le domaine public ou sous licence
+		<a href="http://creativecommons.org/publicdomain/zero/1.0/" target="_blank">CC0</a> au choix.</p>
+	<p>Wot est développé par Tarh au Bénin. Besoin d'aide ? C'est <a href="https://www.facebook.com/ta.rh.79" target="_blank">sur Facebook</a>.</p>
+</div></footer>
+</div>

@@ -1,0 +1,137 @@
+<!doctype html>
+<html dir="ltr" lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Extension wotext - Les datasets - Wot</title>
+<link rel="stylesheet" media="all" href="wot.css">
+<body>
+<div class="global-wrapper">
+<header class="site-header"><div class="area-wrapper">
+	<a href="./">
+		<h1>Wot <small>[TypeScript Framework]</small></h1>
+	</a>
+	<p class="slogan">Well-Organized TypeScript.</p>
+</div></header>
+<nav class="site-menu"><div class="area-wrapper">
+	<ul class="menu-l0">
+		<li class="menu-l0-li">
+			<a class="menu-l0-li-button" href="debuter.html">Débuter</a>
+			<ul class="menu-l1">
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="application.html">Créer une application</a>
+				</li>
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="bundle.html">Créer un bundle</a>
+				</li>
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="component.html">Créer un composant</a>
+				</li>
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="service.html">Créer un service</a>
+				</li>
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="library.html">Inclure une <em>library</em></a>
+				</li>
+			</ul>
+		</li>
+		<li class="menu-l0-li">
+			<a class="menu-l0-li-button" href="extensions-wotext.html">Extensions wotext</a>
+			<ul class="menu-l1">
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="dataset.html">Les <em>datasets</em></a>
+				</li>
+			</ul>
+		</li>
+		<li class="menu-l0-li">
+			<a class="menu-l0-li-button" href="telecharger.html">Télécharger</a>
+			<ul class="menu-l1">
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="https://github.com/tarh/wot/releases/" target="_blank">Télécharger une release</a>
+				</li>
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="https://github.com/tarh/wot/" target="_blank">Contribuer sur GitHub</a>
+				</li>
+			</ul>
+		</li>
+	</ul>
+</div></nav>
+<article class="page-art">
+	<header class="art-header"><div class="area-wrapper">
+		<h1>Extension <em>wotext</em> - Les <em>datasets</em></h1>
+	</div></header>
+	<div class="area-wrapper">
+	<div class="art-body readable-art-body with-text-links">
+<p>Un outil générique est livré dans les extensions « wotext » : la classe <code>wotext.Dataset</code>. Ses instances peuvent
+	servir de modèle, faire partie du modèle ou jouer le rôle de « modèle de vue ».</p>
+<p>Voici comment créer un <em>dataset</em> :</p>
+<pre><code>	var d = wotext.createDataset({
+		'people': [
+			{
+				'name': 'John'
+				'age': 34
+			},
+			{
+				'name': 'Paul'
+				'age': 31
+			}
+		]
+	});
+</code></pre>
+<p>Le paramètre contient les données initiales : un objet ou un tableau. Cet objet doit être « compatible JSON » et donc ne
+	contenir que des chaines de caractères, des nombres, des objets et des tableaux. Les données initiales confiées au
+	<em>dataset</em> ne doivent jamais être ensuite manipulées directement car celui-ci ne s'attend pas à ce qu'elles puissent être
+	modifiées par l'extérieur.</p>
+<p>Ensuite diverses méthodes sont fournies. Par exemple :</p>
+<pre><code>
+	console.log(d.get('people[0].name')); // John
+	console.log(d.get('{people}[0]{name}')); // John (par la deuxième notation)
+	var paul = d.get('people[1]')); // returns a sub-dataset
+	console.log(paul.get('age')); // 31
+	paul.put('age', 40);
+	console.log(d.get('people[1].age')); // 40
+</code></pre>
+<p>Créer des « propriétés calculées » :</p>
+<pre><code>
+	d.putComputedProperty('ageAvg', function (d: wot.RDataset) {
+		var tot = 0, count = 0;
+		d.each('people', function (p: wot.RDataset) {
+			tot += p.get('age');
+			++count;
+		});
+		return count > 0 ? tot / count : null;
+	});
+	console.log(d.get('ageAvg')); // 37
+</code></pre>
+<p>Faire des requêtes :</p>
+<pre><code>
+	var list = d.query({
+		'select': 'people[]',
+		'whereDescendantExists': {
+			'type': 'string',
+			'contains': 'Jo'
+		}
+	}).toList(); // returns a list that contains a dataset on « John »
+</code></pre>
+<p>La méthode <code>toReadOnly</code> fournit le même <em>dataset</em> mais en lecture-seule (un <code>wot.RDataset</code>.</p>
+<p>Il est en outre possible de s'abonner aux modifications grâce aux méthodes <code>addTopChangeListener</code> (des changements
+	au niveau des enfants du dataset), <code>addDeepChangeListener</code> (des changements dans les descendants de deuxième niveau
+	et plus), et <code>addChangeListener</code> (regroupe les deux autres).</p>
+<h2>À propos des abonnements aux <em>datasets</em></h2>
+<p>Chaque abonnement est une fuite mémoire potentielle. En outre les codes de vos <em>listeners</em> sont difficiles à tester et
+	dans le cas de nombreux abonnements sur diverses parties des données, les ordres d'appels ne sont pas maitrisés.</p>
+<p>Prenons le cas d'un rafraichissement des données en provenance du serveur : la modification du <em>dataset</em> n'a qu'une
+	seule origine et arrive peu souvent. Si l'objectif est seulement de maintenir l'affichage à jour lorsque des données sont
+	chargées depuis le serveur, peut-être vaudrait-il mieux que vos composants implémentent tous la méthode <code>reset()</code>
+	sans s'abonner au <em>dataset</em>.</p>
+
+</div>
+	</div>
+</article>
+<footer class="site-footer with-text-links"><div class="area-wrapper">
+	<p>NB. Lorsque Wot passera en version 1.0, la documentation de référence passera en anglais.</p>
+	<p>Wot et le contenu de ce site sont dans le domaine public ou sous licence
+		<a href="http://creativecommons.org/publicdomain/zero/1.0/" target="_blank">CC0</a> au choix.</p>
+	<p>Wot est développé par Tarh au Bénin. Besoin d'aide ? C'est <a href="https://www.facebook.com/ta.rh.79" target="_blank">sur Facebook</a>.</p>
+</div></footer>
+</div>

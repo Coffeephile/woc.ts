@@ -1,0 +1,95 @@
+<!doctype html>
+<html dir="ltr" lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inclure une library - Wot</title>
+<link rel="stylesheet" media="all" href="wot.css">
+<body>
+<div class="global-wrapper">
+<header class="site-header"><div class="area-wrapper">
+	<a href="./">
+		<h1>Wot <small>[TypeScript Framework]</small></h1>
+	</a>
+	<p class="slogan">Well-Organized TypeScript.</p>
+</div></header>
+<nav class="site-menu"><div class="area-wrapper">
+	<ul class="menu-l0">
+		<li class="menu-l0-li">
+			<a class="menu-l0-li-button" href="debuter.html">Débuter</a>
+			<ul class="menu-l1">
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="application.html">Créer une application</a>
+				</li>
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="bundle.html">Créer un bundle</a>
+				</li>
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="component.html">Créer un composant</a>
+				</li>
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="service.html">Créer un service</a>
+				</li>
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="library.html">Inclure une <em>library</em></a>
+				</li>
+			</ul>
+		</li>
+		<li class="menu-l0-li">
+			<a class="menu-l0-li-button" href="extensions-wotext.html">Extensions wotext</a>
+			<ul class="menu-l1">
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="dataset.html">Les <em>datasets</em></a>
+				</li>
+			</ul>
+		</li>
+		<li class="menu-l0-li">
+			<a class="menu-l0-li-button" href="telecharger.html">Télécharger</a>
+			<ul class="menu-l1">
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="https://github.com/tarh/wot/releases/" target="_blank">Télécharger une release</a>
+				</li>
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="https://github.com/tarh/wot/" target="_blank">Contribuer sur GitHub</a>
+				</li>
+			</ul>
+		</li>
+	</ul>
+</div></nav>
+<article class="page-art">
+	<header class="art-header"><div class="area-wrapper">
+		<h1>Inclure une <em>library</em></h1>
+	</div></header>
+	<div class="area-wrapper">
+	<div class="art-body readable-art-body with-text-links">
+<p>Une <em>library</em> encapsule du code JavaScript, des CSS et d'éventuelles autres ressources (des images…) dans un répertoire
+	suffixé par <code>.l</code> et dont le parent est un bundle.</p>
+<p>Elle est le moyen idéal de rendre disponible une classe TypeScript auprès de différents composants et services,
+	ou bien d'inclure des fichiers JavaScript externes : jQuery, jQueryUI, Modernizr, etc.</p>
+<p>Une <em>library</em> n'est donc pas forcément écrite en TypeScript. L'encapsulation d'une <em>library</em> externe dans un
+	bundle n'est pas non plus obligatoire. Une fois que le bundle dont elle fait partie est chargé, n'importe quelle partie de
+	l'application peut rendre disponible la <em>library</em> via la méthode <code>requireLib</code> (cela lance l'interprétation du
+	code s'il n'a pas déjà été interprété). Ou bien, si un élément <code>requireLib</code> est présent dans un fichier de
+	configuration, le noyau WOT appelle automatiquement la méthode <code>requireLib</code>.</p>
+<p>La configuration se trouve dans un fichier « lib.json ». Voici le contenu du fichier « jQueryUI.l/lib.json » :</p>
+
+<pre><code>{
+	"wot": "0.5",
+	"requireLib": ["jQuery"],
+	"script": ["jquery-ui-1.10.4.custom.min.js", "datepicker-fr.js"],
+	"css": "jquery-ui-1.10.4.custom.min.css",
+	"name": "jQueryUI"
+}
+</code></pre>
+<p>Note commune pour les composants, services et libraries : les dépendances envers les <em>libraries</em> sont mentionnées dans
+	un élément <code>requireLib</code> (optionnel).</p>
+</div>
+	</div>
+</article>
+<footer class="site-footer with-text-links"><div class="area-wrapper">
+	<p>NB. Lorsque Wot passera en version 1.0, la documentation de référence passera en anglais.</p>
+	<p>Wot et le contenu de ce site sont dans le domaine public ou sous licence
+		<a href="http://creativecommons.org/publicdomain/zero/1.0/" target="_blank">CC0</a> au choix.</p>
+	<p>Wot est développé par Tarh au Bénin. Besoin d'aide ? C'est <a href="https://www.facebook.com/ta.rh.79" target="_blank">sur Facebook</a>.</p>
+</div></footer>
+</div>

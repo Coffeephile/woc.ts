@@ -1,0 +1,116 @@
+<!doctype html>
+<html dir="ltr" lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wot - TypeScript Framework</title>
+<link rel="stylesheet" media="all" href="wot.css">
+<body>
+<div class="global-wrapper">
+<header class="site-header"><div class="area-wrapper">
+	<a href="./">
+		<h1>Wot  <small>[TypeScript Framework]</small></h1>
+	</a>
+	<p class="slogan">Well-Organized TypeScript.</p>
+</div></header>
+<nav class="site-menu"><div class="area-wrapper">
+	<ul class="menu-l0">
+		<li class="menu-l0-li">
+			<a class="menu-l0-li-button" href="debuter.html">Débuter</a>
+			<ul class="menu-l1">
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="application.html">Créer une application</a>
+				</li>
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="bundle.html">Créer un bundle</a>
+				</li>
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="component.html">Créer un composant</a>
+				</li>
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="service.html">Créer un service</a>
+				</li>
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="library.html">Inclure une <em>library</em></a>
+				</li>
+			</ul>
+		</li>
+		<li class="menu-l0-li">
+			<a class="menu-l0-li-button" href="extensions-wotext.html">Extensions wotext</a>
+			<ul class="menu-l1">
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="dataset.html">Les <em>datasets</em></a>
+				</li>
+			</ul>
+		</li>
+		<li class="menu-l0-li">
+			<a class="menu-l0-li-button" href="telecharger.html">Télécharger</a>
+			<ul class="menu-l1">
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="https://github.com/tarh/wot/releases/" target="_blank">Télécharger une release</a>
+				</li>
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="https://github.com/tarh/wot/" target="_blank">Contribuer sur GitHub</a>
+				</li>
+			</ul>
+		</li>
+	</ul>
+</div></nav>
+<article class="page-art">
+	<div class="art-body beautiful-art-body with-text-links">
+	<div class="h2-area"><h2 class="area-wrapper">Qu'est-ce que Wot ?</h2></div>
+	<div class="area-wrapper">
+	<p>Wot (Well-Organized TypeScript) est un framework pour <a href="http://www.typescriptlang.org/" target="_blank">TypeScript</a>.</p>
+	<p>Wot est destiné aux développeurs qui construisent leurs applications « lentement et surement ». Wot en effet ne fait
+		aucune magie : pas de langage de <em>templates</em> omnipotent, encore moins d'affreux <em>dirty checking</em> à la manière
+		<em>Angular.js</em>. Élaborer un composant avec Wot prend plus de temps que de saisir quelques mots-clés dans un système de
+		templates. En revanche, une fois le composant réalisé, il est réutilisable.
+	</p>
+	<p>Actuellement 90 Ko minifié (noyau plus principales extensions).</p>
+	</div>
+	<div class="h2-area"><h2 class="area-wrapper">Sous le capot</h2></div>
+	<div class="area-wrapper">
+	<h3>Une architecture MVC</h3>
+	<ul>
+		<li>Le <strong>modèle</strong> : Le développeur construit son modèle comme il le souhaite, par exemple en l'encapsulant dans un
+			service. Ou bien il peut utiliser un <a href="dataset.html">dataset</a> (une sorte de « modèle générique »).</li>
+		<li>La <strong>vue</strong> est faite de <a href="component.html"><em>composants</em></a>. Un composant est un répertoire qui regroupe en particulier du
+			code JavaScript, HTML et CSS. Il peut utiliser d'autres composants et des <em>library</em>. Les composants vont du plus
+			petit (un bouton) au plus grand (tout l'écran). L'encapsulation des composants est une grande force de Wot, elle devrait
+			permettre de toujours développer à petite échelle même dans des projets immenses.</li>
+		<li>Le <strong>contrôleur</strong> : Le développeur crée des <a href="service.html"><em>services</em></a>. Un service est un objet unique accessible
+			depuis tout le projet.</li>
+	</ul>
+	<h3>Focus performance</h3>
+	<p>Durant la phase de développement les ressources JavaScript et CSS sont toutes chargées directement depuis leurs emplacements.
+		Cela permet un développement et un déboguage habituel.</p>
+	<p>Lorsque l'application est prête à être déployée, l'outil « wott » (<em>Wot tool</em>) tournant sous Node.js la prépare en
+		réduisant le nombre des ressources à charger. Dans l'absolu une application Wot pourrait ne charger que deux ressources en
+		plus du noyau Wot : un fichier CSS minifié et un fichier JSON. Le JSON contient les scripts JS minifiés prêts à être
+		interprétés (en suivant <a href="http://calendar.perfplanet.com/2011/lazy-evaluation-of-commonjs-modules/" target="_blank">cette approche</a>)
+		ainsi que les templates HTML prêts à être insérés dans le DOM.</p>
+	<p>L'unité de déploiement est le <a href="bundle.html"><em>bundle</em></a>. Le développeur décide de comment son application doit être chargée en
+		répartissant les divers éléments dans des <em>bundles</em>.</p>
+	<h3>Les forces</h3>
+	<ul>
+		<li>La <strong>réutilisation</strong> des composants et services ;</li>
+		<li>La <strong>légèreté</strong> des applications déployées grâce à la maitrise du nombre de ressources à charger ;</li>
+		<li>Une <strong>prise en main rapide</strong> : Wot est fait pour que vous utilisiez jQuery ou vos bibliothèques de programmation habituelles ;</li>
+		<li>Pas de dépendance du noyau envers une bibliothèque de programmation externe.</li>
+	</ul>
+	<h3>Compatibilité</h3>
+	<p>IE8+.</p>
+	</div>
+	<div class="h2-area"><h2 class="area-wrapper">Licence</h2></div>
+	<div class="area-wrapper">
+	<p>Domaine publique ou <a href="http://creativecommons.org/publicdomain/zero/1.0/" target="_blank">CC0</a> au choix.</p>
+	</div>
+	</div>
+</article>
+<footer class="site-footer with-text-links"><div class="area-wrapper">
+	<p>NB. Lorsque Wot passera en version 1.0, la documentation de référence passera en anglais.</p>
+	<p>Wot et le contenu de ce site sont dans le domaine public ou sous licence
+		<a href="http://creativecommons.org/publicdomain/zero/1.0/" target="_blank">CC0</a> au choix.</p>
+	<p>Wot est développé par Tarh au Bénin. Besoin d'aide ? C'est <a href="https://www.facebook.com/ta.rh.79" target="_blank">sur Facebook</a>.</p>
+</div></footer>
+</div>
