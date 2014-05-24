@@ -111,17 +111,19 @@
 		public setData(data) {
 			// Ici le remplissage des templates par les données
 		}
-		public destroy() {
-			// Ici les désabonnements et la propagation aux sous-composants
+		public destruct(removeFromDOM: boolean) {
+			// Ici les désabonnements
 		}
 	}
 }</code></pre>
 
 <p>Afin d'homogénéiser les composants, le noyau Wot définit plusieurs méthodes optionnelles. Par exemple la méthode
 	<code>setData</code> de notre exemple est optionnelle. Le développeur n'est pas obligé de les implémenter.</p>
-<p>La méthode <code>destroy</code> est obligatoire. Elle doit contenir le code de désabonnement aux évènements du DOM et aux
-	autres évènements à l'application. Et l'appel doit être propagé à tous les sous-composants. Oublier un désabonnement, c'est
-	laisser une fuite mémoire.</p>
+<p>La méthode <code>destruct</code> est optionnelle, elle contient le code de désabonnement aux évènements (par exemple
+	l'annulation d'un <em>listener</em> exposé par un service) plus éventuellement la suppression de ses éléments dans le DOM. Cette méthode est
+	optionnelle car en pratique le composant conteneur supprime souvent plus efficacement ses composants enfants dans le DOM
+	(nœuds plus évènements liés). Cette méthode ne doit jamais être appelée directement, c'est le noyau de Wot qui
+	s'en charge lors de la destruction d'un composant.</p>
 <p>Voici un exemple d'instanciation d'un template :</p>
 <pre><code>
 	this.btn = cc.createComponent('ext.Button', {'label': 'Add'});
