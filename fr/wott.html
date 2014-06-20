@@ -85,6 +85,10 @@ Syntax: node _wott/wott.js OPTIONS bundle1 bundle2...
 		<p>Par exemple pour préparer les bundles <code>ext.w</code> et <code>todos.w</code> :</p>
 		<pre><code>$ cd path-to-your-project/
 $ node _wott/wott.js -r true ext todos</code></pre>
+		<p>Cette commande crée ou met à jour des dossiers <code>ext-&lt;version&gt;</code> et <code>todos-&lt;version&gt;</code>. Pour
+			demander au moteur de les utiliser, éditer le fichier <code>todos.html</code> et retirer les suffixes <code>.w</code> dans
+			l'attribut <code>data-wot-preload</code> :</p>
+		<pre><code>&lt;html data-wot-preload="ext-0.5<s>.w</s> todos-0.5<s>.w</s>"&gt;</code></pre>
 	</div>
 	</div>
 </article>
