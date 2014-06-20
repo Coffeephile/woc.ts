@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Inclure une library - Wot</title>
+<title>Déployer avec wott - Wot</title>
 <link rel="stylesheet" media="all" href="wot.css">
 <body>
 <div class="global-wrapper">
@@ -61,34 +61,31 @@
 </div></nav>
 <article class="page-art">
 	<header class="art-header"><div class="area-wrapper">
-		<h1>Inclure une <em>library</em></h1>
+		<h1>Déployer avec <em>wott</em></h1>
 	</div></header>
 	<div class="area-wrapper">
 	<div class="art-body readable-art-body with-text-links">
-<p>Une <em>library</em> encapsule du code JavaScript, des CSS et d'éventuelles autres ressources (des images…) dans un répertoire
-	suffixé par <code>.l</code> et dont le parent est un bundle.</p>
-<p>Elle est le moyen idéal de rendre disponible une classe TypeScript auprès de différents composants et services,
-	ou bien d'inclure des fichiers JavaScript externes : jQuery, jQueryUI, Modernizr, etc.</p>
-<p>Une <em>library</em> n'est donc pas forcément écrite en TypeScript. L'encapsulation d'une <em>library</em> externe dans un
-	bundle n'est pas non plus obligatoire. Une fois que le bundle dont elle fait partie est chargé, n'importe quelle partie de
-	l'application peut rendre disponible la <em>library</em> via la méthode <code>requireLib</code> (cela lance l'interprétation du
-	code s'il n'a pas déjà été interprété). Ou bien, si un élément <code>requireLib</code> est présent dans un fichier de
-	configuration, le noyau WOT appelle automatiquement la méthode <code>requireLib</code>.</p>
-<p>La configuration se trouve dans un fichier « lib.json ». Voici le contenu du fichier « jQueryUI.l/lib.json » :</p>
-
-<pre><code>{
-	"wot": "0.5",
-	"requireLib": ["jQuery"],
-	"script": ["jquery-ui-1.10.4.custom.min.js", "datepicker-fr.js"],
-	"css": "jquery-ui-1.10.4.custom.min.css",
-	"name": "jQueryUI"
-}
+		<p>L'utilitaire <em>wott</em>, qui tourne sur Node.js, fusionne les éléments des bundles afin de réduire les dépendances
+		à charger.</p>
+		<p>Pour l'utiliser, veuillez d'abord installer <a href="http://nodejs.org/" target="_blank">Node.js</a>.</p>
+		<p>Ensuite l'option <code>-h</code> liste les options disponibles :</p>
+		<pre><code>$ cd path-to-your-project/
+$ node _wott/wott.js -h
+Syntax: node _wott/wott.js OPTIONS bundle1 bundle2...
+	-h --help
+	-i --in-project-path path-to-input-dir (default is current)
+	-o --out-project-path path-to-output-dir (default is value from -i)
+	-e --default-encoding the default enconding (default utf8)
+	-f --include-files "list of extensions" (default is "png gif jpg jpeg")
+	-j --minify-js true|false (default is true)
+	-c --minify-css true|false (default is true)
+	-m --minify-html true|false (default is true)
+	-r --remove-destination true|false (default is false)
 </code></pre>
-<p>Note commune pour les composants, services et libraries : les dépendances envers les <em>libraries</em> sont mentionnées dans
-	un élément <code>requireLib</code> (optionnel).</p>
-<h2>Étapes suivantes</h2>
-<p>→ <a href="wott.html">Déployer avec <em>wott</em></a>.</p>
-</div>
+		<p>Par exemple pour préparer les bundles <code>ext.w</code> et <code>todos.w</code> :</p>
+		<pre><code>$ cd path-to-your-project/
+$ node _wott/wott.js -r true ext todos</code></pre>
+	</div>
 	</div>
 </article>
 <footer class="site-footer with-text-links"><div class="area-wrapper">
