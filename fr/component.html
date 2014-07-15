@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Créer un composant - Wot</title>
-<link rel="stylesheet" media="all" href="wot.css">
+<title>Créer un composant - Woc.ts, TypeScript Framework</title>
+<link rel="stylesheet" media="all" href="woc.css">
 <body>
 <div class="global-wrapper">
 <header class="site-header"><div class="area-wrapper">
 	<a href="./">
-		<h1>Wot <small>[TypeScript Framework]</small></h1>
+		<h1>Woc.ts <small>[TypeScript Framework]</small></h1>
 	</a>
-	<p class="slogan">Well-Organized TypeScript.</p>
+	<p class="slogan">Well-Organized Code.</p>
 </div></header>
 <nav class="site-menu"><div class="area-wrapper">
 	<ul class="menu-l0">
@@ -34,12 +34,12 @@
 					<a class="menu-l1-li-button" href="library.html">Inclure une <em>library</em></a>
 				</li>
 				<li class="menu-l1-li">
-					<a class="menu-l1-li-button" href="wott.html">Déployer avec <em>wott</em></a>
+					<a class="menu-l1-li-button" href="woc-make.html">Déployer avec <em>woc-make</em></a>
 				</li>
 			</ul>
 		</li>
 		<li class="menu-l0-li">
-			<a class="menu-l0-li-button" href="extensions-wotext.html">Extensions wotext</a>
+			<a class="menu-l0-li-button" href="extensions-wocext.html">Extensions wocext</a>
 			<ul class="menu-l1">
 				<li class="menu-l1-li">
 					<a class="menu-l1-li-button" href="dataset.html">Les <em>datasets</em></a>
@@ -50,10 +50,10 @@
 			<a class="menu-l0-li-button" href="telecharger.html">Télécharger</a>
 			<ul class="menu-l1">
 				<li class="menu-l1-li">
-					<a class="menu-l1-li-button" href="https://github.com/tarh/wot/releases/" target="_blank">Télécharger une release</a>
+					<a class="menu-l1-li-button" href="https://github.com/tarh/woc.ts/releases/" target="_blank">Télécharger une release</a>
 				</li>
 				<li class="menu-l1-li">
-					<a class="menu-l1-li-button" href="https://github.com/tarh/wot/" target="_blank">Contribuer sur GitHub</a>
+					<a class="menu-l1-li-button" href="https://github.com/tarh/woc.ts/" target="_blank">Contribuer sur GitHub</a>
 				</li>
 			</ul>
 		</li>
@@ -68,11 +68,11 @@
 <p>Un composant encapsule du code JavaScript, des templates HTML, du code CSS et d'éventuelles autres ressources comme des
 	images, dans un répertoire suffixé par <code>.c</code> et dont le parent est un bundle.</p>
 <p>Une fois que le bundle dont il fait partie est chargé, le composant devient accessible globalement. N'importe quelle partie
-	de l'application Wot peut instancier le composant.</p>
+	de l'application Woc peut instancier le composant.</p>
 <p>Sa configuration est précisée dans un fichier « comp.json ». Voici le contenu du fichier « todos_List.c/comp.json » :</p>
 
 <pre><code>{
-	"wot": "0.5",
+	"woc": "0.6",
 	"encoding": "utf8",
 	"requireLib": ["jQuery"],
 	"script": "List.js",
@@ -84,7 +84,7 @@
 <p>Note commune pour les composants, services et libraries : les dépendances envers les <em>libraries</em> sont mentionnées dans
 	un élément <code>requireLib </code> (optionnel).</p>
 <p>Note commune pour les composants et services : l'élément <code>name</code> doit contenir le nom complet de la classe qui
-	implémente <code>wot.Component</code>. Le nom du bundle ne devrait pas être relié à un nom de module TypeScript. La règle est
+	implémente <code>woc.Component</code>. Le nom du bundle ne devrait pas être relié à un nom de module TypeScript. La règle est
 	de mentionner le module (en remplaçant les points par des underscores) dans le nom du répertoire du composant ou du service.</p>
 
 <h2>Les <em>templates</em> HTML</h2>
@@ -100,15 +100,15 @@
 <p>Lorsqu'un composant utilise un autre composant, on peut préciser l'endroit où aura lieu l'insertion au moyen d'un marqueur
 	<code>{placeholder:leNomDuPlaceholder}</code>. Le nom du placeholder est libre. Il sert à sélectionner cet emplacement pour le
 	remplacer par un élément HTML.</p>
-<p>WOT ne fournit pas de langage de template complet. Si vous souhaitez insérer non pas un composant mais un nombre indéterminé
+<p>Woc ne fournit pas de langage de template complet. Si vous souhaitez insérer non pas un composant mais un nombre indéterminé
 	d'instances d'un composant, vous le ferez dans le code TypeScript. C'est le cas ici : l'élément <code>ul</code> est rempli en
 	TypeScript.</p>
 <h2>Le code TypeScript du composant</h2>
 <p>Voici un squelette de code TypeScript pour un composant :</p>
 <pre><code>module todos {
 	'use strict';
-	export class List implements wot.Component {
-		constructor(private cc: wot.ComponentContext, props: {}) {
+	export class List implements woc.Component {
+		constructor(private cc: woc.ComponentContext, props: {}) {
 			// Ici l'instanciation des templates
 		}
 		public setData(data) {
@@ -120,12 +120,12 @@
 	}
 }</code></pre>
 
-<p>Afin d'homogénéiser les composants, le noyau Wot définit plusieurs méthodes optionnelles. Par exemple la méthode
+<p>Afin d'homogénéiser les composants, le noyau Woc définit plusieurs méthodes optionnelles. Par exemple la méthode
 	<code>setData</code> de notre exemple est optionnelle. Le développeur n'est pas obligé de les implémenter.</p>
 <p>La méthode <code>destruct</code> est optionnelle, elle contient le code de désabonnement aux évènements (par exemple
 	l'annulation d'un <em>listener</em> exposé par un service) plus éventuellement la suppression de ses éléments dans le DOM. Cette méthode est
 	optionnelle car en pratique le composant conteneur supprime souvent plus efficacement ses composants enfants dans le DOM
-	(nœuds plus évènements liés). Cette méthode ne doit jamais être appelée directement, c'est le noyau de Wot qui
+	(nœuds plus évènements liés). Cette méthode ne doit jamais être appelée directement, c'est le noyau de Woc qui
 	s'en charge lors de la destruction d'un composant.</p>
 <p>Voici un exemple d'instanciation d'un template :</p>
 <pre><code>
@@ -147,14 +147,14 @@
 <h2>Étapes suivantes</h2>
 <p>→ <a href="service.html">Créer un service</a>.</p>
 <p>→ <a href="library.html">Inclure une <em>library</em></a>.</p>
-<p>→ <a href="wott.html">Déployer avec <em>wott</em></a>.</p>
+<p>→ <a href="woc-make.html">Déployer avec <em>woc-make</em></a>.</p>
 </div>
 	</div>
 </article>
 <footer class="site-footer with-text-links"><div class="area-wrapper">
-	<p>NB. Lorsque Wot passera en version 1.0, la documentation de référence passera en anglais.</p>
-	<p>Wot et le contenu de ce site sont dans le domaine public ou sous licence
+	<p>NB. Lorsque Woc.ts passera en version 1.0, la documentation de référence passera en anglais.</p>
+	<p>Woc.ts et le contenu de ce site sont dans le domaine public ou sous licence
 		<a href="http://creativecommons.org/publicdomain/zero/1.0/" target="_blank">CC0</a> au choix.</p>
-	<p>Wot est développé par Tarh au Bénin. Besoin d'aide ? C'est <a href="https://www.facebook.com/tarh.paleo" target="_blank">sur Facebook</a>.</p>
+	<p>Woc.ts est développé par Tarh. Besoin d'aide ? C'est <a href="https://www.facebook.com/tarh.paleo" target="_blank">sur Facebook</a>.</p>
 </div></footer>
 </div>

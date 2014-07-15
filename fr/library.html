@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Inclure une library - Wot</title>
-<link rel="stylesheet" media="all" href="wot.css">
+<title>Inclure une library - Woc.ts, TypeScript Framework</title>
+<link rel="stylesheet" media="all" href="woc.css">
 <body>
 <div class="global-wrapper">
 <header class="site-header"><div class="area-wrapper">
 	<a href="./">
-		<h1>Wot <small>[TypeScript Framework]</small></h1>
+		<h1>Woc.ts <small>[TypeScript Framework]</small></h1>
 	</a>
-	<p class="slogan">Well-Organized TypeScript.</p>
+	<p class="slogan">Well-Organized Code.</p>
 </div></header>
 <nav class="site-menu"><div class="area-wrapper">
 	<ul class="menu-l0">
@@ -34,12 +34,12 @@
 					<a class="menu-l1-li-button" href="library.html">Inclure une <em>library</em></a>
 				</li>
 				<li class="menu-l1-li">
-					<a class="menu-l1-li-button" href="wott.html">Déployer avec <em>wott</em></a>
+					<a class="menu-l1-li-button" href="woc-make.html">Déployer avec <em>woc-make</em></a>
 				</li>
 			</ul>
 		</li>
 		<li class="menu-l0-li">
-			<a class="menu-l0-li-button" href="extensions-wotext.html">Extensions wotext</a>
+			<a class="menu-l0-li-button" href="extensions-wocext.html">Extensions wocext</a>
 			<ul class="menu-l1">
 				<li class="menu-l1-li">
 					<a class="menu-l1-li-button" href="dataset.html">Les <em>datasets</em></a>
@@ -50,10 +50,10 @@
 			<a class="menu-l0-li-button" href="telecharger.html">Télécharger</a>
 			<ul class="menu-l1">
 				<li class="menu-l1-li">
-					<a class="menu-l1-li-button" href="https://github.com/tarh/wot/releases/" target="_blank">Télécharger une release</a>
+					<a class="menu-l1-li-button" href="https://github.com/tarh/woc.ts/releases/" target="_blank">Télécharger une release</a>
 				</li>
 				<li class="menu-l1-li">
-					<a class="menu-l1-li-button" href="https://github.com/tarh/wot/" target="_blank">Contribuer sur GitHub</a>
+					<a class="menu-l1-li-button" href="https://github.com/tarh/woc.ts/" target="_blank">Contribuer sur GitHub</a>
 				</li>
 			</ul>
 		</li>
@@ -73,11 +73,11 @@
 	bundle n'est pas non plus obligatoire. Une fois que le bundle dont elle fait partie est chargé, n'importe quelle partie de
 	l'application peut rendre disponible la <em>library</em> via la méthode <code>requireLib</code> (cela lance l'interprétation du
 	code s'il n'a pas déjà été interprété). Ou bien, si un élément <code>requireLib</code> est présent dans un fichier de
-	configuration, le noyau WOT appelle automatiquement la méthode <code>requireLib</code>.</p>
+	configuration, le noyau Woc appelle automatiquement la méthode <code>requireLib</code>.</p>
 <p>La configuration se trouve dans un fichier « lib.json ». Voici le contenu du fichier « jQueryUI.l/lib.json » :</p>
 
 <pre><code>{
-	"wot": "0.5",
+	"woc": "0.6",
 	"requireLib": ["jQuery"],
 	"script": ["jquery-ui-1.10.4.custom.min.js", "datepicker-fr.js"],
 	"css": "jquery-ui-1.10.4.custom.min.css",
@@ -87,14 +87,14 @@
 <p>Note commune pour les composants, services et libraries : les dépendances envers les <em>libraries</em> sont mentionnées dans
 	un élément <code>requireLib</code> (optionnel).</p>
 <h2>Étapes suivantes</h2>
-<p>→ <a href="wott.html">Déployer avec <em>wott</em></a>.</p>
+<p>→ <a href="woc-make.html">Déployer avec <em>woc-make</em></a>.</p>
 </div>
 	</div>
 </article>
 <footer class="site-footer with-text-links"><div class="area-wrapper">
-	<p>NB. Lorsque Wot passera en version 1.0, la documentation de référence passera en anglais.</p>
-	<p>Wot et le contenu de ce site sont dans le domaine public ou sous licence
+	<p>NB. Lorsque Woc.ts passera en version 1.0, la documentation de référence passera en anglais.</p>
+	<p>Woc.ts et le contenu de ce site sont dans le domaine public ou sous licence
 		<a href="http://creativecommons.org/publicdomain/zero/1.0/" target="_blank">CC0</a> au choix.</p>
-	<p>Wot est développé par Tarh au Bénin. Besoin d'aide ? C'est <a href="https://www.facebook.com/tarh.paleo" target="_blank">sur Facebook</a>.</p>
+	<p>Woc.ts est développé par Tarh. Besoin d'aide ? C'est <a href="https://www.facebook.com/tarh.paleo" target="_blank">sur Facebook</a>.</p>
 </div></footer>
 </div>

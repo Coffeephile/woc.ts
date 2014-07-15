@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Créer un service - Wot</title>
-<link rel="stylesheet" media="all" href="wot.css">
+<title>Créer un service - Woc.ts, TypeScript Framework</title>
+<link rel="stylesheet" media="all" href="woc.css">
 <body>
 <div class="global-wrapper">
 <header class="site-header"><div class="area-wrapper">
 	<a href="./">
-		<h1>Wot <small>[TypeScript Framework]</small></h1>
+		<h1>Woc.ts <small>[TypeScript Framework]</small></h1>
 	</a>
-	<p class="slogan">Well-Organized TypeScript.</p>
+	<p class="slogan">Well-Organized Code.</p>
 </div></header>
 <nav class="site-menu"><div class="area-wrapper">
 	<ul class="menu-l0">
@@ -34,12 +34,12 @@
 					<a class="menu-l1-li-button" href="library.html">Inclure une <em>library</em></a>
 				</li>
 				<li class="menu-l1-li">
-					<a class="menu-l1-li-button" href="wott.html">Déployer avec <em>wott</em></a>
+					<a class="menu-l1-li-button" href="woc-make.html">Déployer avec <em>woc-make</em></a>
 				</li>
 			</ul>
 		</li>
 		<li class="menu-l0-li">
-			<a class="menu-l0-li-button" href="extensions-wotext.html">Extensions wotext</a>
+			<a class="menu-l0-li-button" href="extensions-wocext.html">Extensions wocext</a>
 			<ul class="menu-l1">
 				<li class="menu-l1-li">
 					<a class="menu-l1-li-button" href="dataset.html">Les <em>datasets</em></a>
@@ -50,10 +50,10 @@
 			<a class="menu-l0-li-button" href="telecharger.html">Télécharger</a>
 			<ul class="menu-l1">
 				<li class="menu-l1-li">
-					<a class="menu-l1-li-button" href="https://github.com/tarh/wot/releases/" target="_blank">Télécharger une release</a>
+					<a class="menu-l1-li-button" href="https://github.com/tarh/woc.ts/releases/" target="_blank">Télécharger une release</a>
 				</li>
 				<li class="menu-l1-li">
-					<a class="menu-l1-li-button" href="https://github.com/tarh/wot/" target="_blank">Contribuer sur GitHub</a>
+					<a class="menu-l1-li-button" href="https://github.com/tarh/woc.ts/" target="_blank">Contribuer sur GitHub</a>
 				</li>
 			</ul>
 		</li>
@@ -67,12 +67,12 @@
 	<div class="art-body readable-art-body with-text-links">
 <p>Un service encapsule du code JavaScript et d'éventuelles autres ressources dans un répertoire suffixé par <code>.s</code> et
 	dont le parent est un bundle.</p>
-<p>Un service est une unique instance d'une classe TypeScript implémentant <code>wot.Service</code>. Une fois que le bundle dont
+<p>Un service est une unique instance d'une classe TypeScript implémentant <code>woc.Service</code>. Une fois que le bundle dont
 	il fait partie est chargé, l'instance du service devient accessible globalement. L'instance du service est créée au premier appel.</p>
 <p>Sa configuration est dans un fichier « serv.json ». Voici le contenu du fichier « ext_Helper.s/serv.json » :</p>
 
 <pre><code>{
-	"wot": "0.5",
+	"woc": "0.6",
 	"script": ["Helper.js"],
 	"name": "ext.Helper"
 }
@@ -80,15 +80,15 @@
 <p>Note commune pour les composants, services et libraries : les dépendances envers les <em>libraries</em> sont mentionnées dans
 	un élément <code>requireLib </code> (optionnel).</p>
 <p>Note commune pour les composants et services : l'élément <code>name</code> doit contenir le nom complet de la classe qui
-	implémente <code>wot.Component</code>. Le nom du bundle ne devrait pas être relié à un nom de module TypeScript. La règle est de
+	implémente <code>woc.Component</code>. Le nom du bundle ne devrait pas être relié à un nom de module TypeScript. La règle est de
 	mentionner le module (en remplaçant les points par des underscores) dans le nom du répertoire du composant ou du service.</p>
 <p>Voici un exemple de code TypeScript d'un service :</p>
 
-<pre><code>/// &lt;reference path='../../wot.d.ts' /&gt;
+<pre><code>/// &lt;reference path='../../woc.d.ts' /&gt;
 module my.module {
 	'use strict';
 	export class MyService {
-		constructor(sc: wot.ServiceContext) {
+		constructor(sc: woc.ServiceContext) {
 		}
 		// My methods here
 	}
@@ -96,14 +96,14 @@ module my.module {
 
 <h2>Étapes suivantes</h2>
 <p>→ <a href="library.html">Inclure une <em>library</em></a>.</p>
-<p>→ <a href="wott.html">Déployer avec <em>wott</em></a>.</p>
+<p>→ <a href="woc-make.html">Déployer avec <em>woc-make</em></a>.</p>
 </div>
 	</div>
 </article>
 <footer class="site-footer with-text-links"><div class="area-wrapper">
-	<p>NB. Lorsque Wot passera en version 1.0, la documentation de référence passera en anglais.</p>
-	<p>Wot et le contenu de ce site sont dans le domaine public ou sous licence
+	<p>NB. Lorsque Woc.ts passera en version 1.0, la documentation de référence passera en anglais.</p>
+	<p>Woc.ts et le contenu de ce site sont dans le domaine public ou sous licence
 		<a href="http://creativecommons.org/publicdomain/zero/1.0/" target="_blank">CC0</a> au choix.</p>
-	<p>Wot est développé par Tarh au Bénin. Besoin d'aide ? C'est <a href="https://www.facebook.com/tarh.paleo" target="_blank">sur Facebook</a>.</p>
+	<p>Woc.ts est développé par Tarh. Besoin d'aide ? C'est <a href="https://www.facebook.com/tarh.paleo" target="_blank">sur Facebook</a>.</p>
 </div></footer>
 </div>
