@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Extension wocext - Les datasets - Woc.ts, TypeScript Framework</title>
+<title>Les datasets - Extensions - Woc.ts, TypeScript Framework</title>
 <link rel="stylesheet" media="all" href="woc.css">
 <body>
 <div class="global-wrapper">
@@ -39,7 +39,7 @@
 			</ul>
 		</li>
 		<li class="menu-l0-li">
-			<a class="menu-l0-li-button" href="extensions-wocext.html">Extensions wocext</a>
+			<a class="menu-l0-li-button" href="extensions.html">Extensions</a>
 			<ul class="menu-l1">
 				<li class="menu-l1-li">
 					<a class="menu-l1-li-button" href="dataset.html">Les <em>datasets</em></a>
@@ -61,14 +61,14 @@
 </div></nav>
 <article class="page-art">
 	<header class="art-header"><div class="area-wrapper">
-		<h1>Extension <em>wocext</em> - Les <em>datasets</em></h1>
+		<h1>Les <em>Datasets</em> - Extensions</em></h1>
 	</div></header>
 	<div class="area-wrapper">
 	<div class="art-body readable-art-body with-text-links">
-<p>Un outil générique est livré dans les extensions « wocext » : la classe <code>wocext.Dataset</code>. Ses instances peuvent
+<p>Un outil générique est livré comme extension : la classe <code>Tree14.Dataset</code>. Ses instances peuvent
 	servir de modèle, faire partie du modèle ou jouer le rôle de « modèle de vue ».</p>
 <p>Voici comment créer un <em>dataset</em> :</p>
-<pre><code>	var d = wocext.createDataset({
+<pre><code>	var d = Tree14.createDataset({
 		'people': [
 			{
 				'name': 'John'
@@ -96,9 +96,9 @@
 </code></pre>
 <p>Créer des « propriétés calculées » :</p>
 <pre><code>
-	d.putComputedProperty('ageAvg', function (d: woc.RDataset) {
+	d.putComputedProperty('ageAvg', function (d: Tree14.RDataset) {
 		var tot = 0, count = 0;
-		d.each('people', function (p: woc.RDataset) {
+		d.each('people', function (p: Tree14.RDataset) {
 			tot += p.get('age');
 			++count;
 		});
@@ -116,7 +116,7 @@
 		}
 	}).toList(); // returns a list that contains a dataset on « John »
 </code></pre>
-<p>La méthode <code>toReadOnly</code> fournit le même <em>dataset</em> mais en lecture-seule (un <code>wocext.RDataset</code>.</p>
+<p>La méthode <code>toReadOnly</code> fournit le même <em>dataset</em> mais en lecture-seule (un <code>Tree14.RDataset</code>.</p>
 <p>Il est en outre possible de s'abonner aux modifications grâce aux méthodes <code>addTopChangeListener</code> (des changements
 	au niveau des enfants du dataset), <code>addDeepChangeListener</code> (des changements dans les descendants de deuxième niveau
 	et plus), et <code>addChangeListener</code> (regroupe les deux autres).</p>

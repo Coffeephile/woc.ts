@@ -3,14 +3,14 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Woc.ts - TypeScript Framework</title>
+	<title>Présentation - Woc.ts - TypeScript Framework</title>
 	<link rel="stylesheet" media="all" href="woc.css">
 <body>
 <div class="global-wrapper">
 	<header class="site-header">
 		<div class="area-wrapper">
 			<a href="./">
-				<h1>Woc.ts
+				<h1>Présentation de Woc.ts
 					<small>[TypeScript Framework]</small>
 				</h1>
 			</a>
@@ -69,12 +69,71 @@
 	</nav>
 	<article class="page-art">
 		<div class="art-body beautiful-art-body with-text-links">
-			<div class="h2-area"><h2 class="area-wrapper">Qu'est-ce que Woc.ts ?</h2></div>
+			<div class="h2-area"><h2 class="area-wrapper">Woc.ts, framework orienté composants</h2></div>
 			<div class="area-wrapper">
-				<p>Woc.ts (Well-Organized Code) est un framework <strong><a href="pourquoi-des-composants.html">orienté
-				composants</a></strong> pour <a target="_blank" href="http://www.typescriptlang.org/"><strong>TypeScript</strong></a>.</p>
+				<p>Woc (Well-Organized Code) est un framework en <a href="http://www.typescriptlang.org/" target="_blank"><strong>TypeScript</strong></a>
+					orienté
+					<strong>composants</strong>.</p>
 
-				<p>Actuellement 50 Ko minifié.</p>
+			</div>
+			<div class="h2-area"><h2 class="area-wrapper">Pourquoi des composants ?</h2></div>
+			<div class="area-wrapper">
+				<p>Des composants pour réutiliser des morceaux de la vue…</p>
+
+				<p>L'enjeu est de pouvoir assembler et faire interagir des composants visuels pour construire la vue d'une application
+					sans repartir à chaque fois des balises HTML. Les composants sont des « boites noires » que l'on assemble sans s'occuper
+					de comment elles sont implémentées. Par exemple, un composant calendrier pourrait afficher le mois choisi par
+					configuration, puis gérer les clics et le survol sur la partie du DOM le concernant, proposer des évènements de haut
+					niveau auxquels d'autres composants pourraient s'abonner. À ce jour cela n'est faisable que d'une manière rigide et
+					limitée sur des CMS, c'est pourtant utile et d'ailleurs les CMS ont tous des plugins pour les calendriers.</p>
+
+				<p>Imbrication : dans une approche par composants, chaque composant contient son propre MVC. Un composant imbriqué (et son
+				MVC) fait ensuite partie du « V » du composant englobant, etc. Cela n'empêche pas qu'un modèle et un contrôleur existe aussi
+				au niveau de l'application.</p>
+
+				<p>C'est un sujet technique difficile. Comment encapsuler les templates HTML, le code JavaScript associé, les CSS, puis
+				« <em>sandboxer</em> » les éléments du DOM et faire en sorte que les règles CSS et le JavaScript du composant
+				n'interagissent pas avec des éléments extérieurs au composant ? Comment aussi éviter que le navigateur n'ait des centaines
+				de ressources à charger, chaque composant ajoutant les siennes ?</p>
+
+				<p>Le W3C travaille sur un standard pour des <a target="_blank" href="http://www.w3.org/TR/components-intro/"><em>Web
+				Components</em></a>. Trois solutions existent qui en sont des implémentations :</p>
+
+				<ul>
+					<li><strong>Polymer</strong> de Google, une implémentation résolument tournée vers l'avenir, la compatibilité est
+					maintenue seulement avec les dernières versions des navigateurs et plus particulièrement sur Chrome. Le chargement des
+					ressources engendre des chargements aggressifs en Ajax. Inutilisable en production. À voir :
+					<a target="_blank" href="http://www.polymer-project.org/docs/start/creatingelements.html#propertiesmethods">un exemple</a>
+					de code Polymer assemblant du JavaScript et un template HTML.</li>
+					<li><strong>X-Tag</strong> de Mozilla, un framework faisant fonctionner des Web Components sur un ensemble raisonnable de
+					navigateurs, au prix d'une utilisation massive de polyfills. À voir
+					<a target="_blank" href="http://www.x-tags.org/docs#template">la documentation</a> sur les templates.</li>
+					<li><strong>Bosonic</strong> « transpile » les composants avant le déploiement, ce qui permet de ne charger ensuite
+					qu'une seule ressource JavaScript par composant, plus les CSS. À voir :
+					<a target="_blank" href="http://bosonic.github.io/documentation.html#how-it-works">comment ça marche</a>.</li>
+					<li><strong></strong> </li>
+					<li><strong></strong> </li>
+				</ul>
+
+				<p>En dehors du standard, mentionnons <a target="_blank" href="https://facebook.github.io/react/">React</a> de Facebook,
+				qui est basé sur l'idée de la réutilisation de composants « boites noires », avec en plus un fort aspect performance des
+				accès au DOM, au prix d'une véritable usine à gaz.</p>
+
+				<p>Woc.ts est la solution la plus légère. Woc.ts est utilisable avec les IDE d'aujourd'hui, avec
+				les connaissances habituelles (par exemple un habitué de jQuery utilisera jQuery pour manipuler les templates) et même le
+				débogage habituel. Les CSS ne sont pas « sandboxées » mais le développeur peut définir un préfixe en suivant simplement
+				les suggestions de <a target="_blank" href="http://bem.info/method/definitions/">BEM</a>. Woc.ts, c'est juste des
+				technologies d'aujourd'hui avec un peu d'organisation pour regrouper les codes HTML, CSS et JS par composants.</p>
+
+				<p>Woc est destiné aux développeurs qui construisent leurs applications « lentement et surement ». Woc en effet ne fait
+					aucune magie : pas de langage de <em>templates</em> omnipotent, encore moins d'affreux <em>dirty checking</em> à la
+					manière
+					<em>Angular.js</em>. Élaborer un composant avec Woc prend plus de temps que de saisir quelques mots-clés dans un système
+					de
+					templates. En revanche, une fois le composant réalisé, il est réutilisable.
+				</p>
+
+				<p>Actuellement 90 Ko minifié (noyau plus principales extensions).</p>
 			</div>
 			<div class="h2-area"><h2 class="area-wrapper">Sous le capot</h2></div>
 			<div class="area-wrapper">

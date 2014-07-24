@@ -39,7 +39,7 @@
 			</ul>
 		</li>
 		<li class="menu-l0-li">
-			<a class="menu-l0-li-button" href="extensions-wocext.html">Extensions wocext</a>
+			<a class="menu-l0-li-button" href="extensions.html">Extensions</a>
 			<ul class="menu-l1">
 				<li class="menu-l1-li">
 					<a class="menu-l1-li-button" href="dataset.html">Les <em>datasets</em></a>
@@ -76,52 +76,18 @@
 	(« w »). Voici celui du bundle « todos » :</p>
 
 <pre><code>{
-	"woc": "0.6",
+	"woc": "0.7",
 	"encoding": "utf8",
 	"preload": ["ext"],
-	"embed": ["todos_List.c", "todos_Item.c"],
-	"requireLib": ["jQuery"],
-	"script": "Main.js",
-	"main": "todos.Main"
+	"embed": ["todos_List.c", "todos_Item.c"]
 }
 </code></pre>
-<p>Les ordonnancements des listes <code>preload</code>, <code>embed</code> et <code>requireLib</code> sont sans importance.</p>
+<p>Les ordonnancements des listes <code>preload</code> et <code>embed</code> sont sans importance.</p>
 <p>L'élément <code>preload</code> liste les bundles de premier niveau à charger au préalable. Ici, tous les scripts présents dans
 	le bundle « todos » peuvent considérer que le bundle « ext » est déjà chargé.</p>
 <p>L'élément <code>embed</code> liste des noms de sous-répertoires : les <em>services</em> (suffixés par <code>.s</code>), les
 	<em>composants</em> (suffixés par <code>.c</code>), les <em>libraries</em> (suffixées par <code>.l</code>) et les sous-bundles
 	(suffixés par <code>.w</code> puisqu'ils sont eux-même en mode « w »).</p>
-<p>L'élément <code>requireLib</code> donne la liste des <em>libraries</em> à rendre disponible avant l'exécution du contenu du
-	bundle. Elles sont listées par leurs noms.</p>
-<h2>Cas d'un bundle exécutable</h2>
-<p>L'élément <code>script</code> (optionnel en cas d'absence d'élément <code>main</code>) mentionne le fichier JavaScript
-	« principal » du bundle, il contient une classe qui implémente <code>woc.BundleMain</code>.</p>
-<p>Le nom de la classe à exécuter est mentionné dans l'élément <code>main</code> (optionnel). Le constructeur reçoit en paramètres
-	le contexte général de l'application ainsi que l'URL du répertoire du bundle.</p>
-<h2>Le code TypeScript du bundle</h2>
-<p>Voici le code du fichier « todos.w/Main.ts » :</p>
-<pre><code>/// &lt;reference path="jquery.d.ts" /&gt;
-/// &lt;reference path="woc.d.ts" /&gt;
-/// &lt;reference path='todos_List.c/List.ts' /&gt;
-module todos {
-	'use strict';
-	export class Main implements woc.BundleMain {
-		constructor(private ac: woc.ApplicationContext) {
-		}
-		public start(element) {
-			var st = new wocext.helpers.<strong>GenericLiveState</strong>(true);
-			var list = &lt;todos.List&gt;this.ac.<strong>createComponent</strong>('todos.List', {'title': 'My First List', 'count': 3}, st);
-			$(element).append(list.getElement());
-		}
-	}
-}</code></pre>
-<p>Une seule instance de la classe « todos.Main » sera créée. Le constructeur n'est appelé qu'une seule fois, il est donc
-	l'endroit idéal pour les configurations globales des bibliothèques de programmation.</p>
-<p>Ensuite la méthode <code>start</code> est appelée autant de fois qu'un attribut <code>data-woc-exec</code> apparait dans le
-	code HTML. L'élément HTML est passé en paramètre.</p>
-<p>L'instance de <code>GenericLiveState</code> donne un état d'affichage aux composants. Grâce à lui le composant peut savoir s'il
-	est situé dans une partie de l'application affichée ou non. La méthode <code>createComponent</code> crée une instance du
-	composant <code>todos.List</code> à la ligne suivante.</p>
 <h2>À savoir</h2>
 <ol>
 <li>La notion de sous-bundle est un moyen pratique d'organiser les différents éléments. Lors du chargement, les sous-bundles sont

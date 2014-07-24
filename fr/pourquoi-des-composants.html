@@ -1,0 +1,125 @@
+<!doctype html>
+<html dir="ltr" lang="fr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Pourquoi des composants ? - Woc.ts - TypeScript Framework</title>
+	<link rel="stylesheet" media="all" href="woc.css">
+<body>
+<div class="global-wrapper">
+	<header class="site-header">
+		<div class="area-wrapper">
+			<a href="./">
+				<h1>Woc.ts
+					<small>[TypeScript Framework]</small>
+				</h1>
+			</a>
+			<p class="slogan">Well-Organized Code.</p>
+		</div>
+	</header>
+
+<nav class="site-menu"><div class="area-wrapper">
+	<ul class="menu-l0">
+		<li class="menu-l0-li">
+			<a class="menu-l0-li-button" href="debuter.html">Débuter</a>
+			<ul class="menu-l1">
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="application.html">Créer une application</a>
+				</li>
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="bundle.html">Créer un bundle</a>
+				</li>
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="component.html">Créer un composant</a>
+				</li>
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="service.html">Créer un service</a>
+				</li>
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="library.html">Inclure une <em>library</em></a>
+				</li>
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="woc-make.html">Déployer avec <em>woc-make</em></a>
+				</li>
+			</ul>
+		</li>
+		<li class="menu-l0-li">
+			<a class="menu-l0-li-button" href="extensions.html">Extensions</a>
+			<ul class="menu-l1">
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="dataset.html">Les <em>datasets</em></a>
+				</li>
+			</ul>
+		</li>
+		<li class="menu-l0-li">
+			<a class="menu-l0-li-button" href="telecharger.html">Télécharger</a>
+			<ul class="menu-l1">
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="https://github.com/tarh/woc.ts/releases/" target="_blank">Télécharger une release</a>
+				</li>
+				<li class="menu-l1-li">
+					<a class="menu-l1-li-button" href="https://github.com/tarh/woc.ts/" target="_blank">Contribuer sur GitHub</a>
+				</li>
+			</ul>
+		</li>
+	</ul>
+</div></nav>
+<article class="page-art">
+	<header class="art-header"><div class="area-wrapper">
+		<h1>Pourquoi des composants ?</h1>
+	</div></header>
+	<div class="area-wrapper">
+	<div class="art-body readable-art-body with-text-links">
+		<p><em>Des composants pour réutiliser des morceaux de la vue…</em></p>
+
+		<p>L'enjeu est de pouvoir <strong>assembler</strong> et faire interagir <strong>des composants visuels</strong> pour construire la vue d'une application
+			sans repartir à chaque fois des balises HTML. Les composants sont des « boites noires » que l'on assemble sans s'occuper
+			de comment elles sont implémentées. Par exemple, un composant calendrier pourrait afficher le mois choisi par
+			configuration, puis gérer les clics et le survol sur la partie du DOM le concernant, proposer des évènements de haut
+			niveau auxquels d'autres composants pourraient s'abonner. À ce jour cela n'est faisable que d'une manière rigide et
+			limitée sur des CMS, c'est pourtant utile et d'ailleurs les CMS ont tous des plugins pour les calendriers.</p>
+
+		<p>Imbrication : dans une approche par composants, chaque composant peut contenir son propre <strong>schéma MVC</strong>. Un
+		composant réutilisé (et son MVC) fait ensuite partie du « V » du composant englobant, etc.</p>
+
+		<p>Ce sujet technique est difficile. Comment encapsuler les templates HTML, le code JavaScript associé, les CSS, puis
+		<em>« sandboxer »</em> les éléments du DOM et faire en sorte que les règles CSS et le JavaScript du composant
+		n'interagissent pas avec des éléments extérieurs au composant ? Comment aussi éviter que le navigateur n'ait des centaines
+		de ressources à charger, chaque composant ajoutant les siennes ?</p>
+
+		<p>Le W3C travaille sur un standard pour des <a target="_blank" href="http://www.w3.org/TR/components-intro/"><em>Web
+		Components</em></a>. Trois solutions existent qui en sont des implémentations :</p>
+
+		<ul>
+			<li><strong>Polymer</strong> de Google, une implémentation résolument tournée vers l'avenir, la compatibilité est
+			maintenue seulement avec les dernières versions des navigateurs et plus particulièrement sur Chrome. Le chargement des
+			ressources engendre des chargements aggressifs en Ajax. Inutilisable en production. À voir :
+			<a target="_blank" href="http://www.polymer-project.org/docs/start/creatingelements.html#propertiesmethods">un exemple</a>
+			de code Polymer assemblant du JavaScript et un template HTML.</li>
+			<li><strong>X-Tag</strong> de Mozilla, un framework faisant fonctionner des Web Components sur un ensemble raisonnable de
+			navigateurs, au prix d'une utilisation massive de polyfills. À voir
+			<a target="_blank" href="http://www.x-tags.org/docs#template">la documentation</a> sur les templates.</li>
+			<li><strong>Bosonic</strong> « transpile » les composants avant le déploiement, ce qui permet de ne charger ensuite
+			qu'une seule ressource JavaScript par composant, plus les CSS. À voir :
+			<a target="_blank" href="http://bosonic.github.io/documentation.html#how-it-works">comment ça marche</a>.</li>
+		</ul>
+
+		<p>En dehors du standard, mentionnons <a target="_blank" href="https://facebook.github.io/react/"><strong>React</strong></a>
+		de Facebook, qui est basé sur l'idée de la réutilisation de composants « boites noires », avec en plus un fort aspect
+		performance des accès au DOM, au prix d'une authentique usine à gaz.</p>
+
+		<p><strong>Woc.ts</strong>, également en dehors du standard, est la solution la plus légère. Woc.ts est utilisable avec les IDE d'aujourd'hui, avec
+		les connaissances habituelles (un habitué de jQuery manipulera ses templates avec jQuery) et même le
+		débogage habituel. Les CSS ne sont pas « sandboxées » mais le développeur peut définir un préfixe en suivant simplement
+		les suggestions de <a target="_blank" href="http://bem.info/method/definitions/">BEM</a>. Woc.ts, c'est juste des
+		technologies d'aujourd'hui avec un peu d'organisation pour regrouper les codes HTML, CSS et JS par composants.</p>
+</div>
+	</div>
+</article>
+<footer class="site-footer with-text-links"><div class="area-wrapper">
+	<p>NB. Lorsque Woc.ts passera en version 1.0, la documentation de référence passera en anglais.</p>
+	<p>Woc.ts et le contenu de ce site sont dans le domaine public ou sous licence
+		<a href="http://creativecommons.org/publicdomain/zero/1.0/" target="_blank">CC0</a> au choix.</p>
+	<p>Woc.ts est développé par Tarh. Besoin d'aide ? C'est <a href="https://www.facebook.com/tarh.paleo" target="_blank">sur Facebook</a>.</p>
+</div></footer>
+</div>

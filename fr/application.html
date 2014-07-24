@@ -39,7 +39,7 @@
 			</ul>
 		</li>
 		<li class="menu-l0-li">
-			<a class="menu-l0-li-button" href="extensions-wocext.html">Extensions wocext</a>
+			<a class="menu-l0-li-button" href="extensions.html">Extensions</a>
 			<ul class="menu-l1">
 				<li class="menu-l1-li">
 					<a class="menu-l1-li-button" href="dataset.html">Les <em>datasets</em></a>
@@ -69,19 +69,19 @@
 </p>
 
 <pre><code>&lt;!doctype html&gt;
-&lt;html data-woc-preload="ext.w todos.w"&gt;
+&lt;html&gt;
 &lt;head&gt;
 &lt;meta charset="UTF-8"&gt;
 &lt;base href="/my-app/"&gt;
 &lt;script src="woc.min.js"&gt;&lt;/script&gt;
 &lt;/head&gt;
 &lt;body&gt;
-&lt;section data-woc-exec="todos"&gt;&lt;/section&gt;
+&lt;section data-woc-preload="ext.w todos.w" data-woc-start="Todos.Start"&gt;&lt;/section&gt;
 </code></pre>
 <p>L'URL de base doit être mentionnée dans l'élément <code>base</code> ou dans un attribut <code>data-woc-base</code> de l'élément
 	<code>html</code> au choix.</p>
 <p>Une application Woc est un répertoire. Si ce répertoire est distinct de celui qui sert de base pour les URLs, alors son URL
-	doit être précisée dans un attribut <code>data-woc-exec</code> de l'élément <code>html</code>.</p>
+	doit être précisée dans un attribut <code>data-woc-url</code> de l'élément <code>html</code>.</p>
 <p>Une application est composée de un ou plusieurs <em>bundle(s)</em>. Dans notre exemple, deux bundles sont préchargés en mode
 	« w » (« work in progress », leur développement n'est pas terminé) : « ext » et « todos ». C'est de cette manière, au niveau du
 	préchargement, que l'on précise au noyau quels bundles doivent être chargés en mode normal (déployés) et quels autres en mode

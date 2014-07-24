@@ -39,7 +39,7 @@
 			</ul>
 		</li>
 		<li class="menu-l0-li">
-			<a class="menu-l0-li-button" href="extensions-wocext.html">Extensions wocext</a>
+			<a class="menu-l0-li-button" href="extensions.html">Extensions</a>
 			<ul class="menu-l1">
 				<li class="menu-l1-li">
 					<a class="menu-l1-li-button" href="dataset.html">Les <em>datasets</em></a>
@@ -71,21 +71,20 @@
 	ou bien d'inclure des fichiers JavaScript externes : jQuery, jQueryUI, Modernizr, etc.</p>
 <p>Une <em>library</em> n'est donc pas forcément écrite en TypeScript. L'encapsulation d'une <em>library</em> externe dans un
 	bundle n'est pas non plus obligatoire. Une fois que le bundle dont elle fait partie est chargé, n'importe quelle partie de
-	l'application peut rendre disponible la <em>library</em> via la méthode <code>requireLib</code> (cela lance l'interprétation du
-	code s'il n'a pas déjà été interprété). Ou bien, si un élément <code>requireLib</code> est présent dans un fichier de
-	configuration, le noyau Woc appelle automatiquement la méthode <code>requireLib</code>.</p>
+	l'application peut rendre disponible la <em>library</em> via la méthode <code>evalLibrary</code> (cela lance l'interprétation du
+	code s'il n'a pas déjà été interprété). Ou bien, si un élément <code>useLibraries</code> est présent dans un fichier de
+	configuration, le noyau Woc appelle automatiquement la méthode <code>evalLibrary</code>.</p>
 <p>La configuration se trouve dans un fichier « lib.json ». Voici le contenu du fichier « jQueryUI.l/lib.json » :</p>
 
 <pre><code>{
-	"woc": "0.6",
-	"requireLib": ["jQuery"],
+	"woc": "0.7",
+	"useLibraries": ["jQuery"],
 	"script": ["jquery-ui-1.10.4.custom.min.js", "datepicker-fr.js"],
 	"css": "jquery-ui-1.10.4.custom.min.css",
 	"name": "jQueryUI"
 }
 </code></pre>
-<p>Note commune pour les composants, services et libraries : les dépendances envers les <em>libraries</em> sont mentionnées dans
-	un élément <code>requireLib</code> (optionnel).</p>
+<p>Les dépendances sont mentionnées dans l'élément optionnel <code>useLibraries</code>.</p>
 <h2>Étapes suivantes</h2>
 <p>→ <a href="woc-make.html">Déployer avec <em>woc-make</em></a>.</p>
 </div>
