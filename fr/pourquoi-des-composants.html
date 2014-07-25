@@ -89,7 +89,9 @@
 
 		<p>Le W3C travaille sur <a target="_blank" href="http://www.w3.org/wiki/WebComponents/">une ébauche de standard</a> pour des
 		<em>Web Components</em>, avec notamment l'idée d'un <em>« shadow DOM »</em>, c'est-à-dire une <em>sandbox</em> du DOM par
-		composant. Trois solutions existent qui en sont des implémentations :</p>
+		composant (le lecteur trouvera une explication visuelle dans
+		<a target="_blank" href="https://hayatoito.github.io/webcomponents-slides/">cet exposé</a>). Trois solutions existent qui en
+		sont des implémentations :</p>
 
 		<ul>
 			<li><strong>Polymer</strong> de Google, une implémentation résolument tournée vers l'avenir, la compatibilité n'est
@@ -108,20 +110,23 @@
 			<a target="_blank" href="http://bosonic.github.io/documentation.html#how-it-works">comment ça marche</a>.</li>
 		</ul>
 
-		<p>En dehors d'une approche par la standardisation, mentionnons <strong>React</strong>
-		de Facebook. React est une bibliothèque pour construire les vues (il est le « V » du MVC),
-		basée sur l'idée de la réutilisation de composants « boites noires ». React implémente un <em>DOM virtuel</em>, c'est-à-dire
-		qu'il crée un objet JavaScript représentant chaque balise HTML dans le but de minimiser les traitements sur le DOM réel. Une
-		seconde technologie a été élaborée conjointement : JSX, qui permet de représenter les objets JavaScript par des balises XML
-		et ainsi de reconstituer une apparence de templates HTML. À regarder :
-		<a target="_blank" href="https://facebook.github.io/react/#examples">des exemples</a> de code JSX avec leur compilation en
+		<p>Attiré par une aventure qui se conjugue au futur ? Rejoignez les <a target="_blank" href="http://webcomponents.org/">amateurs de
+		<em>Web components</em></a>.</p>
+
+		<p>En dehors de l'approche par la standardisation, mentionnons <strong>React</strong>
+		de Facebook. React est une bibliothèque pour construire les vues (elle est le « V » du MVC),
+		basée sur l'idée de la réutilisation de composants « boites noires ». React implémente un « DOM virtuel », c'est-à-dire
+		qu'un objet JavaScript est créé pour chaque balise HTML, dans le but de minimiser les traitements sur le DOM réel. Une
+		seconde technologie a été élaborée conjointement : JSX, qui représente les objets JavaScript par des balises XML
+		et reconstitue ainsi une apparence de templates HTML. À regarder par étonnement :
+		<a target="_blank" href="https://facebook.github.io/react/#examples">des exemples</a> de code JSX et leur compilation en
 		JavaScript (cliquez sur les onglets). Une approche axée performance des accès au DOM au prix d'une authentique usine à gaz.</p>
 
 		<p><strong>Woc.ts</strong>, également en dehors du standard, est la solution la plus légère. Woc.ts est utilisable avec les
-		IDE d'aujourd'hui, avec les connaissances d'aujourd'hui (un habitué de jQuery manipulera ses templates avec jQuery) et même
-		le débogage habituel. Les CSS ne sont pas « sandboxées » mais le développeur peut définir un préfixe par composant en suivant
+		IDE d'aujourd'hui, avec les connaissances habituelles (un amateur de jQuery manipulera ses templates avec jQuery) et même
+		le débogage normal. Les CSS ne sont pas « sandboxées » mais le développeur peut définir un préfixe par composant en suivant
 		simplement les suggestions de <a target="_blank" href="http://bem.info/method/definitions/">BEM</a>. Woc.ts, c'est juste des
-		technologies d'aujourd'hui organisées pour regrouper les codes HTML, CSS et JS par composants.</p>
+		technologies d'aujourd'hui bien organisées pour regrouper les codes HTML, CSS et JavaScript par composants.</p>
 </div>
 	</div>
 </article>
