@@ -82,37 +82,46 @@
 		<p>Imbrication : dans une approche par composants, chaque composant peut contenir son propre <strong>schéma MVC</strong>. Un
 		composant réutilisé (et son MVC) fait ensuite partie du « V » du composant englobant, etc.</p>
 
-		<p>Ce sujet technique est difficile. Comment encapsuler les templates HTML, le code JavaScript associé, les CSS, puis
+		<p>Les composants sont un technique difficile. Comment encapsuler les templates HTML, le code JavaScript associé, les CSS, puis
 		<em>« sandboxer »</em> les éléments du DOM et faire en sorte que les règles CSS et le JavaScript du composant
 		n'interagissent pas avec des éléments extérieurs au composant ? Comment aussi éviter que le navigateur n'ait des centaines
 		de ressources à charger, chaque composant ajoutant les siennes ?</p>
 
-		<p>Le W3C travaille sur un standard pour des <a target="_blank" href="http://www.w3.org/TR/components-intro/"><em>Web
-		Components</em></a>. Trois solutions existent qui en sont des implémentations :</p>
+		<p>Le W3C travaille sur <a target="_blank" href="http://www.w3.org/wiki/WebComponents/">une ébauche de standard</a> pour des
+		<em>Web Components</em>, avec notamment l'idée d'un <em>« shadow DOM »</em>, c'est-à-dire une <em>sandbox</em> du DOM par
+		composant. Trois solutions existent qui en sont des implémentations :</p>
 
 		<ul>
-			<li><strong>Polymer</strong> de Google, une implémentation résolument tournée vers l'avenir, la compatibilité est
-			maintenue seulement avec les dernières versions des navigateurs et plus particulièrement sur Chrome. Le chargement des
-			ressources engendre des chargements aggressifs en Ajax. Inutilisable en production. À voir :
+			<li><strong>Polymer</strong> de Google, une implémentation résolument tournée vers l'avenir, la compatibilité n'est
+			maintenue qu'avec les dernières versions des navigateurs et plus particulièrement sur Chrome. Polymer est une solution
+			purement « cliente », il engendre par conséquent des chargements aggressifs en Ajax. Inutilisable en production. À voir par
+			curiosité :
 			<a target="_blank" href="http://www.polymer-project.org/docs/start/creatingelements.html#propertiesmethods">un exemple</a>
 			de code Polymer assemblant du JavaScript et un template HTML.</li>
-			<li><strong>X-Tag</strong> de Mozilla, un framework faisant fonctionner des Web Components sur un ensemble raisonnable de
-			navigateurs, au prix d'une utilisation massive de polyfills. À voir
-			<a target="_blank" href="http://www.x-tags.org/docs#template">la documentation</a> sur les templates.</li>
+			<li><strong>X-Tag</strong> de Mozilla est une solution similaire à Polymer mais compatible avec un ensemble raisonnable de
+			navigateurs, au prix d'une utilisation massive de polyfills. Cela en fait une solution complexe et probablement peu
+			performante. À regarder sans y toucher : <a target="_blank" href="http://www.x-tags.org/docs#template">la documentation</a>
+			sur les templates.</li>
 			<li><strong>Bosonic</strong> « transpile » les composants avant le déploiement, ce qui permet de ne charger ensuite
-			qu'une seule ressource JavaScript par composant, plus les CSS. À voir :
+			qu'une seule ressource JavaScript par composant, plus les CSS. Une solution peut-être un peu complexe mais qui se veut
+			utilisable en production. À lire :
 			<a target="_blank" href="http://bosonic.github.io/documentation.html#how-it-works">comment ça marche</a>.</li>
 		</ul>
 
-		<p>En dehors du standard, mentionnons <a target="_blank" href="https://facebook.github.io/react/"><strong>React</strong></a>
-		de Facebook, qui est basé sur l'idée de la réutilisation de composants « boites noires », avec en plus un fort aspect
-		performance des accès au DOM, au prix d'une authentique usine à gaz.</p>
+		<p>En dehors d'une approche par la standardisation, mentionnons <strong>React</strong>
+		de Facebook. React est une bibliothèque pour construire les vues (il est le « V » du MVC),
+		basée sur l'idée de la réutilisation de composants « boites noires ». React implémente un <em>DOM virtuel</em>, c'est-à-dire
+		qu'il crée un objet JavaScript représentant chaque balise HTML dans le but de minimiser les traitements sur le DOM réel. Une
+		seconde technologie a été élaborée conjointement : JSX, qui permet de représenter les objets JavaScript par des balises XML
+		et ainsi de reconstituer une apparence de templates HTML. À regarder :
+		<a target="_blank" href="https://facebook.github.io/react/#examples">des exemples</a> de code JSX avec leur compilation en
+		JavaScript (cliquez sur les onglets). Une approche axée performance des accès au DOM au prix d'une authentique usine à gaz.</p>
 
-		<p><strong>Woc.ts</strong>, également en dehors du standard, est la solution la plus légère. Woc.ts est utilisable avec les IDE d'aujourd'hui, avec
-		les connaissances habituelles (un habitué de jQuery manipulera ses templates avec jQuery) et même le
-		débogage habituel. Les CSS ne sont pas « sandboxées » mais le développeur peut définir un préfixe en suivant simplement
-		les suggestions de <a target="_blank" href="http://bem.info/method/definitions/">BEM</a>. Woc.ts, c'est juste des
-		technologies d'aujourd'hui avec un peu d'organisation pour regrouper les codes HTML, CSS et JS par composants.</p>
+		<p><strong>Woc.ts</strong>, également en dehors du standard, est la solution la plus légère. Woc.ts est utilisable avec les
+		IDE d'aujourd'hui, avec les connaissances d'aujourd'hui (un habitué de jQuery manipulera ses templates avec jQuery) et même
+		le débogage habituel. Les CSS ne sont pas « sandboxées » mais le développeur peut définir un préfixe par composant en suivant
+		simplement les suggestions de <a target="_blank" href="http://bem.info/method/definitions/">BEM</a>. Woc.ts, c'est juste des
+		technologies d'aujourd'hui organisées pour regrouper les codes HTML, CSS et JS par composants.</p>
 </div>
 	</div>
 </article>
