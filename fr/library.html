@@ -74,13 +74,13 @@
 	l'application peut rendre disponible la <em>library</em> via la méthode <code>evalLibrary</code> (cela lance l'interprétation du
 	code s'il n'a pas déjà été interprété). Ou bien, si un élément <code>useLibraries</code> est présent dans un fichier de
 	configuration, le noyau Woc appelle automatiquement la méthode <code>evalLibrary</code>.</p>
-<p>La configuration se trouve dans un fichier « lib.json ». Voici le contenu du fichier « jQueryUI.l/lib.json » :</p>
+<p>La configuration se trouve dans un fichier « library.json ». Voici le contenu du fichier « jQueryUI.l/library.json » :</p>
 
 <pre><code>{
-	"woc": "0.7",
+	"woc": "0.8",
 	"useLibraries": ["jQuery"],
 	"script": ["jquery-ui-1.10.4.custom.min.js", "datepicker-fr.js"],
-	"css": "jquery-ui-1.10.4.custom.min.css",
+	"stylesheet": "jquery-ui-1.10.4.custom.min.css",
 	"name": "jQueryUI"
 }
 </code></pre>

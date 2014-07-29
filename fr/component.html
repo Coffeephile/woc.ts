@@ -69,17 +69,17 @@
 	images, dans un répertoire suffixé par <code>.c</code> et dont le parent est un bundle.</p>
 <p>Une fois que le bundle dont il fait partie est chargé, le composant devient accessible globalement. N'importe quelle partie
 	de l'application Woc peut instancier le composant.</p>
-<p>Sa configuration est précisée dans un fichier « comp.json ». Voici le contenu du fichier « todos_List.c/comp.json » :</p>
+<p>Sa configuration est précisée dans un fichier « component.json ». Voici le contenu du fichier « todos_List.c/component.json » :</p>
 
 <pre><code>{
-	"woc": "0.7",
+	"woc": "0.8",
 	"encoding": "utf8",
 	"useLibraries": ["jQuery"],
 	"useServices": [],
 	"useComponents": [],
 	"script": "List.js",
 	"templates": "t.html",
-	"css": "p.css",
+	"stylesheet": "p.css",
 	"name": "todos.List"
 }
 </code></pre>
