@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 7 - Tutorial - Woc.ts</title>
+    <link rel="stylesheet" href="/theme/main.css">
+  </head>
+  <body class="ob-bgGreyArea">
+    <header class="SiteHeader">
+      <div class="ob-pageWrapper pos large">
+        <div class="SiteHeader-left"><a href="/" class="BlockLink light">Woc.ts</a></div>
+        <div class="SiteHeader-right"><a href="/presentation.html" class="BlockLink light">Presentation</a><a href="/tutorial/" class="BlockLink light noMargin">Tutorial</a></div>
+      </div>
+    </header>
+    <div class="PageBody ob-pageWrapper large">
+      <main class="PageBody-main">
+        <div class="Paper side ob-text longTitle"><h1 id="step-7-todos-model-make-a-service-">Step 7 - <code>Todos.Model</code> <em>Make a service</em></h1>
+<p>The model is the “M” of the MVC schema. In this step, the model of our application will be created. It will be a <em>service</em>.</p>
+<blockquote>
+<p>A <strong>service</strong> is a singleton. All the application shares a single instance of the service, that will be lazily created on the first use. Until it is deployed, a service is a directory named <code>&lt;ServiceName&gt;.wocs</code>, that contains a file <code>service.json</code>.</p>
+</blockquote>
+<p>We already have created a service: the starting point is a service.</p>
+<h2 id="create-the-service-todos-model-">Create the service <code>Todos.Model</code></h2>
+<ol>
+<li>In <code>todos.wocb</code>, make a directory <code>Todos.Model.wocs/</code>;</li>
+<li>In this new directory, create and edit a file <code>Model.ts</code>;</li>
+<li>Then, paste the code:</li>
+</ol>
+<pre><code class="lang-typescript">/// &lt;reference path=&#39;../defs/todos.d.ts&#39; /&gt;
+
+module Todos {
+  &#39;use strict&#39;;
+
+  export interface Task {
+    id: number;
+    title: string;
+    description?: string;
+    expirationDate?: string;
+  }
+
+  export class Model {
+    private tasks = {};
+    private lastId: number = -1;
+
+    public reset(tasks: Task[]) {
+      this.tasks = {};
+      var t: Task;
+      for (var i = 0, len = tasks.length; i &lt; len; ++i) {
+        t = tasks[i];
+        this.tasks[t.id] = t;
+        this.lastId = Math.max(this.lastId, t.id);
+      }
+    }
+
+    public addTask(taskTitle: string): number {
+      var id = ++this.lastId;
+      this.tasks[id] = {
+        id: id,
+        title: taskTitle
+      };
+      return id;
+    }
+
+    public rmTask(id: number): void {
+      if (!this.tasks[id])
+        throw Error(&#39;Unknown task &quot;&#39; + id + &#39;&quot;&#39;);
+      delete this.tasks[id];
+    }
+
+    public updateTask(t: Task): Task {
+      if (!this.tasks[t.id])
+        throw Error(&#39;Unknown task &quot;&#39; + t.id + &#39;&quot;&#39;);
+      return this.tasks[t.id] = Model.cloneTask(t);
+    }
+
+    public listTasks(): Task[] {
+      var list: Task[] = [];
+      for (var k in this.tasks) {
+        if (this.tasks.hasOwnProperty(k))
+          list.push(Model.cloneTask(this.tasks[k]));
+      }
+      list.sort((a: Task, b: Task) =&gt; {
+        return a.title &lt; b.title ? -1 : (a.title === b.title ? 0 : 1);
+      });
+      return list;
+    }
+
+    public getTask(id: number): Task {
+      return this.tasks[id] ? Model.cloneTask(this.tasks[id]) : undefined;
+    }
+
+    private static cloneTask(t: Task): Task {
+      return {
+        id: t.id,
+        title: t.title,
+        description: t.description,
+        expirationDate: t.expirationDate
+      };
+    }
+  }
+}
+</code></pre>
+<p>In this code, an interface <code>Task</code> is defined. The model provides the API for storing and reading tasks.</p>
+<p>There isn’t a constructor because we don’t use the service context. But we could write one:</p>
+<pre><code class="lang-typescript">  constructor(private sc: Woc.ServiceContext) {
+  }
+</code></pre>
+<p>In the directory <code>Todos.Model.wocs/</code>, create the configuration file <code>service.json</code> with this code:</p>
+<pre><code class="lang-javascript">{
+  <span class="string">"woc"</span>: <span class="string">"0.12"</span>,
+  <span class="string">"encoding"</span>: <span class="string">"UTF-8"</span>,
+  <span class="string">"scripts"</span>: <span class="string">"Model.js"</span>,
+  <span class="string">"name"</span>: <span class="string">"Todos.Model"</span>
+}
+</code></pre>
+<h2 id="reference-the-service-todos-model-in-the-bundle">Reference the service <code>Todos.Model</code> in the bundle</h2>
+<p>Edit the file <code>todos.wocb/bundle.json</code> and add the service <code>Todos.Model</code>:</p>
+<pre><code class="lang-javascript">  <span class="string">"services"</span>: [<span class="string">"Todos.Start"</span>, <span class="string">"Todos.Model"</span>]
+</code></pre>
+<p>Then, edit the file <code>todos.wocb/defs/todos.d.ts</code> and append the following line:</p>
+<pre><code class="lang-typescript">/// &lt;reference path=&#39;../Todos.Model.wocs/Model.ts&#39; /&gt;
+</code></pre>
+<p>The service is ready to be used.</p>
+<h2 id="use-our-model-in-the-starting-point-todos-start-">Use our model in the starting point <code>Todos.Start</code></h2>
+<p>Edit the file <code>Todos.Start.wocs/Start.ts</code> and replace all the class with this new code:</p>
+<pre><code class="lang-typescript">export class Start implements Woc.StartingPoint {
+  private http: Woc.HttpClient;
+  private model: Todos.Model;
+
+  constructor(private sc: Woc.ServiceContext) {
+    this.http = sc.getService(&#39;Woc.HttpClient&#39;);
+    this.model = sc.getService(&#39;Todos.Model&#39;);
+  }
+
+  public start(el: HTMLElement) {
+    el.className = &#39;AppWrapper&#39;;
+    el.classList.add(&#39;ob-ajax&#39;);
+    this.http.get(this.sc.appConfig.wocUrl + &#39;/data.json&#39;).then((resp) =&gt; {
+      el.classList.remove(&#39;ob-ajax&#39;);
+      this.model.reset(resp.data.tasks);
+      var list: Todos.List = this.sc.createComponent(&#39;Todos.List&#39;);
+      list.attachTo(el);
+    }).catch((err) =&gt; {
+      this.sc.log.error(err);
+    });
+  }
+}
+</code></pre>
+<p>The model is received in the constructor. Then, after the Ajax request returns initial data, the data is given to the method <code>reset</code> of the model. The component <code>Todos.List</code> doesn’t receive the data as a property. At the next step the component <code>Todos.List</code> will use the model.</p>
+<p>Because <code>Todos.Start</code> uses the model, it has to declare it in its configuration file. Edit the file <code>Todos.Start.wocs/service.json</code>, then add <code>Todos.Model</code> in the property <code>useService</code>:</p>
+<pre><code class="lang-javascript">  <span class="string">"useServices"</span>: [<span class="string">"Woc.HttpClient"</span>, <span class="string">"Todos.Model"</span>],
+</code></pre>
+<h2 id="run-in-the-browser">Run in the browser</h2>
+<p>Reload the application in the browser. The list content disappears because the component Todos.List receives nothing as data.</p>
+
+        </div>
+      </main>
+      <div class="PageBody-side Sidebar">
+        <nav class="Widget">
+          <ul class="SimpleList">
+            <li class="SimpleList-li"><a href="step-00.html" class="SmallBlockLink">0 - Bootstrapping</a></li>
+            <li class="SimpleList-li"><a href="step-01.html" class="SmallBlockLink">1 - Hello, World! <em>Make a Starting Point</em></a></li>
+            <li class="SimpleList-li"><a href="step-02.html" class="SmallBlockLink">2 - Add a nested bundle <code>lib</code> <em>Add things from outside</em></a></li>
+            <li class="SimpleList-li"><a href="step-03.html" class="SmallBlockLink">3 - A Few Styles <em>Make a Theme</em></a></li>
+            <li class="SimpleList-li"><a href="step-04.html" class="SmallBlockLink">4 - <code>Todos.List</code> <em>Make a Component</em></a></li>
+            <li class="SimpleList-li"><a href="step-05.html" class="SmallBlockLink">5 - <code>Todos.List</code>: Dynamic template <em>Data binding with Vue.js</em></a></li>
+            <li class="SimpleList-li"><a href="step-06.html" class="SmallBlockLink">6 - Load data from the server <em>Use the service <code>Woc.Ajax</code></em></a></li>
+            <li class="SimpleList-li"><a href="step-07.html" class="SmallBlockLink">7 - <code>Todos.Model</code> <em>Make a service</em></a></li>
+            <li class="SimpleList-li"><a href="step-08.html" class="SmallBlockLink">8 - <code>Todos.List</code>: With the model</a></li>
+            <li class="SimpleList-li"><a href="step-09.html" class="SmallBlockLink">9 - <code>Todos.CreateTask</code> <em>A component managed by a template</em></a></li>
+            <li class="SimpleList-li"><a href="step-10.html" class="SmallBlockLink">10 - <code>Todos.Start</code>: several pages <em>Use a router</em></a></li>
+            <li class="SimpleList-li"><a href="step-11.html" class="SmallBlockLink">11 - <code>Todos.EditPanel</code> <em>Double bind</em></a></li>
+            <li class="SimpleList-li"><a href="step-12.html" class="SmallBlockLink">12 - <code>Todos.EditPanel</code>: with dialogs <em>Use the service <code>WocTeam.Dialogs</code></em></a></li>
+            <li class="SimpleList-li"><a href="step-13.html" class="SmallBlockLink">13 - <code>Todos.DateInput</code>: A custom date picker? <em>Use a jQuery-ui widget</em></a></li>
+            <li class="SimpleList-li"><a href="step-14.html" class="SmallBlockLink">14 - <code>Todos.Init</code>: Globally configure jQuery-ui <em>Make an initializer</em></a></li>
+            <li class="SimpleList-li"><a href="step-15.html" class="SmallBlockLink">15 - Deploy! <em>Use the tool <code>woc-make</code></em></a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <footer class="SiteFooter">
+      <div class="ob-pageWrapper large"><span class="ph-email"></span><a href="https://www.facebook.com/tarh.paleo" class="BlockLink">Facebook</a><a href="https://github.com/tarh/woc.ts" class="BlockLink">Contribute</a><a href="https://github.com/tarh/woc-site" class="BlockLink noMargin">Improve this site</a></div>
+    </footer>
+    <script src="/js/main.js"></script>
+    <script src="/theme/prism.js"></script>
+  </body>
+</html>

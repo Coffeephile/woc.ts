@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 1 - Tutorial - Woc.ts</title>
+    <link rel="stylesheet" href="/theme/main.css">
+  </head>
+  <body class="ob-bgGreyArea">
+    <header class="SiteHeader">
+      <div class="ob-pageWrapper pos large">
+        <div class="SiteHeader-left"><a href="/" class="BlockLink light">Woc.ts</a></div>
+        <div class="SiteHeader-right"><a href="/presentation.html" class="BlockLink light">Presentation</a><a href="/tutorial/" class="BlockLink light noMargin">Tutorial</a></div>
+      </div>
+    </header>
+    <div class="PageBody ob-pageWrapper large">
+      <main class="PageBody-main">
+        <div class="Paper side ob-text longTitle"><h1 id="step-1-hello-world-make-a-starting-point-">Step 1 - Hello World! <em>Make a Starting Point</em></h1>
+<h2 id="notice-valid-for-all-steps-">Notice (valid for all steps)</h2>
+<p>We are going to work in the directory <code>first-app</code>. At the end of this step, our directory <code>first-app</code> will be similar to the directory <code>step-01</code>.</p>
+<p>Before each step, you should watch the result by loading the current step in the browser. In WebStorm, right click on <code>step-01/index.html</code>, then go to <code>Open in Browser</code>. Or, with another Web server, load the page from the right URL, like: <code>http://localhost:8080/path/to/the/tutorial/step-01/</code>.</p>
+<h2 id="the-bundle-todos-in-the-directory-todos-wocb-">The bundle <code>todos</code> in the directory <code>todos.wocb</code></h2>
+<p>In our application directory <code>first-app</code>, there is a subdirectory <code>todos.wocb</code>. It contains the <em>bundle</em> <code>todos</code>.</p>
+<blockquote>
+<p>A <strong>bundle</strong> is a loading unit. It is not a namespace: once loaded, it has no existence. We suggest you name bundles in lower case with dashes. Until it is deployed, a bundle is a directory suffixed with <code>.wocb</code>, that contains a file <code>bundle.json</code>.</p>
+</blockquote>
+<p>For this tutorial, all our application is contained in the bundle <code>todos</code>.</p>
+<h2 id="-todos-start-wocs-start-ts-our-starting-point-code"><code>Todos.Start.wocs/Start.ts</code>, our starting point code</h2>
+<p>Now we are going to write the TypeScript code of the starting point. A starting point is a <em>service</em>. We’ll see further, in a next step, what is a service. For now, let’s create it.</p>
+<ol>
+<li>In <code>todos.wocb</code>, make a directory <code>Todos.Start.wocs/</code>;</li>
+<li>In this directory, create and edit a file <code>Start.ts</code>;</li>
+<li>Then, paste the code:</li>
+</ol>
+<pre><code class="lang-typescript">/// &lt;reference path=&#39;../defs/Woc.d.ts&#39; /&gt;
+module Todos {
+  &#39;use strict&#39;;
+  export class Start implements Woc.StartingPoint {
+    constructor(private sc: Woc.ServiceContext) {
+    }
+    public start(el: HTMLElement) {
+      el.innerHTML = &#39;&lt;h1&gt;Hello, World!&lt;/h1&gt;&#39;;
+    }
+  }
+}
+</code></pre>
+<p>In a TypeScript module <code>Todos</code>, a class <code>Start</code> is created. The names of modules and classes are free, but we strongly recommend to make the name of the directory match the full class name: in this case <code>Todos.Start.wocs</code> and <code>Todos.Start</code>. The suffix <code>.wocs</code> in the directory name is required, it means “Woc Service”.</p>
+<p>The constructor expects a parameter <code>sc</code> of type <code>Woc.ServiceContext</code>. Woc.ts will create a context and give it to the service.</p>
+<p>The method <code>start(el)</code> is defined in the interface <code>Woc.StartingPoint</code>. Its role is to start the application on the HTML element <code>el</code>. We then write <code>Hello, World!</code> in this element.</p>
+<p>When we save the TypeScript file <code>Start.ts</code>, the code is compiled by the IDE and then, as a result, a new JavaScript file <code>Start.js</code> is created.</p>
+<h2 id="-todos-start-wocs-service-json-the-starting-point-configuration"><code>Todos.Start.wocs/service.json</code>, the starting point configuration</h2>
+<p>Our starting point service needs a second file for the configuration.</p>
+<ol>
+<li>In <code>Todos.Start.wocs</code>, create a file <code>service.json</code>;</li>
+<li>Then, edit this file and paste the code:</li>
+</ol>
+<pre><code class="lang-javascript">{
+  <span class="string">"woc"</span>: <span class="string">"0.12"</span>,
+  <span class="string">"encoding"</span>: <span class="string">"UTF-8"</span>,
+  <span class="string">"scripts"</span>: <span class="string">"Start.js"</span>,
+  <span class="string">"name"</span>: <span class="string">"Todos.Start"</span>
+}
+</code></pre>
+<p>The first two properties are common to all the configuration files in a Woc.ts application. The property <code>woc</code> gives the compatible core version.</p>
+<p>The property <code>scripts</code> contains the JavaScript file name as a string, or a list of JavaScript file names. The property <code>name</code> must be the full name of the class that Woc.ts will have to instantiate. It is also the name of the service.</p>
+<h2 id="-bundle-json-the-bundle-configuration"><code>bundle.json</code>, the bundle configuration</h2>
+<p>Because we’ve added a service in the bundle <code>todos</code>, the bundle configuration needs to be updated.</p>
+<p>Edit the file <code>todos.wocb/bundle.json</code> and add the service:</p>
+<pre><code class="lang-javascript">  <span class="string">"services"</span>: [<span class="string">"Todos.Start"</span>]
+</code></pre>
+<p>So, the complete code of <code>bundle.json</code> is now:</p>
+<pre><code class="lang-javascript">{
+  <span class="string">"woc"</span>: <span class="string">"0.12"</span>,
+  <span class="string">"encoding"</span>: <span class="string">"UTF-8"</span>,
+  <span class="string">"version"</span>: <span class="string">"0.1"</span>,
+  <span class="string">"services"</span>: [<span class="string">"Todos.Start"</span>]
+}
+</code></pre>
+<h2 id="load-woc-ts-and-the-bundle-todos-from-index-html-">Load Woc.ts and the bundle <code>todos</code> from <code>index.html</code></h2>
+<p>The bundle is ready. Let’s load it from the HTML code:</p>
+<ol>
+<li>In the application directory, edit the file <code>index.html</code>;</li>
+<li>In the <code>&lt;head&gt;</code> element, at the last position, append:</li>
+</ol>
+<pre><code class="lang-markup">  &lt;script src=&quot;woc-w.min.js&quot;&gt;&lt;/script&gt;
+</code></pre>
+<p>The file <code>woc-w.min.js</code> includes the code for loading bundles during development (<code>-w</code> means “working”).</p>
+<p>Then, in the <code>&lt;body&gt;</code> element, append:</p>
+<pre><code class="lang-markup">  &lt;div data-woc-load=&quot;todos(w)&quot; data-woc-start=&quot;Todos.Start&quot;&gt;&lt;/div&gt;
+</code></pre>
+<p>The attribute <code>data-woc-load</code> determine which bundle(s) Woc.ts has to load. The <code>w</code> in parenthesis means that the bundle is not deployed and the working loader must be used. The attribute <code>data-woc-start</code> contains the service name of the starting point.</p>
+<h2 id="run-in-the-browser">Run in the browser</h2>
+<p>Load the file <code>index.html</code> in a browser, via HTTP. You should see the <code>Hello, World!</code> message.</p>
+<h2 id="use-woc-w-service-for-better-performances-during-coding">Use <code>woc-w-service</code> for better performances during coding</h2>
+<p>While loading <code>index.html</code> in a browser, if you open the JavaScript console, you can notice a message: “[Cache disabled] …”. In order to use the browser cache, the program <code>woc-w-service</code> should run.</p>
+<p>On the first run, the node dependencies have to be installed. In command line, go to the application directory, then install the dependencies:</p>
+<pre><code>cd path/to/first-app/
+npm install --prefix _woctools/
+</code></pre><p>Run the program:</p>
+<pre><code>node _woctools/woc-w-service
+</code></pre><p>This program creates a file <code>w-sync.json</code> that list the last update time for each files of the project. If you use WebStorm as a Web server, ensure that it takes into account the file <code>w-sync.json</code>. Reload the page in the browser: in the console, the warning is not displayed anymore.</p>
+<p>On the command line, after the turorial, you will enter <code>CTRL + C</code> for exit the program.</p>
+<p>I suggest to use Chrome or Chromium during development. Because Firefox reloads by default all the ajax loaded files.</p>
+
+        </div>
+      </main>
+      <div class="PageBody-side Sidebar">
+        <nav class="Widget">
+          <ul class="SimpleList">
+            <li class="SimpleList-li"><a href="step-00.html" class="SmallBlockLink">0 - Bootstrapping</a></li>
+            <li class="SimpleList-li"><a href="step-01.html" class="SmallBlockLink">1 - Hello, World! <em>Make a Starting Point</em></a></li>
+            <li class="SimpleList-li"><a href="step-02.html" class="SmallBlockLink">2 - Add a nested bundle <code>lib</code> <em>Add things from outside</em></a></li>
+            <li class="SimpleList-li"><a href="step-03.html" class="SmallBlockLink">3 - A Few Styles <em>Make a Theme</em></a></li>
+            <li class="SimpleList-li"><a href="step-04.html" class="SmallBlockLink">4 - <code>Todos.List</code> <em>Make a Component</em></a></li>
+            <li class="SimpleList-li"><a href="step-05.html" class="SmallBlockLink">5 - <code>Todos.List</code>: Dynamic template <em>Data binding with Vue.js</em></a></li>
+            <li class="SimpleList-li"><a href="step-06.html" class="SmallBlockLink">6 - Load data from the server <em>Use the service <code>Woc.Ajax</code></em></a></li>
+            <li class="SimpleList-li"><a href="step-07.html" class="SmallBlockLink">7 - <code>Todos.Model</code> <em>Make a service</em></a></li>
+            <li class="SimpleList-li"><a href="step-08.html" class="SmallBlockLink">8 - <code>Todos.List</code>: With the model</a></li>
+            <li class="SimpleList-li"><a href="step-09.html" class="SmallBlockLink">9 - <code>Todos.CreateTask</code> <em>A component managed by a template</em></a></li>
+            <li class="SimpleList-li"><a href="step-10.html" class="SmallBlockLink">10 - <code>Todos.Start</code>: several pages <em>Use a router</em></a></li>
+            <li class="SimpleList-li"><a href="step-11.html" class="SmallBlockLink">11 - <code>Todos.EditPanel</code> <em>Double bind</em></a></li>
+            <li class="SimpleList-li"><a href="step-12.html" class="SmallBlockLink">12 - <code>Todos.EditPanel</code>: with dialogs <em>Use the service <code>WocTeam.Dialogs</code></em></a></li>
+            <li class="SimpleList-li"><a href="step-13.html" class="SmallBlockLink">13 - <code>Todos.DateInput</code>: A custom date picker? <em>Use a jQuery-ui widget</em></a></li>
+            <li class="SimpleList-li"><a href="step-14.html" class="SmallBlockLink">14 - <code>Todos.Init</code>: Globally configure jQuery-ui <em>Make an initializer</em></a></li>
+            <li class="SimpleList-li"><a href="step-15.html" class="SmallBlockLink">15 - Deploy! <em>Use the tool <code>woc-make</code></em></a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <footer class="SiteFooter">
+      <div class="ob-pageWrapper large"><span class="ph-email"></span><a href="https://www.facebook.com/tarh.paleo" class="BlockLink">Facebook</a><a href="https://github.com/tarh/woc.ts" class="BlockLink">Contribute</a><a href="https://github.com/tarh/woc-site" class="BlockLink noMargin">Improve this site</a></div>
+    </footer>
+    <script src="/js/main.js"></script>
+    <script src="/theme/prism.js"></script>
+  </body>
+</html>

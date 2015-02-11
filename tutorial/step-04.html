@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 4 - Tutorial - Woc.ts</title>
+    <link rel="stylesheet" href="/theme/main.css">
+  </head>
+  <body class="ob-bgGreyArea">
+    <header class="SiteHeader">
+      <div class="ob-pageWrapper pos large">
+        <div class="SiteHeader-left"><a href="/" class="BlockLink light">Woc.ts</a></div>
+        <div class="SiteHeader-right"><a href="/presentation.html" class="BlockLink light">Presentation</a><a href="/tutorial/" class="BlockLink light noMargin">Tutorial</a></div>
+      </div>
+    </header>
+    <div class="PageBody ob-pageWrapper large">
+      <main class="PageBody-main">
+        <div class="Paper side ob-text longTitle"><h1 id="step-4-todos-list-make-a-component-">Step 4 - <code>Todos.List</code> <em>Make a Component</em></h1>
+<p>We are going to create our first component.</p>
+<h2 id="a-dedicated-directory-todos-list-wocc-">A dedicated directory <code>Todos.List.wocc</code></h2>
+<p>In the directory <code>todos.wocb</code>, make a subdirectory <code>Todos.List.wocc</code>.</p>
+<blockquote>
+<p>A <strong>component</strong> is a piece of GUI. It is instanciated as much time as needed. Until it is deployed, a component is a directory named <code>&lt;ComponentName&gt;.wocc</code>, that contains a file <code>component.json</code>.</p>
+</blockquote>
+<h2 id="the-typescript-code-in-list-ts-">The TypeScript code in <code>List.ts</code></h2>
+<p>In this new component directory, create and edit a file <code>List.ts</code>. Then, paste the code:</p>
+<pre><code class="lang-typescript">/// &lt;reference path=&#39;../defs/todos.d.ts&#39; /&gt;
+
+module Todos {
+  &#39;use strict&#39;;
+
+  export class List implements Woc.Component {
+    constructor(private cc: WocTeam.VueComponentContext) {
+    }
+
+    public attachTo(el: HTMLElement): void {
+      this.cc.bindTemplate({
+        el: el,
+        wocTemplate: &#39;TodosList&#39;
+      });
+    }
+  }
+}
+</code></pre>
+<p>The method <code>attachTo</code> is required, it is present in the interface <code>Woc.Component</code>. In this method, we bind the HTML element to a template <code>TodosList</code> that we have now to create.</p>
+<p>The constructor take its context as a parameter. The context is provided by Woc.ts (see the interface <code>Woc.ComponentContext</code> for the methods), and methods can be added by templates engine (here, we use the method <code>bindTemplate</code> from the template engine <code>WocTeam.VueTemplateEngine</code>).</p>
+<p>On save, the IDE should generate the <code>.js</code> file.</p>
+<h2 id="a-static-html-template">A static HTML template</h2>
+<p>In the component directory, create and edit a file <code>List.html</code>. Then, paste the code:</p>
+<pre><code class="lang-markup">&lt;!-- Template: TodosList --&gt;
+
+&lt;section class=&quot;TodosList&quot;&gt;
+  &lt;h1 class=&quot;PageTitle&quot;&gt;Tasks&lt;/h1&gt;
+  &lt;ul class=&quot;TodosList-ul&quot;&gt;
+    &lt;li class=&quot;TodosList-li&quot;&gt;Task 1&lt;/li&gt;
+    &lt;li class=&quot;TodosList-li&quot;&gt;Task 2&lt;/li&gt;
+    &lt;li class=&quot;TodosList-li&quot;&gt;Task 3&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/section&gt;
+</code></pre>
+<p>A template file (suffixed with <code>.html</code>) can contain several templates. Each are named with an HTML comment:</p>
+  <!-- Template: <TemplateName> -->
+
+<p>Then, it can be used from the TypeScript code with the property <code>wocTemplate</code> of the method <code>bindTemplate</code>.</p>
+<h2 id="css-rules">CSS rules</h2>
+<p>CSS files can be added to the component.</p>
+<blockquote>
+<p>Notice: The selectors should not interfere to other parts of the application. Woc.ts doesn’t check your CSS code. And the rules won’t be wrapped (maybe once <em>Shadow DOM</em> will be implemented everywhere, we will be able to use it, but today we it’s not ready for production). So, you have to carefully choose the CSS class names. I suggest to use a <a href="http://bem.info/method/definitions/">BEM syntax</a> in order to create strong namespace separation. I use the following alternate BEM syntax (see this <a href="http://www.alsacreations.com/article/lire/1641-bonnes-pratiques-en-css-bem-et-oocss.html">french article</a>):</p>
+<ul>
+<li>ComponentName</li>
+<li>ComponentName.modifierName</li>
+<li>ComponentName-descendantName</li>
+<li>ComponentName-descendantName.modifierName</li>
+<li>ComponentName.isStateOfComponent</li>
+</ul>
+<p>In addition, I use the following syntax for the non-BEM classes:</p>
+<ul>
+<li>myPrefix-&lt;anything&gt;</li>
+</ul>
+</blockquote>
+<p>In the component directory, create and edit a file <code>List.scss</code>. Then, paste the code:</p>
+<pre><code class="lang-scss"><span class="at_rule">@<span class="keyword">charset</span> <span class="string">"UTF-8"</span>;</span>
+<span class="at_rule">@<span class="keyword">import</span> <span class="string">"../defs/defs"</span>;</span>
+
+<span class="class">.TodosList</span> {
+  &amp;-<span class="tag">li</span> {
+    <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> gradient</span>(<span class="hexcolor">#BBB</span>);</span>
+    <span class="attribute">border-bottom</span><span class="value">: <span class="hexcolor">#EEE</span>;</span>
+    <span class="attribute">color</span><span class="value">: <span class="hexcolor">#FFF</span>;</span>
+    <span class="attribute">height</span><span class="value">: <span class="number">40</span>px;</span>
+    <span class="attribute">padding-left</span><span class="value">: <span class="number">30</span>px;</span>
+    <span class="attribute">position</span><span class="value">: relative;</span>
+    &amp;<span class="pseudo">:nth-child</span>(even) {
+      <span class="attribute">background-color</span><span class="value">: <span class="hexcolor">#CCC</span>;</span>
+    }
+  }
+  &amp;-editBtn {
+    -moz-<span class="attribute">box-sizing</span><span class="value">: border-box;</span>
+    -ms-<span class="attribute">box-sizing</span><span class="value">: border-box;</span>
+    -o-<span class="attribute">box-sizing</span><span class="value">: border-box;</span>
+    -webkit-<span class="attribute">box-sizing</span><span class="value">: border-box;</span>
+    <span class="attribute">box-sizing</span><span class="value">: border-box;</span>
+    <span class="attribute">display</span><span class="value">: block;</span>
+    <span class="attribute">font-size</span><span class="value">: <span class="number">1.25</span>em;</span>
+    <span class="attribute">font-weight</span><span class="value">: bold;</span>
+    <span class="attribute">height</span><span class="value">: <span class="number">100</span>%;</span>
+    <span class="attribute">line-height</span><span class="value">: <span class="number">38</span>px;</span>
+    <span class="attribute">padding</span><span class="value">: <span class="number">2</span>px <span class="number">8</span>px;</span>
+    <span class="attribute">width</span><span class="value">: <span class="number">100</span>%;</span>
+    &amp;<span class="pseudo">:focus</span>,
+    &amp;<span class="pseudo">:hover</span> {
+      <span class="attribute">background-color</span><span class="value">: rgba(<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>, .<span class="number">4</span>);</span>
+    }
+    &amp;,
+    &amp;<span class="pseudo">:visited</span> {
+      <span class="attribute">color</span><span class="value">: inherit;</span>
+      <span class="attribute">text-decoration</span><span class="value">: none;</span>
+    }
+  }
+  &amp;-rmBtn {
+    <span class="attribute">font-size</span><span class="value">: <span class="number">2</span>em;</span>
+    <span class="attribute">font-weight</span><span class="value">: bold;</span>
+    <span class="attribute">height</span><span class="value">: <span class="number">100</span>%;</span>
+    <span class="attribute">left</span><span class="value">: <span class="number">0</span>;</span>
+    <span class="attribute">line-height</span><span class="value">: <span class="number">40</span>px;</span>
+    <span class="attribute">position</span><span class="value">: absolute;</span>
+    <span class="attribute">text-align</span><span class="value">: center;</span>
+    <span class="attribute">top</span><span class="value">: <span class="number">0</span>;</span>
+    <span class="attribute">width</span><span class="value">: <span class="number">30</span>px;</span>
+    &amp;<span class="pseudo">:focus</span>,
+    &amp;<span class="pseudo">:hover</span> {
+      <span class="attribute">background-color</span><span class="value">: rgba(<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>, .<span class="number">4</span>);</span>
+    }
+  }
+  &amp;-new {
+    <span class="attribute">margin-top</span><span class="value">: $space2;</span>
+  }
+}
+</code></pre>
+<p>On save, the IDE should generate the <code>.css</code> file.</p>
+<h2 id="the-configuration-file-component-json-">The configuration file <code>component.json</code></h2>
+<p>In the component directory, create and edit a file <code>component.json</code>. Then, paste the code:</p>
+<pre><code class="lang-javascript">  {
+    <span class="string">"woc"</span>: <span class="string">"0.12"</span>,
+    <span class="string">"encoding"</span>: <span class="string">"UTF-8"</span>,
+    <span class="string">"contextPlugins"</span>: [<span class="string">"WocTeam.VueTemplateEngine"</span>],
+    <span class="string">"scripts"</span>: <span class="string">"List.js"</span>,
+    <span class="string">"templates"</span>: <span class="string">"List.html"</span>,
+    <span class="string">"styleSheets"</span>: <span class="string">"List.css"</span>,
+    <span class="string">"name"</span>: <span class="string">"Todos.List"</span>
+  }
+</code></pre>
+<p>Each property <code>scripts</code>, <code>templates</code> and <code>styleSheets</code> can be set with a single file name (<code>string</code>) or a list of file names (<code>string[]</code>). We references the JavaScript file, the HTML file and the CSS file.</p>
+<p>The component name must be the full JavaScript class name of our component. Here, the class <code>List</code> is in a module <code>Todos</code>. The component name must match to the directory name too.</p>
+<p>The template engine is chosen here: <code>WocTeam.VueTemplateEngine</code> (you can see it in the nested bundle <code>lib</code> of the step 2).</p>
+<h2 id="reference-the-component-in-the-bundle">Reference the component in the bundle</h2>
+<p>Our component is created. Let’s reference it.</p>
+<p>Edit the file <code>todos.wocb/bundle.json</code> and add the component:</p>
+<pre><code class="lang-javascript">  <span class="string">"components"</span>: [<span class="string">"Todos.List"</span>]
+</code></pre>
+<p>Edit the file <code>todos.wocb/defs/todos.d.ts</code> and append the new TypeScript file:</p>
+<p>  /// <reference path='../Todos.List.wocc/List.ts' /></p>
+<h2 id="use-the-component">Use the component</h2>
+<p>Our component is added in the bundle. Let’s use it.</p>
+<p>Edit the file <code>Todos.Start.wocs/Start.ts</code>, and replace the line with the message <code>Hello, World!</code> with:</p>
+<pre><code class="lang-typescript">    var list: Todos.List = this.sc.createComponent(&#39;Todos.List&#39;);
+    list.attachTo(el);
+</code></pre>
+<p>Now, the full code of the method is:</p>
+<pre><code class="lang-typescript">  public start(el: HTMLElement) {
+    el.className = &#39;AppWrapper&#39;;
+    var list: Todos.List = this.sc.createComponent(&#39;Todos.List&#39;);
+    list.attachTo(el);
+  }
+</code></pre>
+<p>By default, Woc.ts will refuse to execute the method <code>createComponent</code>, because each part of the application has to detail in its configuration other parts of the application it uses. Edit the file <code>Todos.Start.wocs/service.json</code> and add:</p>
+<pre><code class="lang-javascript">  <span class="string">"useComponents"</span>: [<span class="string">"Todos.List"</span>]
+</code></pre>
+<p>The full code of the file is now:</p>
+<pre><code class="lang-javascript">{
+  <span class="string">"woc"</span>: <span class="string">"0.12"</span>,
+  <span class="string">"encoding"</span>: <span class="string">"UTF-8"</span>,
+  <span class="string">"scripts"</span>: <span class="string">"Start.js"</span>,
+  <span class="string">"name"</span>: <span class="string">"Todos.Start"</span>,
+  <span class="string">"useComponents"</span>: [<span class="string">"Todos.List"</span>]
+}
+</code></pre>
+<blockquote>
+<p>Why to detail all parts of the application we use? In order to respect the <a href="https://en.wikipedia.org/wiki/Law_of_Demeter">Law of Demeter</a>.</p>
+</blockquote>
+<h2 id="run-in-the-browser">Run in the browser</h2>
+<p>Reload the file <code>index.html</code> in the browser. Now the list should appear.</p>
+
+        </div>
+      </main>
+      <div class="PageBody-side Sidebar">
+        <nav class="Widget">
+          <ul class="SimpleList">
+            <li class="SimpleList-li"><a href="step-00.html" class="SmallBlockLink">0 - Bootstrapping</a></li>
+            <li class="SimpleList-li"><a href="step-01.html" class="SmallBlockLink">1 - Hello, World! <em>Make a Starting Point</em></a></li>
+            <li class="SimpleList-li"><a href="step-02.html" class="SmallBlockLink">2 - Add a nested bundle <code>lib</code> <em>Add things from outside</em></a></li>
+            <li class="SimpleList-li"><a href="step-03.html" class="SmallBlockLink">3 - A Few Styles <em>Make a Theme</em></a></li>
+            <li class="SimpleList-li"><a href="step-04.html" class="SmallBlockLink">4 - <code>Todos.List</code> <em>Make a Component</em></a></li>
+            <li class="SimpleList-li"><a href="step-05.html" class="SmallBlockLink">5 - <code>Todos.List</code>: Dynamic template <em>Data binding with Vue.js</em></a></li>
+            <li class="SimpleList-li"><a href="step-06.html" class="SmallBlockLink">6 - Load data from the server <em>Use the service <code>Woc.Ajax</code></em></a></li>
+            <li class="SimpleList-li"><a href="step-07.html" class="SmallBlockLink">7 - <code>Todos.Model</code> <em>Make a service</em></a></li>
+            <li class="SimpleList-li"><a href="step-08.html" class="SmallBlockLink">8 - <code>Todos.List</code>: With the model</a></li>
+            <li class="SimpleList-li"><a href="step-09.html" class="SmallBlockLink">9 - <code>Todos.CreateTask</code> <em>A component managed by a template</em></a></li>
+            <li class="SimpleList-li"><a href="step-10.html" class="SmallBlockLink">10 - <code>Todos.Start</code>: several pages <em>Use a router</em></a></li>
+            <li class="SimpleList-li"><a href="step-11.html" class="SmallBlockLink">11 - <code>Todos.EditPanel</code> <em>Double bind</em></a></li>
+            <li class="SimpleList-li"><a href="step-12.html" class="SmallBlockLink">12 - <code>Todos.EditPanel</code>: with dialogs <em>Use the service <code>WocTeam.Dialogs</code></em></a></li>
+            <li class="SimpleList-li"><a href="step-13.html" class="SmallBlockLink">13 - <code>Todos.DateInput</code>: A custom date picker? <em>Use a jQuery-ui widget</em></a></li>
+            <li class="SimpleList-li"><a href="step-14.html" class="SmallBlockLink">14 - <code>Todos.Init</code>: Globally configure jQuery-ui <em>Make an initializer</em></a></li>
+            <li class="SimpleList-li"><a href="step-15.html" class="SmallBlockLink">15 - Deploy! <em>Use the tool <code>woc-make</code></em></a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <footer class="SiteFooter">
+      <div class="ob-pageWrapper large"><span class="ph-email"></span><a href="https://www.facebook.com/tarh.paleo" class="BlockLink">Facebook</a><a href="https://github.com/tarh/woc.ts" class="BlockLink">Contribute</a><a href="https://github.com/tarh/woc-site" class="BlockLink noMargin">Improve this site</a></div>
+    </footer>
+    <script src="/js/main.js"></script>
+    <script src="/theme/prism.js"></script>
+  </body>
+</html>

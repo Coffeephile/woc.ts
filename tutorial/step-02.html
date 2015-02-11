@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 2 - Tutorial - Woc.ts</title>
+    <link rel="stylesheet" href="/theme/main.css">
+  </head>
+  <body class="ob-bgGreyArea">
+    <header class="SiteHeader">
+      <div class="ob-pageWrapper pos large">
+        <div class="SiteHeader-left"><a href="/" class="BlockLink light">Woc.ts</a></div>
+        <div class="SiteHeader-right"><a href="/presentation.html" class="BlockLink light">Presentation</a><a href="/tutorial/" class="BlockLink light noMargin">Tutorial</a></div>
+      </div>
+    </header>
+    <div class="PageBody ob-pageWrapper large">
+      <main class="PageBody-main">
+        <div class="Paper side ob-text longTitle"><h1 id="step-2-add-a-nested-bundle-lib-add-things-from-outside-">Step 2 - Add a nested bundle <code>lib</code> <em>Add things from outside</em></h1>
+<blockquote>
+<p>[Tip] WebStorm allows to compare directories. Select the two directories <code>step-01</code> and <code>step-02</code>, then right click, and select “compare directories”. Use it to watch the differences between the step 1 and the step 2.</p>
+</blockquote>
+<h2 id="create-a-nested-bundle-lib-">Create a nested bundle <code>lib</code></h2>
+<p>Why a nested bundle? Just for readability. Grouping things from outside is not required, but convenient. A nested bundle is merged in its parent bundle before the code runs.</p>
+<p>Woc.ts is an application loader, it provides almost nothing, except the built-in Ajax service. We are going to add a router, a template engine, a log system, a dialog service, jQuery, jQueryUI, and a CSS reset. We’ll use them in the next steps.</p>
+<ol>
+<li>In the directory <code>todos.wocb/</code>, make a subdirectory <code>lib.wocb</code>;</li>
+<li>In this new directory, copy and paste all the subdirectories from the tutorial <code>tuto-lib/</code> directory.</li>
+</ol>
+<h2 id="-lib-wocb-bundle-json-configuring-the-bundle"><code>lib.wocb/bundle.json</code>, configuring the bundle</h2>
+<p>Create and edit a new file <code>todos.wocb/lib.wocb/bundle.json</code>, then append the code:</p>
+<pre><code class="lang-javascript">{
+  <span class="string">"woc"</span>: <span class="string">"0.12"</span>,
+  <span class="string">"externalLibraries"</span>: [<span class="string">"jQuery"</span>, <span class="string">"jQueryUI"</span>],
+  <span class="string">"services"</span>: [<span class="string">"WocTeam.Log"</span>, <span class="string">"WocTeam.WocEasyRouter"</span>, <span class="string">"WocTeam.Dialogs"</span>, <span class="string">"WocTeam.VueTemplateEngine"</span>],
+  <span class="string">"components"</span>: [<span class="string">"Public.ScreenRouter"</span>],
+  <span class="string">"themes"</span>: [<span class="string">"ResetCSS"</span>]
+}
+</code></pre>
+<p>We add four <em>services</em>, one <em>component</em> and one <em>theme</em>. The router is in the service <code>WocTeam.WocEasyRouter</code>, but we use a small component <code>Public.ScreenRouter</code> that will help us to use it.</p>
+<h2 id="-todos-wocb-bundle-json-add-the-nested-bundle-lib-"><code>todos.wocb/bundle.json</code>, add the nested bundle <code>lib</code></h2>
+<p>Edit the file <code>todos.wocb/bundle.json</code> and add the nested bundle:</p>
+<pre><code class="lang-javascript">  <span class="string">"bundles"</span>: [<span class="string">"lib(w)"</span>]
+</code></pre>
+<p>The complete code is now:</p>
+<pre><code class="lang-javascript">{
+  <span class="string">"woc"</span>: <span class="string">"0.12"</span>,
+  <span class="string">"encoding"</span>: <span class="string">"UTF-8"</span>,
+  <span class="string">"version"</span>: <span class="string">"0.1"</span>,
+  <span class="string">"bundles"</span>: [<span class="string">"lib(w)"</span>],
+  <span class="string">"services"</span>: [<span class="string">"Todos.Start"</span>]
+}
+</code></pre>
+<h2 id="the-subdirectory-defs-and-the-ts-definition-file-lib-d-ts-">The subdirectory <code>defs</code> and the TS definition file <code>lib.d.ts</code></h2>
+<p>We should prepare the TypeScript definition files that we’ll need in the next steps. For flexibility, we are going to create a definition file for each bundle.</p>
+<p>Create and edit a new file <code>todos.wocb/lib.wocb/defs/lib.d.ts</code>, then append the code:</p>
+<pre><code class="lang-typescript">/// &lt;reference path=&#39;Woc.d.ts&#39; /&gt;
+/// &lt;reference path=&#39;../WocTeam.VueTemplateEngine.wocs/VueTemplateEngine.d.ts&#39; /&gt;
+/// &lt;reference path=&#39;../WocTeam.Log.wocs/Log.d.ts&#39; /&gt;
+/// &lt;reference path=&#39;../WocTeam.WocEasyRouter.wocs/WocEasyRouter.d.ts&#39; /&gt;
+/// &lt;reference path=&#39;../WocTeam.Dialogs.wocs/Dialogs.d.ts&#39; /&gt;
+/// &lt;reference path=&#39;../Public.ScreenRouter.wocc/ScreenRouter.ts&#39; /&gt;
+/// &lt;reference path=&#39;../jQuery.woce/jquery.d.ts&#39; /&gt;
+/// &lt;reference path=&#39;../jQueryUI.woce/jqueryui.d.ts&#39; /&gt;
+</code></pre>
+<p>The Woc.ts definition file <code>Woc.d.ts</code> is referenced, then all the services and components of the bundle <code>lib</code> are referenced as well. Later, from TypeScript code, a single reference to <code>lib.d.ts</code> will be enough to access to all the definitions of <code>lib</code> and Woc.ts.</p>
+<p>Note: <code>Woc.d.ts</code> references the file <code>es6-promise.d.ts</code>, which is therefore required.</p>
+<h2 id="-todos-d-ts-the-definitions-used-by-the-bundle-todos-"><code>todos.d.ts</code>, the definitions used by the bundle <code>todos</code></h2>
+<p>In the directory <code>todos.wocb/defs/</code>, we currently have the definition files <code>Woc.d.ts</code> and <code>es6-promise.d.ts</code>. Delete them, because they are already in bundle <code>lib</code>.</p>
+<p>Create and edit a new file <code>todos.wocb/defs/todos.d.ts</code>, then append the code:</p>
+<pre><code class="lang-typescript">/// &lt;reference path=&#39;../lib.wocb/defs/lib.d.ts&#39; /&gt;
+</code></pre>
+<p>This is just a shortcut to the file <code>lib.d.ts</code>.</p>
+<h2 id="in-todos-start-wocs-start-ts-use-the-new-file-todos-d-ts-">In <code>Todos.Start.wocs/Start.ts</code>, use the new file <code>todos.d.ts</code></h2>
+<p>Edit the file <code>todos.wocb/Todos.Start.wocs/Start.ts</code> and replace the first line by our new definition file <code>todos.d.ts</code>:</p>
+<pre><code class="lang-typescript">/// &lt;reference path=&#39;../defs/todos.d.ts&#39; /&gt;
+</code></pre>
+<p>Fine! All is clean. Each TypeScript code references only definition files in its own bundle, and there is no duplicated definitions files.</p>
+<h2 id="run-in-the-browser">Run in the browser</h2>
+<p>Reload the file <code>index.html</code> in the browser. Now the reset CSS should be operational, the <code>Hello, World!</code> message loses its default <code>&lt;h1&gt;</code> style.</p>
+
+        </div>
+      </main>
+      <div class="PageBody-side Sidebar">
+        <nav class="Widget">
+          <ul class="SimpleList">
+            <li class="SimpleList-li"><a href="step-00.html" class="SmallBlockLink">0 - Bootstrapping</a></li>
+            <li class="SimpleList-li"><a href="step-01.html" class="SmallBlockLink">1 - Hello, World! <em>Make a Starting Point</em></a></li>
+            <li class="SimpleList-li"><a href="step-02.html" class="SmallBlockLink">2 - Add a nested bundle <code>lib</code> <em>Add things from outside</em></a></li>
+            <li class="SimpleList-li"><a href="step-03.html" class="SmallBlockLink">3 - A Few Styles <em>Make a Theme</em></a></li>
+            <li class="SimpleList-li"><a href="step-04.html" class="SmallBlockLink">4 - <code>Todos.List</code> <em>Make a Component</em></a></li>
+            <li class="SimpleList-li"><a href="step-05.html" class="SmallBlockLink">5 - <code>Todos.List</code>: Dynamic template <em>Data binding with Vue.js</em></a></li>
+            <li class="SimpleList-li"><a href="step-06.html" class="SmallBlockLink">6 - Load data from the server <em>Use the service <code>Woc.Ajax</code></em></a></li>
+            <li class="SimpleList-li"><a href="step-07.html" class="SmallBlockLink">7 - <code>Todos.Model</code> <em>Make a service</em></a></li>
+            <li class="SimpleList-li"><a href="step-08.html" class="SmallBlockLink">8 - <code>Todos.List</code>: With the model</a></li>
+            <li class="SimpleList-li"><a href="step-09.html" class="SmallBlockLink">9 - <code>Todos.CreateTask</code> <em>A component managed by a template</em></a></li>
+            <li class="SimpleList-li"><a href="step-10.html" class="SmallBlockLink">10 - <code>Todos.Start</code>: several pages <em>Use a router</em></a></li>
+            <li class="SimpleList-li"><a href="step-11.html" class="SmallBlockLink">11 - <code>Todos.EditPanel</code> <em>Double bind</em></a></li>
+            <li class="SimpleList-li"><a href="step-12.html" class="SmallBlockLink">12 - <code>Todos.EditPanel</code>: with dialogs <em>Use the service <code>WocTeam.Dialogs</code></em></a></li>
+            <li class="SimpleList-li"><a href="step-13.html" class="SmallBlockLink">13 - <code>Todos.DateInput</code>: A custom date picker? <em>Use a jQuery-ui widget</em></a></li>
+            <li class="SimpleList-li"><a href="step-14.html" class="SmallBlockLink">14 - <code>Todos.Init</code>: Globally configure jQuery-ui <em>Make an initializer</em></a></li>
+            <li class="SimpleList-li"><a href="step-15.html" class="SmallBlockLink">15 - Deploy! <em>Use the tool <code>woc-make</code></em></a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <footer class="SiteFooter">
+      <div class="ob-pageWrapper large"><span class="ph-email"></span><a href="https://www.facebook.com/tarh.paleo" class="BlockLink">Facebook</a><a href="https://github.com/tarh/woc.ts" class="BlockLink">Contribute</a><a href="https://github.com/tarh/woc-site" class="BlockLink noMargin">Improve this site</a></div>
+    </footer>
+    <script src="/js/main.js"></script>
+    <script src="/theme/prism.js"></script>
+  </body>
+</html>

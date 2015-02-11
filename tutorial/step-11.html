@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 11 - Tutorial - Woc.ts</title>
+    <link rel="stylesheet" href="/theme/main.css">
+  </head>
+  <body class="ob-bgGreyArea">
+    <header class="SiteHeader">
+      <div class="ob-pageWrapper pos large">
+        <div class="SiteHeader-left"><a href="/" class="BlockLink light">Woc.ts</a></div>
+        <div class="SiteHeader-right"><a href="/presentation.html" class="BlockLink light">Presentation</a><a href="/tutorial/" class="BlockLink light noMargin">Tutorial</a></div>
+      </div>
+    </header>
+    <div class="PageBody ob-pageWrapper large">
+      <main class="PageBody-main">
+        <div class="Paper side ob-text longTitle"><h1 id="step-11-todos-editpanel-double-bind-">Step 11 - <code>Todos.EditPanel</code> <em>Double bind</em></h1>
+<p>We can now implement the component <code>Todos.EditPanel</code>.</p>
+<h2 id="in-editpanel-html-">In <code>EditPanel.html</code></h2>
+<p>Replace all the content of the file with:</p>
+<pre><code class="lang-markup">&lt;!-- Template: TodosEditPanel --&gt;
+
+&lt;section class=&quot;TodosEditPanel&quot;&gt;
+  &lt;h1 class=&quot;PageTitle&quot;&gt;Edition&lt;/h1&gt;
+  &lt;form class=&quot;Form&quot;&gt;
+    &lt;fieldset class=&quot;Form-fields&quot; v-on=&quot;input: inputHandler()&quot;&gt;
+      &lt;label class=&quot;Field&quot;&gt;
+        &lt;span class=&quot;Field-lbl&quot;&gt;Title :&lt;/span&gt;
+        &lt;input class=&quot;Field-input&quot; type=&quot;text&quot; v-model=&quot;task.title&quot;&gt;
+      &lt;/label&gt;
+      &lt;label class=&quot;Field&quot;&gt;
+        &lt;span class=&quot;Field-lbl top&quot;&gt;Description :&lt;/span&gt;
+        &lt;textarea class=&quot;Field-textarea&quot; v-model=&quot;task.description&quot;&gt;&lt;/textarea&gt;
+      &lt;/label&gt;
+      &lt;label class=&quot;Field&quot;&gt;
+        &lt;span class=&quot;Field-lbl top&quot;&gt;Date :&lt;/span&gt;
+        &lt;input class=&quot;Field-input&quot; type=&quot;date&quot; v-model=&quot;task.expirationDate&quot;&gt;
+      &lt;/label&gt;
+    &lt;/fieldset&gt;
+    &lt;div class=&quot;Form-btnBar&quot;&gt;
+      &lt;button class=&quot;Form-btn Btn&quot; value=&quot;save&quot; v-on=&quot;click: save&quot; v-show=&quot;changed&quot;&gt;Save&lt;/button&gt;
+      &lt;button class=&quot;Form-btn Btn&quot; value=&quot;rm&quot; v-on=&quot;click: remove&quot;&gt;Remove&lt;/button&gt;
+      &lt;button class=&quot;Form-btn Btn&quot; value=&quot;close&quot; v-on=&quot;click: cancel&quot;&gt;Cancel&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/form&gt;
+&lt;/section&gt;
+</code></pre>
+<p>Notice the directives <code>v-on</code> for event handlers. The callbacks <code>inputHandler</code>, <code>save</code>, <code>remove</code>, <code>cancel</code> will be defined in the TypeScript code, as <code>methods</code>.</p>
+<p>The directive <code>v-model</code> is used for the double bind with the template data.</p>
+<p>The directive <code>v-show</code> displays or hide the element <code>&lt;button&gt;</code>, depending of the value of the property <code>changed</code> in the template data.</p>
+<p>See the documentation of Vue.js for <a href="http://vuejs.org/api/directives.html">more information on directives</a>.</p>
+<h2 id="in-editpanel-ts-">In <code>EditPanel.ts</code></h2>
+<p>Edit the file <code>Todos.EditPanel.wocc/EditPanel.ts</code>. Here is the new code of the class:</p>
+<pre><code class="lang-typescript">export class EditPanel implements Woc.Component {
+  private router: Woc.Router;
+  private model: Todos.Model;
+  private tplData = {
+    task: null,
+    changed: false
+  };
+
+  constructor(private cc: WocTeam.VueComponentContext) {
+    this.router = cc.getService(&#39;Woc.Router&#39;);
+    this.model = cc.getService(&#39;Todos.Model&#39;);
+  }
+
+  public attachTo(el: HTMLElement): void {
+    this.cc.bindTemplate({
+      el: el,
+      wocTemplate: &#39;TodosEditPanel&#39;,
+      data: this.tplData,
+      methods: {
+        save: (e) =&gt; this.cc.logWrap(() =&gt; {
+          e.preventDefault();
+          if (this.tplData.task) {
+            this.model.updateTask(this.tplData.task);
+            this.close();
+          }
+        }),
+        remove: (e) =&gt; this.cc.logWrap(() =&gt; {
+          e.preventDefault();
+          if (this.tplData.task) {
+            this.model.rmTask(this.tplData.task.id);
+            this.close();
+          }
+        }),
+        cancel: (e) =&gt; this.cc.logWrap(() =&gt; {
+          e.preventDefault();
+          this.close();
+        }),
+        inputHandler: () =&gt; this.cc.logWrap(() =&gt; {
+          this.tplData.changed = this.isChanged();
+        })
+      }
+    });
+  }
+
+  public setTask(taskId: number) {
+    this.tplData.task = this.model.getTask(taskId);
+    this.tplData.changed = false;
+  }
+
+  private close() {
+    this.router.navigate(&#39;&#39;);
+  }
+
+  private isChanged(): boolean {
+    if (!this.tplData.task)
+      return false;
+    var keys = [&#39;title&#39;, &#39;description&#39;, &#39;expirationDate&#39;],
+      k: string,
+      cur = this.tplData.task,
+      orig = this.model.getTask(cur.id),
+      changed = false;
+    for (var i = 0, len = keys.length; i &lt; len; ++i) {
+      k = keys[i];
+      if ((cur[k] || null) !== (orig[k] || null)) {
+        changed = true;
+        break;
+      }
+    }
+    return changed;
+  }
+}
+</code></pre>
+<p>The services <code>Woc.Router</code> and <code>Todos.Model</code> are received in the constructor. Note that <code>Woc.Router</code> doesn’t really exists, it is just a TypeScript interface. It is implemented by the service <code>WocTeam.WocEasyRouter.wocs</code>, which is declared as an alias of <code>Woc.Router</code> in its configuration file.</p>
+<p>In the method <code>attachTo</code>, all the callbacks and data used by the HTML template are defined.</p>
+<p>The method <code>setTask</code> take a copy of the current task from the model, and affect it to the template data. Then Vue.js automatically update the DOM with the new task.</p>
+<p>The method <code>close</code> calls the method <code>navigate</code> of the router. The empty string is the root path (paths don’t begin with <code>/</code>).</p>
+<p>The method <code>isChanged</code> compares the model and the current template data.</p>
+<h2 id="in-component-json-">In <code>component.json</code></h2>
+<p>Edit the file <code>Todos.EditPanel.wocc/component.json</code> and add the services <code>Woc.Router</code> and <code>Todos.Model</code>:</p>
+<pre><code class="lang-javascript">  <span class="string">"useServices"</span>: [<span class="string">"Woc.Router"</span>, <span class="string">"Todos.Model"</span>],
+</code></pre>
+<h2 id="run-in-the-browser">Run in the browser</h2>
+<p>Reload the application in the browser. Open a task, and test the edit panel.</p>
+
+        </div>
+      </main>
+      <div class="PageBody-side Sidebar">
+        <nav class="Widget">
+          <ul class="SimpleList">
+            <li class="SimpleList-li"><a href="step-00.html" class="SmallBlockLink">0 - Bootstrapping</a></li>
+            <li class="SimpleList-li"><a href="step-01.html" class="SmallBlockLink">1 - Hello, World! <em>Make a Starting Point</em></a></li>
+            <li class="SimpleList-li"><a href="step-02.html" class="SmallBlockLink">2 - Add a nested bundle <code>lib</code> <em>Add things from outside</em></a></li>
+            <li class="SimpleList-li"><a href="step-03.html" class="SmallBlockLink">3 - A Few Styles <em>Make a Theme</em></a></li>
+            <li class="SimpleList-li"><a href="step-04.html" class="SmallBlockLink">4 - <code>Todos.List</code> <em>Make a Component</em></a></li>
+            <li class="SimpleList-li"><a href="step-05.html" class="SmallBlockLink">5 - <code>Todos.List</code>: Dynamic template <em>Data binding with Vue.js</em></a></li>
+            <li class="SimpleList-li"><a href="step-06.html" class="SmallBlockLink">6 - Load data from the server <em>Use the service <code>Woc.Ajax</code></em></a></li>
+            <li class="SimpleList-li"><a href="step-07.html" class="SmallBlockLink">7 - <code>Todos.Model</code> <em>Make a service</em></a></li>
+            <li class="SimpleList-li"><a href="step-08.html" class="SmallBlockLink">8 - <code>Todos.List</code>: With the model</a></li>
+            <li class="SimpleList-li"><a href="step-09.html" class="SmallBlockLink">9 - <code>Todos.CreateTask</code> <em>A component managed by a template</em></a></li>
+            <li class="SimpleList-li"><a href="step-10.html" class="SmallBlockLink">10 - <code>Todos.Start</code>: several pages <em>Use a router</em></a></li>
+            <li class="SimpleList-li"><a href="step-11.html" class="SmallBlockLink">11 - <code>Todos.EditPanel</code> <em>Double bind</em></a></li>
+            <li class="SimpleList-li"><a href="step-12.html" class="SmallBlockLink">12 - <code>Todos.EditPanel</code>: with dialogs <em>Use the service <code>WocTeam.Dialogs</code></em></a></li>
+            <li class="SimpleList-li"><a href="step-13.html" class="SmallBlockLink">13 - <code>Todos.DateInput</code>: A custom date picker? <em>Use a jQuery-ui widget</em></a></li>
+            <li class="SimpleList-li"><a href="step-14.html" class="SmallBlockLink">14 - <code>Todos.Init</code>: Globally configure jQuery-ui <em>Make an initializer</em></a></li>
+            <li class="SimpleList-li"><a href="step-15.html" class="SmallBlockLink">15 - Deploy! <em>Use the tool <code>woc-make</code></em></a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <footer class="SiteFooter">
+      <div class="ob-pageWrapper large"><span class="ph-email"></span><a href="https://www.facebook.com/tarh.paleo" class="BlockLink">Facebook</a><a href="https://github.com/tarh/woc.ts" class="BlockLink">Contribute</a><a href="https://github.com/tarh/woc-site" class="BlockLink noMargin">Improve this site</a></div>
+    </footer>
+    <script src="/js/main.js"></script>
+    <script src="/theme/prism.js"></script>
+  </body>
+</html>

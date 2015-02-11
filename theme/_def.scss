@@ -1,0 +1,45 @@
+$rowH: 60px;
+$linkColorRead: #7A4ECD;
+$linkColorUnread: #4043E8;
+
+@mixin clearFloats {
+  clear: both;
+  content: "";
+  display: block;
+}
+
+$f6: 0.375em;
+$f7: 0.4375em;
+$f8: 0.5em;
+$f9: 0.5625em;
+$f10: 0.625em;
+$f11: 0.6875em;
+$f12: 0.75em;
+$f13: 0.8125em;
+$f14: 0.875em;
+$f15: 0.9375em;
+$f16: 1em;
+$f17: 1.0625em;
+$f18: 1.125em;
+$f19: 1.1875em;
+$f20: 1.25em;
+$f21: 1.3125em;
+$f22: 1.375em;
+$f23: 1.4375em;
+$f24: 1.5em;
+$f25: 1.5625em;
+$f26: 1.625em;
+$f27: 1.6875em;
+$f28: 1.75em;
+$f29: 1.8125em;
+$f30: 1.875em;
+$f31: 1.9375em;
+$f32: 2em;
+$f33: 2.0625em;
+$f34: 2.125em;
+$f35: 2.1875em;
+$f36: 2.25em;
+$f37: 2.3125em;
+$f38: 2.375em;
+$f39: 2.4375em;
+$f40: 2.5em;

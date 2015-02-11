@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 3 - Tutorial - Woc.ts</title>
+    <link rel="stylesheet" href="/theme/main.css">
+  </head>
+  <body class="ob-bgGreyArea">
+    <header class="SiteHeader">
+      <div class="ob-pageWrapper pos large">
+        <div class="SiteHeader-left"><a href="/" class="BlockLink light">Woc.ts</a></div>
+        <div class="SiteHeader-right"><a href="/presentation.html" class="BlockLink light">Presentation</a><a href="/tutorial/" class="BlockLink light noMargin">Tutorial</a></div>
+      </div>
+    </header>
+    <div class="PageBody ob-pageWrapper large">
+      <main class="PageBody-main">
+        <div class="Paper side ob-text longTitle"><h1 id="step-3-a-few-styles-make-a-theme-">Step 3 - A Few Styles <em>Make a Theme</em></h1>
+<h2 id="make-a-common-definition-scss-file-optional-">Make a common definition SCSS file (optional)</h2>
+<p>For all the CSS files of our bundle, a common SCSS file can be shared, which will be included later by the SASS directive <code>@include</code>. This file is not required. If you don’t use a CSS preprocessor, you can just skip this section. You’ll find all the CSS codes to use in the directories <code>step-??</code>.</p>
+<ol>
+<li>In the directory <code>todos.wocb/defs/</code>, create and edit a file <code>_defs.scss</code>.</li>
+<li>Then, paste the code:</li>
+</ol>
+<pre><code class="lang-scss"><span class="at_rule">@<span class="keyword">charset</span> <span class="string">"UTF-8"</span>;</span>
+<span class="at_rule">@<span class="keyword">mixin</span><span class="preprocessor"> gradient</span>($top, $bottom:<span class="preprocessor"> lighten</span>($top,<span class="preprocessor"> 6</span>%)) {</span>
+  <span class="attribute">background</span><span class="value">: $top;</span>
+  <span class="attribute">background</span><span class="value">: -moz-linear-gradient(top, $top <span class="number">0</span>%, $bottom <span class="number">100</span>%);</span>
+  <span class="attribute">background</span><span class="value">: -ms-linear-gradient(top, $top <span class="number">0</span>%, $bottom <span class="number">100</span>%);</span>
+  <span class="attribute">background</span><span class="value">: -webkit-linear-gradient(top, $top <span class="number">0</span>%, $bottom <span class="number">100</span>%);</span>
+  <span class="attribute">background</span><span class="value">: linear-gradient(to bottom, $top <span class="number">0</span>%, $bottom <span class="number">100</span>%);</span>
+}
+$space1<span class="value">: <span class="number">10</span>px;</span>
+$space2<span class="value">: <span class="number">20</span>px;</span>
+</code></pre>
+<p>NB: The file name should begin with an underscore, as it is a SASS partial.</p>
+<h2 id="a-dedicated-directory-simpletheme-woct-">A dedicated directory <code>SimpleTheme.woct</code></h2>
+<p>In the directory <code>todos.wocb</code>, make a subdirectory <code>SimpleTheme.woct</code>.</p>
+<blockquote>
+<p>A <strong>theme</strong> is a set of CSS rules. It applies when the bundle is loaded. Themes can be included in components, services, initializers, external libraries and (recursively) in themes. There is also a short syntax in the configuration in order to include subdirectories with CSS (but without configuration file) as Woc.ts themes. Until it is deployed, a theme is a directory named <code>&lt;ThemeName&gt;.woct</code>, that contains a file <code>theme.json</code>.</p>
+</blockquote>
+<h2 id="the-theme-code-in-a-scss-file">The theme code in a SCSS file</h2>
+<ol>
+<li>In the new directory, create and edit a new file <code>style.scss</code>;</li>
+<li>Paste the code:</li>
+</ol>
+<pre><code class="lang-scss"><span class="at_rule">@<span class="keyword">charset</span> <span class="string">"UTF-8"</span>;</span>
+<span class="at_rule">@<span class="keyword">import</span> <span class="string">"../defs/defs"</span>;</span>
+
+<span class="comment">// --</span>
+<span class="comment">// -- CSS Objects</span>
+<span class="comment">// --</span>
+
+<span class="class">.ob-ajax</span> {
+  <span class="attribute">background</span><span class="value">: url(ajax.gif) no-repeat <span class="number">50</span>% <span class="number">50</span>%;</span>
+}
+
+<span class="comment">// --</span>
+<span class="comment">// -- Elements</span>
+<span class="comment">// --</span>
+
+<span class="tag">body</span> {
+  <span class="attribute">background-color</span><span class="value">: <span class="hexcolor">#DED</span>;</span>
+}
+
+dialog {
+  <span class="attribute">border</span><span class="value">: <span class="number">1</span>px solid rgba(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, .<span class="number">3</span>);</span>
+  <span class="attribute">border-radius</span><span class="value">: <span class="number">6</span>px;</span>
+  <span class="attribute">box-shadow</span><span class="value">: <span class="number">0</span> <span class="number">3</span>px <span class="number">7</span>px rgba(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, .<span class="number">3</span>);</span>
+}
+
+<span class="comment">// --</span>
+<span class="comment">// -- CSS Components</span>
+<span class="comment">// --</span>
+
+<span class="class">.AppWrapper</span> {
+  <span class="attribute">background-color</span><span class="value">: <span class="hexcolor">#FFF</span>;</span>
+  <span class="attribute">margin</span><span class="value">: <span class="number">0</span> auto;</span>
+  <span class="attribute">max-width</span><span class="value">: <span class="number">500</span>px;</span>
+  <span class="attribute">min-height</span><span class="value">: <span class="number">200</span>px;</span>
+  <span class="attribute">padding</span><span class="value">: <span class="number">50</span>px <span class="number">80</span>px;</span>
+}
+
+<span class="class">.PageTitle</span> {
+  <span class="attribute">font-size</span><span class="value">: <span class="number">1.5</span>em;</span>
+  <span class="attribute">font-weight</span><span class="value">: bold;</span>
+  <span class="attribute">margin-bottom</span><span class="value">: $space2;</span>
+  <span class="attribute">text-align</span><span class="value">: center;</span>
+}
+
+<span class="class">.Btn</span> {
+  <span class="at_rule">@<span class="keyword">include</span><span class="preprocessor"> gradient</span>(<span class="hexcolor">#AAA</span>);</span>
+  <span class="attribute">color</span><span class="value">: <span class="hexcolor">#FFF</span>;</span>
+  <span class="attribute">font-weight</span><span class="value">: bold;</span>
+  <span class="attribute">min-height</span><span class="value">: <span class="number">26</span>px;</span>
+  <span class="attribute">min-width</span><span class="value">: <span class="number">80</span>px;</span>
+  <span class="attribute">text-align</span><span class="value">: center;</span>
+}
+
+<span class="class">.Form</span> {
+  &amp;-btnBar {
+    <span class="attribute">margin-top</span><span class="value">: $space1;</span>
+    <span class="attribute">text-align</span><span class="value">: center;</span>
+  }
+}
+
+<span class="class">.Field</span> {
+  <span class="attribute">display</span><span class="value">: block;</span>
+  <span class="attribute">margin-bottom</span><span class="value">: $space1;</span>
+  &amp;-lbl {
+    <span class="attribute">display</span><span class="value">: inline-block;</span>
+    <span class="attribute">margin-right</span><span class="value">: <span class="number">20</span>px;</span>
+    &amp;<span class="class">.top</span> {
+      <span class="attribute">display</span><span class="value">: block;</span>
+      <span class="attribute">margin</span><span class="value">: <span class="number">0</span> <span class="number">0</span> <span class="number">4</span>px <span class="number">0</span>;</span>
+    }
+  }
+  &amp;-<span class="tag">input</span> {
+    <span class="attribute">min-width</span><span class="value">: <span class="number">320</span>px;</span>
+  }
+  &amp;-<span class="tag">textarea</span> {
+    -moz-<span class="attribute">box-sizing</span><span class="value">: border-box;</span>
+    -ms-<span class="attribute">box-sizing</span><span class="value">: border-box;</span>
+    -webkit-<span class="attribute">box-sizing</span><span class="value">: border-box;</span>
+    <span class="attribute">box-sizing</span><span class="value">: border-box;</span>
+    <span class="attribute">width</span><span class="value">: <span class="number">100</span>%;</span>
+  }
+}
+</code></pre>
+<p>When this file is saved, your IDE should compile it to a new file <code>style.css</code>.</p>
+<h2 id="-ajax-gif-"><code>ajax.gif</code></h2>
+<p>We need an animated GIF <code>ajax.gif</code> in the directory <code>SimpleTheme.woct/</code>. Put yours or copy it from the directory <code>step-03/todos.wocb/SimpleTheme.woct/</code>.</p>
+<h2 id="-theme-json-write-the-theme-configuration"><code>theme.json</code>, write the theme configuration</h2>
+<p>Create and edit a new file <code>todos.wocb/SimpleTheme.woct/theme.json</code>, then append the code:</p>
+<pre><code class="lang-javascript">{
+  <span class="string">"woc"</span>: <span class="string">"0.12"</span>,
+  <span class="string">"encoding"</span>: <span class="string">"UTF-8"</span>,
+  <span class="string">"styleSheets"</span>: [<span class="string">"style.css"</span>]
+}
+</code></pre>
+<h2 id="add-the-theme-in-the-bundle-configuration">Add the theme in the bundle configuration</h2>
+<p>Edit the file <code>todos.wocb/bundle.json</code> and add the theme:</p>
+<pre><code class="lang-javascript">  <span class="string">"themes"</span>: [<span class="string">"SimpleTheme"</span>]
+</code></pre>
+<p>The complete code is now:</p>
+<pre><code class="lang-javascript">{
+  <span class="string">"woc"</span>: <span class="string">"0.12"</span>,
+  <span class="string">"encoding"</span>: <span class="string">"UTF-8"</span>,
+  <span class="string">"version"</span>: <span class="string">"0.1"</span>,
+  <span class="string">"bundles"</span>: [<span class="string">"lib(w)"</span>],
+  <span class="string">"services"</span>: [<span class="string">"Todos.Start"</span>],
+  <span class="string">"themes"</span>: [<span class="string">"SimpleTheme"</span>]
+}
+</code></pre>
+<h2 id="use-a-css-class">Use a CSS class</h2>
+<p>The CSS class <code>AppWrapper</code> can be applied to the main element of the application. Edit the file <code>Todos.Start.wocs/Start.ts</code>, then insert a new line in the method <code>start()</code>:</p>
+<pre><code class="lang-typescript">    el.className = &#39;AppWrapper&#39;;
+</code></pre>
+<p>Now, the complete method is:</p>
+<pre><code class="lang-typescript">  public start(el: HTMLElement) {
+    el.className = &#39;AppWrapper&#39;;
+    el.innerHTML = &#39;&lt;h1&gt;Hello, World!&lt;/h1&gt;&#39;;
+  }
+</code></pre>
+<h2 id="run-in-the-browser">Run in the browser</h2>
+<p>Reload the file <code>index.html</code> in the browser. Now the theme should be loaded, our <code>Hello, World!</code> message is on a centered white area.</p>
+
+        </div>
+      </main>
+      <div class="PageBody-side Sidebar">
+        <nav class="Widget">
+          <ul class="SimpleList">
+            <li class="SimpleList-li"><a href="step-00.html" class="SmallBlockLink">0 - Bootstrapping</a></li>
+            <li class="SimpleList-li"><a href="step-01.html" class="SmallBlockLink">1 - Hello, World! <em>Make a Starting Point</em></a></li>
+            <li class="SimpleList-li"><a href="step-02.html" class="SmallBlockLink">2 - Add a nested bundle <code>lib</code> <em>Add things from outside</em></a></li>
+            <li class="SimpleList-li"><a href="step-03.html" class="SmallBlockLink">3 - A Few Styles <em>Make a Theme</em></a></li>
+            <li class="SimpleList-li"><a href="step-04.html" class="SmallBlockLink">4 - <code>Todos.List</code> <em>Make a Component</em></a></li>
+            <li class="SimpleList-li"><a href="step-05.html" class="SmallBlockLink">5 - <code>Todos.List</code>: Dynamic template <em>Data binding with Vue.js</em></a></li>
+            <li class="SimpleList-li"><a href="step-06.html" class="SmallBlockLink">6 - Load data from the server <em>Use the service <code>Woc.Ajax</code></em></a></li>
+            <li class="SimpleList-li"><a href="step-07.html" class="SmallBlockLink">7 - <code>Todos.Model</code> <em>Make a service</em></a></li>
+            <li class="SimpleList-li"><a href="step-08.html" class="SmallBlockLink">8 - <code>Todos.List</code>: With the model</a></li>
+            <li class="SimpleList-li"><a href="step-09.html" class="SmallBlockLink">9 - <code>Todos.CreateTask</code> <em>A component managed by a template</em></a></li>
+            <li class="SimpleList-li"><a href="step-10.html" class="SmallBlockLink">10 - <code>Todos.Start</code>: several pages <em>Use a router</em></a></li>
+            <li class="SimpleList-li"><a href="step-11.html" class="SmallBlockLink">11 - <code>Todos.EditPanel</code> <em>Double bind</em></a></li>
+            <li class="SimpleList-li"><a href="step-12.html" class="SmallBlockLink">12 - <code>Todos.EditPanel</code>: with dialogs <em>Use the service <code>WocTeam.Dialogs</code></em></a></li>
+            <li class="SimpleList-li"><a href="step-13.html" class="SmallBlockLink">13 - <code>Todos.DateInput</code>: A custom date picker? <em>Use a jQuery-ui widget</em></a></li>
+            <li class="SimpleList-li"><a href="step-14.html" class="SmallBlockLink">14 - <code>Todos.Init</code>: Globally configure jQuery-ui <em>Make an initializer</em></a></li>
+            <li class="SimpleList-li"><a href="step-15.html" class="SmallBlockLink">15 - Deploy! <em>Use the tool <code>woc-make</code></em></a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <footer class="SiteFooter">
+      <div class="ob-pageWrapper large"><span class="ph-email"></span><a href="https://www.facebook.com/tarh.paleo" class="BlockLink">Facebook</a><a href="https://github.com/tarh/woc.ts" class="BlockLink">Contribute</a><a href="https://github.com/tarh/woc-site" class="BlockLink noMargin">Improve this site</a></div>
+    </footer>
+    <script src="/js/main.js"></script>
+    <script src="/theme/prism.js"></script>
+  </body>
+</html>

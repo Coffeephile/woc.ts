@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 0 - Tutorial - Woc.ts</title>
+    <link rel="stylesheet" href="/theme/main.css">
+  </head>
+  <body class="ob-bgGreyArea">
+    <header class="SiteHeader">
+      <div class="ob-pageWrapper pos large">
+        <div class="SiteHeader-left"><a href="/" class="BlockLink light">Woc.ts</a></div>
+        <div class="SiteHeader-right"><a href="/presentation.html" class="BlockLink light">Presentation</a><a href="/tutorial/" class="BlockLink light noMargin">Tutorial</a></div>
+      </div>
+    </header>
+    <div class="PageBody ob-pageWrapper large">
+      <main class="PageBody-main">
+        <div class="Paper side ob-text longTitle"><h1 id="step-0-bootstrapping">Step 0 - Bootstrapping</h1>
+<h2 id="getting-started-with-typescript">Getting started with TypeScript</h2>
+<p>How to transpile TypeScript to JavaScript:</p>
+<ol>
+<li>Install <a href="http://nodejs.org/">Node.js</a>;</li>
+<li>In command line, install the TypeScript compiler on Node.js, with the command <code>npm</code> given <a href="http://www.typescriptlang.org/">on the official Web site</a>: <code>npm install -g typescript</code>;</li>
+</ol>
+<p>Then, in order to learning TypeScript, read the excellent <a href="http://www.typescriptlang.org/Handbook">Handbook</a>.</p>
+<h2 id="about-sass">About SASS</h2>
+<p>The SCSS variant of SASS is used in this tutorial. Please <a href="http://sass-lang.com/install">install SASS</a>.</p>
+<p>But SASS is not required. You can remove the SASS files (<code>.scss</code>) and directly work on CSS files. When the tutorial gives some SCSS code, just go to the step 14 and copy the matching CSS file.</p>
+<h2 id="get-the-code">Get the code</h2>
+<p>Download <a href="https://github.com/tarh/woc-site/releases">the last release of the tutorial</a>, then decompress it.</p>
+<h2 id="make-the-tutorial-ready">Make the tutorial ready</h2>
+<p>From the command line, run:</p>
+<pre><code>cd path/to/woc-tuto-N-N-N/
+node tuto-install
+</code></pre><p>This command creates fifteen directories <code>step-N</code>: they are the fifteen steps of the tutorial.</p>
+<h2 id="use-idea-webstorm-phpstorm-intellij-">Use IDEA (WebStorm, PhpStorm, IntelliJ…)</h2>
+<p>In this tutorial we recommend WebStorm. Download <a href="http://www.jetbrains.com/webide/">WebStorm</a> (it includes a one month trial license).</p>
+<p>With WebStorm, create a new project on the directory <code>woc-tuto-N-N-N</code>, i.e. the parent directory of the fifteen directories <code>step-N</code>. This means that in a single project by WebStorm, there are sixteen applications: fifteen steps and the <code>first-app</code>.</p>
+<p>When opening the first file with a suffix <code>.ts</code> (TypeScript), the IDE suggests to create the appropriate “Watcher”; Accept, then uncheck “Immediate file synchronization”. <em>Note: If you use IntelliJ IDEA, <a href="https://www.jetbrains.com/idea/help/transpiling-typescript-to-javascript.html">you must install an extra plugin</a>: it is the File watchers plugin that triggers the Typescript transpilation.</em></p>
+<p>Same thing for SCSS files. WebStorm will suggests a Watcher for them, and uncheck “Immediate file synchronization”.</p>
+<h2 id="run-a-web-server-and-test-the-steps">Run a Web server and test the steps</h2>
+<p>All the steps of this tutorial are in directories <code>step-XX</code>. Your work will be in the directory <code>first-app</code>.</p>
+<p>Now we need a Web server.</p>
+<p>If you use WebStorm, select a browser in <code>Open in Browser</code> from the context menu of the HTML file <code>step-01/index.html</code>. WebStorm will run its internal Web server for you.</p>
+<p>Alternatively, you can use the Web server of your choice, like <a href="https://httpd.apache.org/">Apache httpd</a>. Install it and configure it to access to the code of the tutorial by HTTP. Then, test a step with an URL like: <code>http://localhost:8080/path/to/the/tutorial/step-01/</code>.</p>
+<p>You can test the steps 01 to 15 just by changing the URL.</p>
+
+        </div>
+      </main>
+      <div class="PageBody-side Sidebar">
+        <nav class="Widget">
+          <ul class="SimpleList">
+            <li class="SimpleList-li"><a href="step-00.html" class="SmallBlockLink">0 - Bootstrapping</a></li>
+            <li class="SimpleList-li"><a href="step-01.html" class="SmallBlockLink">1 - Hello, World! <em>Make a Starting Point</em></a></li>
+            <li class="SimpleList-li"><a href="step-02.html" class="SmallBlockLink">2 - Add a nested bundle <code>lib</code> <em>Add things from outside</em></a></li>
+            <li class="SimpleList-li"><a href="step-03.html" class="SmallBlockLink">3 - A Few Styles <em>Make a Theme</em></a></li>
+            <li class="SimpleList-li"><a href="step-04.html" class="SmallBlockLink">4 - <code>Todos.List</code> <em>Make a Component</em></a></li>
+            <li class="SimpleList-li"><a href="step-05.html" class="SmallBlockLink">5 - <code>Todos.List</code>: Dynamic template <em>Data binding with Vue.js</em></a></li>
+            <li class="SimpleList-li"><a href="step-06.html" class="SmallBlockLink">6 - Load data from the server <em>Use the service <code>Woc.Ajax</code></em></a></li>
+            <li class="SimpleList-li"><a href="step-07.html" class="SmallBlockLink">7 - <code>Todos.Model</code> <em>Make a service</em></a></li>
+            <li class="SimpleList-li"><a href="step-08.html" class="SmallBlockLink">8 - <code>Todos.List</code>: With the model</a></li>
+            <li class="SimpleList-li"><a href="step-09.html" class="SmallBlockLink">9 - <code>Todos.CreateTask</code> <em>A component managed by a template</em></a></li>
+            <li class="SimpleList-li"><a href="step-10.html" class="SmallBlockLink">10 - <code>Todos.Start</code>: several pages <em>Use a router</em></a></li>
+            <li class="SimpleList-li"><a href="step-11.html" class="SmallBlockLink">11 - <code>Todos.EditPanel</code> <em>Double bind</em></a></li>
+            <li class="SimpleList-li"><a href="step-12.html" class="SmallBlockLink">12 - <code>Todos.EditPanel</code>: with dialogs <em>Use the service <code>WocTeam.Dialogs</code></em></a></li>
+            <li class="SimpleList-li"><a href="step-13.html" class="SmallBlockLink">13 - <code>Todos.DateInput</code>: A custom date picker? <em>Use a jQuery-ui widget</em></a></li>
+            <li class="SimpleList-li"><a href="step-14.html" class="SmallBlockLink">14 - <code>Todos.Init</code>: Globally configure jQuery-ui <em>Make an initializer</em></a></li>
+            <li class="SimpleList-li"><a href="step-15.html" class="SmallBlockLink">15 - Deploy! <em>Use the tool <code>woc-make</code></em></a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <footer class="SiteFooter">
+      <div class="ob-pageWrapper large"><span class="ph-email"></span><a href="https://www.facebook.com/tarh.paleo" class="BlockLink">Facebook</a><a href="https://github.com/tarh/woc.ts" class="BlockLink">Contribute</a><a href="https://github.com/tarh/woc-site" class="BlockLink noMargin">Improve this site</a></div>
+    </footer>
+    <script src="/js/main.js"></script>
+    <script src="/theme/prism.js"></script>
+  </body>
+</html>

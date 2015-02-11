@@ -1,0 +1,146 @@
+@charset "UTF-8";
+@import "def";
+
+body {
+  background-color: #FFF;
+  color: #222;
+  font-family: sans-serif;
+}
+
+.SiteHeader {
+  background-color: #222;
+  height: $rowH;
+  &-left {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  &-right {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+}
+
+.BigBlockLink {
+  background-color: #DDDDE6;
+  display: block;
+  font-size: $f20;
+  font-weight: bold;
+  line-height: ($rowH * 1.5);
+  margin: 0 auto $rowH;
+  max-width: 300px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  &,
+  &:visited {
+    color: #505080;
+  }
+  &:focus,
+  &:hover {
+    background-color: lighten(#DDDDE6, 2%);
+    color: lighten(#505080, 15%);
+  }
+}
+
+.PageBody {
+  &-side {
+    float: left;
+    width: 25%;
+  }
+  &-main {
+    float: right;
+    width: 73%;
+  }
+  &::after {
+    @include clearFloats;
+  }
+}
+
+.Paper {
+  background-color: #FFF;
+  overflow: hidden;
+  padding: 0 50px $rowH 50px;
+}
+
+.SiteFooter {
+  text-align: center;
+}
+
+.BlockLink {
+  color: $linkColorUnread;
+  display: inline-block;
+  font-size: $f18;
+  line-height: $rowH;
+  margin-right: 15px;
+  text-decoration: none;
+  &:visited {
+    color: $linkColorRead;
+  }
+  &:focus,
+  &:hover {
+    text-decoration: underline;
+  }
+  &.light {
+    &,
+    &:visited {
+      color: #CCC;
+    }
+  }
+  &.noMargin {
+    margin-right: 0;
+  }
+}
+
+.PageTitle {
+  font-size: 5em;
+  margin: $rowH 0;
+  text-align: center;
+}
+
+.PageSubtitle {
+  font-size: $f18;
+  margin: (-$rowH*2/3) 0 $rowH;
+  text-align: center;
+}
+
+.Sidebar {
+  padding-top: ($rowH / 2);
+}
+
+.SimpleList {
+  &-li {
+    margin-bottom: 8px;
+  }
+}
+
+.SmallBlockLink {
+  color: $linkColorUnread;
+  font-size: $f14;
+  text-decoration: none;
+  &:visited {
+    color: $linkColorRead;
+  }
+  &:focus,
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.SmallBlockLink,
+.ob-text h1 {
+  em {
+    color: #999;
+    display: block;
+    font-style: normal;
+    margin-top: .125em;
+    //white-space: nowrap;
+    &::before {
+      content: "[";
+    }
+    &::after {
+      content: "]";
+    }
+  }
+}

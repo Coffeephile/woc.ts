@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 13 - Tutorial - Woc.ts</title>
+    <link rel="stylesheet" href="/theme/main.css">
+  </head>
+  <body class="ob-bgGreyArea">
+    <header class="SiteHeader">
+      <div class="ob-pageWrapper pos large">
+        <div class="SiteHeader-left"><a href="/" class="BlockLink light">Woc.ts</a></div>
+        <div class="SiteHeader-right"><a href="/presentation.html" class="BlockLink light">Presentation</a><a href="/tutorial/" class="BlockLink light noMargin">Tutorial</a></div>
+      </div>
+    </header>
+    <div class="PageBody ob-pageWrapper large">
+      <main class="PageBody-main">
+        <div class="Paper side ob-text longTitle"><h1 id="step-13-todos-dateinput-a-custom-date-picker-use-a-jquery-ui-widget-">Step 13 - <code>Todos.DateInput</code>: A custom date picker? <em>Use a jQuery-ui widget</em></h1>
+<p>This step demonstrates the integration of jQuery component and Vue.js component.</p>
+<h2 id="create-a-component-todos-dateinput-">Create a component <code>Todos.DateInput</code></h2>
+<p>In the directory <code>todos.wocb/</code>, make a new directory <code>Todos.DateInput.wocc/</code>. In this new directory, make a file <code>DateInput.ts</code> with the code below:</p>
+<pre><code class="lang-typescript">/// &lt;reference path=&#39;../defs/todos.d.ts&#39; /&gt;
+
+module Todos {
+  &#39;use strict&#39;;
+  var $ = jQuery;
+
+  export class DateInput implements Woc.Component {
+    private $el: JQuery;
+
+    public attachTo(el: HTMLElement): void {
+      this.$el = $(el).datepicker({
+        onSelect: () =&gt; {
+          if (document.createEvent) {
+            var evt = document.createEvent(&#39;HTMLEvents&#39;);
+            evt.initEvent(&#39;input&#39;, true, true);
+            el.dispatchEvent(evt);
+          } else if (el.fireEvent)
+            el.fireEvent(&#39;onchange&#39;); // IE &lt;= 8
+        }
+      });
+    }
+
+    public destruct() {
+      if (this.$el)
+        this.$el.off();
+    }
+  }
+}
+</code></pre>
+<p>This is a component without template engine. We use jQuery and jQueryUI to insert nodes in the DOM.</p>
+<p>Notice the line <code>var $ = jQuery;</code>. It is the way I suggest to define the <code>$</code> variable, because a TypeScript module can’t be put into a IIFE.</p>
+<p>There is a handler for the jQueryUI event <code>onSelect</code>. The event <code>input</code> is manually fired when the date picker selects a date. It’s required for an integration in a Vue.js template, because Vue.js listen for the <code>input</code> event in order to update the bound template data model.</p>
+<p>All the jQuery events are cleaned in the method <code>destruct</code>, which is called by Woc.ts when the component is removed.</p>
+<p>Create and edit a file <code>component.json</code>. Here is the code:</p>
+<pre><code class="lang-javascript">{
+  <span class="string">"woc"</span>: <span class="string">"0.12"</span>,
+  <span class="string">"encoding"</span>: <span class="string">"UTF-8"</span>,
+  <span class="string">"useExternalLibraries"</span>: [<span class="string">"jQueryUI"</span>],
+  <span class="string">"scripts"</span>: <span class="string">"DateInput.js"</span>,
+  <span class="string">"name"</span>: <span class="string">"Todos.DateInput"</span>
+}
+</code></pre>
+<p>Here the external library <code>jQueryUI</code> is used.</p>
+<blockquote>
+<p>An <strong>external library</strong> is a way to include JavaScript libraries in Woc.ts. It is executed once, just after the bundle is loaded. Then the global objects they set can be used as usual. Until it is deployed, a library is a directory named <code>&lt;LibraryName&gt;.woce</code>, that contains a file <code>library.json</code>.</p>
+</blockquote>
+<h2 id="reference-the-component-todos-dateinput-in-the-bundle">Reference the component <code>Todos.DateInput</code> in the bundle</h2>
+<p>Edit the file <code>todos.wocb/bundle.json</code> and add our new component <code>Todos.DateInput</code>:</p>
+<pre><code class="lang-javascript">  <span class="string">"components"</span>: [<span class="string">"Todos.List"</span>, <span class="string">"Todos.CreateTask"</span>, <span class="string">"Todos.EditPanel"</span>, <span class="string">"Todos.DateInput"</span>],
+</code></pre>
+<p>Edit the file <code>todos.wocb/defs/todos.d.ts</code> and add the TypeScript class of our component:</p>
+<pre><code class="lang-typescript">/// &lt;reference path=&#39;../Todos.DateInput.wocc/DateInput.ts&#39; /&gt;
+</code></pre>
+<h2 id="use-the-component-todos-dateinput-in-the-edit-panel">Use the component <code>Todos.DateInput</code> in the edit panel</h2>
+<p>Edit the HTML file <code>Todos.EditPanel.wocc/EditPanel.html</code>, then replace the element <code>&lt;input type=&quot;date&quot;&gt;</code>, under the label <code>Date :</code>, with the following:</p>
+<pre><code class="lang-markup">  &lt;input class=&quot;Field-input&quot; type=&quot;text&quot; v-model=&quot;task.expirationDate&quot; v-woc-component=&quot;Todos.DateInput&quot;&gt;
+</code></pre>
+<p>The type is set to <code>text</code> and a directive <code>v-woc-component=&quot;Todos.DateInput&quot;</code> is added.</p>
+<p>It’s done!</p>
+<p>Now the configuration: edit the HTML file <code>Todos.EditPanel.wocc/component.json</code>, and add the new used component:</p>
+<pre><code class="lang-javascript">  <span class="string">"useComponents"</span>: [<span class="string">"Todos.DateInput"</span>],
+</code></pre>
+<h2 id="run-in-the-browser">Run in the browser</h2>
+<p>Reload the application in the browser. Open a task, click in the date field: the jQueryUI date picker appears.</p>
+
+        </div>
+      </main>
+      <div class="PageBody-side Sidebar">
+        <nav class="Widget">
+          <ul class="SimpleList">
+            <li class="SimpleList-li"><a href="step-00.html" class="SmallBlockLink">0 - Bootstrapping</a></li>
+            <li class="SimpleList-li"><a href="step-01.html" class="SmallBlockLink">1 - Hello, World! <em>Make a Starting Point</em></a></li>
+            <li class="SimpleList-li"><a href="step-02.html" class="SmallBlockLink">2 - Add a nested bundle <code>lib</code> <em>Add things from outside</em></a></li>
+            <li class="SimpleList-li"><a href="step-03.html" class="SmallBlockLink">3 - A Few Styles <em>Make a Theme</em></a></li>
+            <li class="SimpleList-li"><a href="step-04.html" class="SmallBlockLink">4 - <code>Todos.List</code> <em>Make a Component</em></a></li>
+            <li class="SimpleList-li"><a href="step-05.html" class="SmallBlockLink">5 - <code>Todos.List</code>: Dynamic template <em>Data binding with Vue.js</em></a></li>
+            <li class="SimpleList-li"><a href="step-06.html" class="SmallBlockLink">6 - Load data from the server <em>Use the service <code>Woc.Ajax</code></em></a></li>
+            <li class="SimpleList-li"><a href="step-07.html" class="SmallBlockLink">7 - <code>Todos.Model</code> <em>Make a service</em></a></li>
+            <li class="SimpleList-li"><a href="step-08.html" class="SmallBlockLink">8 - <code>Todos.List</code>: With the model</a></li>
+            <li class="SimpleList-li"><a href="step-09.html" class="SmallBlockLink">9 - <code>Todos.CreateTask</code> <em>A component managed by a template</em></a></li>
+            <li class="SimpleList-li"><a href="step-10.html" class="SmallBlockLink">10 - <code>Todos.Start</code>: several pages <em>Use a router</em></a></li>
+            <li class="SimpleList-li"><a href="step-11.html" class="SmallBlockLink">11 - <code>Todos.EditPanel</code> <em>Double bind</em></a></li>
+            <li class="SimpleList-li"><a href="step-12.html" class="SmallBlockLink">12 - <code>Todos.EditPanel</code>: with dialogs <em>Use the service <code>WocTeam.Dialogs</code></em></a></li>
+            <li class="SimpleList-li"><a href="step-13.html" class="SmallBlockLink">13 - <code>Todos.DateInput</code>: A custom date picker? <em>Use a jQuery-ui widget</em></a></li>
+            <li class="SimpleList-li"><a href="step-14.html" class="SmallBlockLink">14 - <code>Todos.Init</code>: Globally configure jQuery-ui <em>Make an initializer</em></a></li>
+            <li class="SimpleList-li"><a href="step-15.html" class="SmallBlockLink">15 - Deploy! <em>Use the tool <code>woc-make</code></em></a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <footer class="SiteFooter">
+      <div class="ob-pageWrapper large"><span class="ph-email"></span><a href="https://www.facebook.com/tarh.paleo" class="BlockLink">Facebook</a><a href="https://github.com/tarh/woc.ts" class="BlockLink">Contribute</a><a href="https://github.com/tarh/woc-site" class="BlockLink noMargin">Improve this site</a></div>
+    </footer>
+    <script src="/js/main.js"></script>
+    <script src="/theme/prism.js"></script>
+  </body>
+</html>

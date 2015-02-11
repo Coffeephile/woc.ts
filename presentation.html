@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentation - Woc.ts</title>
+    <link rel="stylesheet" href="/theme/main.css">
+  </head>
+  <body>
+    <header class="SiteHeader">
+      <div class="ob-pageWrapper pos">
+        <div class="SiteHeader-left"><a href="/" class="BlockLink light">Woc.ts</a></div>
+        <div class="SiteHeader-right"><a href="/presentation.html" class="BlockLink light">Presentation</a><a href="/tutorial/" class="BlockLink light noMargin">Tutorial</a></div>
+      </div>
+    </header>
+    <div class="PageBody ob-pageWrapper">
+      <main class="Paper ob-text"><h1 id="presentation">Presentation</h1>
+<h2 id="what-is-a-component-">What is a component?</h2>
+<ul>
+<li>Until it is deployed, each component is a separated directory;</li>
+<li>A component embeds HTML, CSS, JavaScript files and other resources like images;</li>
+<li>Each component is a GUI unit that can be reused in other components.</li>
+</ul>
+<h2 id="other-kinds-of-program-unit-">Other kinds of program unit…</h2>
+<ul>
+<li>A <strong>service</strong> is a singleton shared by all the application;</li>
+<li>An <strong>initializer</strong> is a singleton called just after loading;</li>
+<li>An <strong>external library</strong> is a wrapper for JavaScript library, like jQuery;</li>
+<li>A <strong>theme</strong> contains CSS files and images.</li>
+</ul>
+<p>Each of these program units is a separated directory that can be easily copied and reused in several applications.</p>
+<h2 id="lean-and-simplicity">Lean and simplicity</h2>
+<ul>
+<li>No unused features, the framework core is really just a loader;</li>
+<li>No magic, just standard JavaScript features;</li>
+<li>The build task for deployment is easy and efficient, it doesn’t need <em>Grunt</em> or <em>Gulp.js</em> neither <em>Browserify</em>;</li>
+<li>Today, the dependencies between services and components can be managed by hand.</li>
+</ul>
+<h2 id="performance">Performance</h2>
+<ul>
+<li>The Woc.ts component system doesn’t require any polyfill;</li>
+<li>Once deployed, JavaScript, HTML and CSS codes are minified and merged in a single JSON file and a single CSS file;</li>
+<li>Once loaded, JavaScript code is lazily evaluated, following <a href="http://calendar.perfplanet.com/2011/lazy-evaluation-of-commonjs-modules/">this approach</a>.</li>
+</ul>
+<h2 id="future-proof">Future proof</h2>
+<ul>
+<li>The scope of the Woc.ts core is determined: loading and nothing more, we aims to make the core API stable;</li>
+<li>So, to keep your work up-to-date, we hope you won’t have to redesign all your application two times a year, but, instead, to rewrite sometime some part of the application when, for example, a new version of your template engine is released;</li>
+<li>The Woc.ts component mechanism was made with the Web component future standard in mind.</li>
+</ul>
+<h2 id="templating">Templating</h2>
+<ul>
+<li>Templating systems are loaded as services. Use <strong>Vue.js</strong> or <strong>Handlebars</strong> or any of your choice. The first one brings <strong>data binding</strong>.</li>
+</ul>
+<h2 id="mvc">MVC</h2>
+<p>Woc.ts doesn’t force you to use a MVC model.</p>
+<p>However MVC is recommended. With modern templating systems like Vue.js, each component contains a small MVC schema. At the application level, the components are the view, then a global model can be implemented as a service, and the business layer as other services.</p>
+<h2 id="work-in-javascript-or-coffeescript-with-woc-ts">Work in JavaScript or CoffeeScript with Woc.ts</h2>
+<p>TypeScript is just syntactic sugar. The developer can use Woc.ts with JavaScript or CoffeeScript. A TypeScript class is an ES5 function that expects to be used with the <code>new</code> operator. A TypeScript module can be implemented as an ES5 object. Example:</p>
+<pre><code class="lang-typescript">module MyModule {
+  &#39;use strict&#39;;
+  export class MyClass {
+    constructor(private arg: string) {
+    }
+    public method1() {
+      this.method2();
+    }
+    private method2() {
+      console.log(this.arg);
+    }
+  }
+}
+</code></pre>
+<p>In JavaScript, you can write:</p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> MyModule = (<span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+<span class="pi">  'use strict'</span>;
+  <span class="function"><span class="keyword">function</span> <span class="title">MyClass</span><span class="params">(arg)</span> {</span>
+    <span class="keyword">this</span>.arg = arg;
+  }
+  MyClass.prototype.method1() {
+    <span class="keyword">this</span>.method2();
+  }
+  MyClass.prototype.method2() {
+    console.log(<span class="keyword">this</span>.arg);
+  }
+  <span class="keyword">return</span> {
+    MyClass: MyClass
+  };
+})();
+</code></pre>
+<h2 id="woc-ts-on-internet-explorer-8">Woc.ts on Internet Explorer 8</h2>
+<p>If IE8 is your target, using Woc.ts is possible but difficult. The core of Woc.ts works roughly on IE8, please fill us the issues when they occur. The dialog polyfill (in the service WocTeam.Dialogs) and EasyRouter (in the service WocTeam.WocEasyRouter) will probably have to be fixed. The template engine Vue.js won’t work (IE9+), you can use Handlebars (no data binding) or manually make the DOM with jQuery in the old school way.</p>
+<h2 id="web-components-vs-woc-components">Web Components vs Woc Components</h2>
+<p>The Woc.ts components and <em>Web Components</em> from HTML 5 are two separate things:</p>
+<ul>
+<li><em>Shadow DOM</em>: Developers of Woc.ts components can use shadow DOM;</li>
+<li><em>Template element</em>: Developers of Woc.ts components can use it, but the Woc.ts principle to write HTML in dedicated HTML files is handier than the template element;</li>
+<li><em>Custom element</em>: Could Woc.ts components be converted to custom elements? This would make the initialization depend of a global context. Perhaps it is a good thing, perhaps not. The question is still open, and there is no emergency since the browsers aren’t ready anyway;</li>
+<li><em>HTML imports</em>: The Woc.ts loading system will not need HTML imports.</li>
+</ul>
+<p>Notice: a Web component can be embedded in a Woc.ts application, as an external library. Of course, a Woc.ts component can use a Web component.</p>
+
+      </main>
+    </div>
+    <footer class="SiteFooter">
+      <div class="ob-pageWrapper"><span class="ph-email"></span><a href="https://www.facebook.com/tarh.paleo" class="BlockLink">Facebook</a><a href="https://github.com/tarh/woc.ts" class="BlockLink">Contribute</a><a href="https://github.com/tarh/woc-site" class="BlockLink noMargin">Improve this site</a></div>
+    </footer>
+    <script src="/js/main.js"></script>
+    <script src="/theme/prism.js"></script>
+  </body>
+</html>

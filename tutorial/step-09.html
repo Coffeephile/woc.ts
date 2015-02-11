@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 9 - Tutorial - Woc.ts</title>
+    <link rel="stylesheet" href="/theme/main.css">
+  </head>
+  <body class="ob-bgGreyArea">
+    <header class="SiteHeader">
+      <div class="ob-pageWrapper pos large">
+        <div class="SiteHeader-left"><a href="/" class="BlockLink light">Woc.ts</a></div>
+        <div class="SiteHeader-right"><a href="/presentation.html" class="BlockLink light">Presentation</a><a href="/tutorial/" class="BlockLink light noMargin">Tutorial</a></div>
+      </div>
+    </header>
+    <div class="PageBody ob-pageWrapper large">
+      <main class="PageBody-main">
+        <div class="Paper side ob-text longTitle"><h1 id="step-9-todos-createtask-a-component-managed-by-a-template-">Step 9 - <code>Todos.CreateTask</code> <em>A component managed by a template</em></h1>
+<p>We are going to create a new component that will be displayed below the list of tasks. It will serve to add new tasks.</p>
+<h2 id="make-the-component-todos-createtask-">Make the component <code>Todos.CreateTask</code></h2>
+<p>In the directory <code>todos.wocb/</code>, make a new directory <code>Todos.CreateTask.wocc/</code>. In this directory, make a file <code>CreateTask.html</code> and paste the code:</p>
+<pre><code class="lang-markup">&lt;!-- Template: CreateTask --&gt;
+
+&lt;form class=&quot;CreateTask&quot; v-on=&quot;submit: addCb&quot;&gt;
+  &lt;input class=&quot;CreateTask-input&quot; type=&quot;text&quot; v-model=&quot;title&quot; placeholder=&quot;Your title here…&quot;&gt;
+  &lt;button class=&quot;CreateTask-addBtn&quot;&gt;+&lt;/button&gt;
+&lt;/form&gt;
+</code></pre>
+<p>Notice the directive <code>v-model=&quot;title&quot;</code>. It is the double bind in the Vue.js way. The property <code>title</code> in the template data is bound to the value of the <code>&lt;input&gt;</code> element. We will see another example of double bind at the step 11.</p>
+<p>In the directory <code>Todos.CreateTask.wocc/</code>, create and edit a file <code>CreateTask.ts</code>. Here is the code:</p>
+<pre><code class="lang-typescript">/// &lt;reference path=&#39;../defs/todos.d.ts&#39; /&gt;
+
+module Todos {
+  &#39;use strict&#39;;
+
+  export class CreateTask implements Woc.Component {
+    private model: Todos.Model;
+    private refreshCb: () =&gt; void;
+    private tplData;
+
+    constructor(private cc: WocTeam.VueComponentContext, props: {}) {
+      this.model = cc.getService(&#39;Todos.Model&#39;);
+      this.refreshCb = props[&#39;refreshCb&#39;];
+      this.tplData = {
+        title: &#39;&#39;
+      };
+    }
+
+    public attachTo(el: HTMLElement): void {
+      this.cc.bindTemplate({
+        el: el,
+        wocTemplate: &#39;CreateTask&#39;,
+        data: this.tplData,
+        methods: {
+          addCb: (e) =&gt; {
+            e.preventDefault();
+            this.cc.logWrap(() =&gt; this.add());
+          }
+        }
+      });
+    }
+
+    public destruct() {
+      this.refreshCb = null;
+    }
+
+    private add() {
+      this.model.addTask(this.tplData.title);
+      this.tplData.title = &#39;&#39;;
+      this.refreshCb();
+    }
+  }
+}
+</code></pre>
+<p>In the constructor, the component receives a callback <code>refreshCb</code>. Component properties are free. You can give the component anything you want, including callbacks or instances. After our component will create a new task in the model, it’ll call the method <code>refreshCb</code> in order to refresh the list.</p>
+<p>In the function <code>addCb</code>, notice that we use the method <code>logWrap</code> of the component context. It is just a shortcut to wrap the content in a <code>try catch</code> and log errors when they happen.</p>
+<p>The optional method <code>destruct</code> is defined in the interface <code>Woc.Component</code>. It is a destructor, Woc.ts calls it automatically on remove. In this method, we help the garbage collector to remove the component. Indeed, each instance of the component <code>Todos.List</code> will have a reference to a component <code>Todos.CreateTask</code> (via the template engine) and the component <code>Todos.CreateTask</code> has a reference to a closure inside the component <code>Todos.List</code>. In this situation, it is difficult to the garbage collector to clean memory when me remove the component <code>Todos.List</code>. We just erase the reference to the <code>refreshCb</code>.</p>
+<p>The method <code>add</code> creates a task in the model, then calls <code>refreshCb</code>.</p>
+<p>In the same directory, create and edit a file <code>CreateTask.scss</code>. Here is the code:</p>
+<pre><code class="lang-scss"><span class="at_rule">@<span class="keyword">charset</span> <span class="string">"UTF-8"</span>;</span>
+<span class="at_rule">@<span class="keyword">import</span> <span class="string">"../defs/defs"</span>;</span>
+
+<span class="class">.CreateTask</span> {
+  &amp;-<span class="tag">input</span> {
+    <span class="attribute">padding</span><span class="value">: <span class="number">5</span>px;</span>
+    <span class="attribute">width</span><span class="value">: <span class="number">300</span>px;</span>
+  }
+  &amp;-addBtn {
+    <span class="attribute">background-color</span><span class="value">: <span class="hexcolor">#BBB</span>;</span>
+    <span class="attribute">font-size</span><span class="value">: <span class="number">2</span>em;</span>
+    <span class="attribute">font-weight</span><span class="value">: bold;</span>
+    <span class="attribute">height</span><span class="value">: <span class="number">30</span>px;</span>
+    <span class="attribute">line-height</span><span class="value">: <span class="number">30</span>px;</span>
+    <span class="attribute">text-align</span><span class="value">: center;</span>
+    <span class="attribute">vertical-align</span><span class="value">: top;</span>
+    <span class="attribute">width</span><span class="value">: <span class="number">30</span>px;</span>
+    &amp;<span class="pseudo">:focus</span>,
+    &amp;<span class="pseudo">:hover</span> {
+      <span class="attribute">background-color</span><span class="value">: <span class="hexcolor">#EEE</span>;</span>
+    }
+  }
+}
+</code></pre>
+<p>Then the configuration. Create and edit a file <code>component.json</code>. Here is the code:</p>
+<pre><code class="lang-javascript">{
+  <span class="string">"woc"</span>: <span class="string">"0.12"</span>,
+  <span class="string">"encoding"</span>: <span class="string">"UTF-8"</span>,
+  <span class="string">"contextPlugins"</span>: [<span class="string">"WocTeam.VueTemplateEngine"</span>],
+  <span class="string">"useServices"</span>: [<span class="string">"Todos.Model"</span>],
+  <span class="string">"scripts"</span>: <span class="string">"CreateTask.js"</span>,
+  <span class="string">"templates"</span>: <span class="string">"CreateTask.html"</span>,
+  <span class="string">"styleSheets"</span>: <span class="string">"CreateTask.css"</span>,
+  <span class="string">"name"</span>: <span class="string">"Todos.CreateTask"</span>
+}
+</code></pre>
+<h2 id="reference-the-component-in-the-bundle">Reference the component in the bundle</h2>
+<p>Edit the file <code>todos.wocb/bundle.json</code> and add our new component <code>Todos.CreateTask</code>:</p>
+<pre><code class="lang-javascript">  <span class="string">"components"</span>: [<span class="string">"Todos.List"</span>, <span class="string">"Todos.CreateTask"</span>],
+</code></pre>
+<p>Edit the file <code>todos.wocb/defs/todos.d.ts</code> and add the TypeScript class of our component:</p>
+<pre><code class="lang-typescript">/// &lt;reference path=&#39;../Todos.CreateTask.wocc/CreateTask.ts&#39; /&gt;
+</code></pre>
+<h2 id="use-the-new-component-in-todos-createtask-">Use the new component in <code>Todos.CreateTask</code></h2>
+<p>Edit the HTML template file <code>Todos.List.wocc/List.html</code>, then add the following line just after the <code>&lt;/ul&gt;</code> closing tag:</p>
+<pre><code class="lang-markup">&lt;div class=&quot;TodosList-new&quot; v-woc-component=&quot;Todos.CreateTask : makeCTProps()&quot;&gt;&lt;/div&gt;
+</code></pre>
+<p>We use a custom Vue.js directive <code>v-woc-component</code> that creates and insert a Woc component. The callback <code>makeCTProps</code> will be called to create the properties of the component <code>Todos.CreateTask</code> when Vue.js will create it.</p>
+<p>We have to make the callback <code>makeCTProps</code>. Edit the file <code>Todos.List.wocc/List.ts</code>. In the method <code>attachTo</code>, we append method for Vue.js. Here is the full code of <code>attachTo</code>:</p>
+<pre><code class="lang-typescript">public attachTo(el: HTMLElement): void {
+  this.cc.bindTemplate({
+    el: el,
+    wocTemplate: &#39;TodosList&#39;,
+    data: this.tplData,
+    methods: {
+      rmTask: (id) =&gt; {
+        this.removeItem(id);
+      },
+      makeCTProps: () =&gt; {
+        return {
+          refreshCb: () =&gt; {
+            this.refresh();
+          }
+        };
+      }
+    }
+  });
+}
+</code></pre>
+<p>Then the configuration. Edit the file <code>Todos.List.wocc/component.json</code> and add a line:</p>
+<pre><code class="lang-javascript">  <span class="string">"useComponents"</span>: [<span class="string">"Todos.CreateTask"</span>],
+</code></pre>
+<h2 id="run-in-the-browser">Run in the browser</h2>
+<p>Reload the application in the browser. A new component is shown under the list of tasks. Try it and add tasks.</p>
+
+        </div>
+      </main>
+      <div class="PageBody-side Sidebar">
+        <nav class="Widget">
+          <ul class="SimpleList">
+            <li class="SimpleList-li"><a href="step-00.html" class="SmallBlockLink">0 - Bootstrapping</a></li>
+            <li class="SimpleList-li"><a href="step-01.html" class="SmallBlockLink">1 - Hello, World! <em>Make a Starting Point</em></a></li>
+            <li class="SimpleList-li"><a href="step-02.html" class="SmallBlockLink">2 - Add a nested bundle <code>lib</code> <em>Add things from outside</em></a></li>
+            <li class="SimpleList-li"><a href="step-03.html" class="SmallBlockLink">3 - A Few Styles <em>Make a Theme</em></a></li>
+            <li class="SimpleList-li"><a href="step-04.html" class="SmallBlockLink">4 - <code>Todos.List</code> <em>Make a Component</em></a></li>
+            <li class="SimpleList-li"><a href="step-05.html" class="SmallBlockLink">5 - <code>Todos.List</code>: Dynamic template <em>Data binding with Vue.js</em></a></li>
+            <li class="SimpleList-li"><a href="step-06.html" class="SmallBlockLink">6 - Load data from the server <em>Use the service <code>Woc.Ajax</code></em></a></li>
+            <li class="SimpleList-li"><a href="step-07.html" class="SmallBlockLink">7 - <code>Todos.Model</code> <em>Make a service</em></a></li>
+            <li class="SimpleList-li"><a href="step-08.html" class="SmallBlockLink">8 - <code>Todos.List</code>: With the model</a></li>
+            <li class="SimpleList-li"><a href="step-09.html" class="SmallBlockLink">9 - <code>Todos.CreateTask</code> <em>A component managed by a template</em></a></li>
+            <li class="SimpleList-li"><a href="step-10.html" class="SmallBlockLink">10 - <code>Todos.Start</code>: several pages <em>Use a router</em></a></li>
+            <li class="SimpleList-li"><a href="step-11.html" class="SmallBlockLink">11 - <code>Todos.EditPanel</code> <em>Double bind</em></a></li>
+            <li class="SimpleList-li"><a href="step-12.html" class="SmallBlockLink">12 - <code>Todos.EditPanel</code>: with dialogs <em>Use the service <code>WocTeam.Dialogs</code></em></a></li>
+            <li class="SimpleList-li"><a href="step-13.html" class="SmallBlockLink">13 - <code>Todos.DateInput</code>: A custom date picker? <em>Use a jQuery-ui widget</em></a></li>
+            <li class="SimpleList-li"><a href="step-14.html" class="SmallBlockLink">14 - <code>Todos.Init</code>: Globally configure jQuery-ui <em>Make an initializer</em></a></li>
+            <li class="SimpleList-li"><a href="step-15.html" class="SmallBlockLink">15 - Deploy! <em>Use the tool <code>woc-make</code></em></a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <footer class="SiteFooter">
+      <div class="ob-pageWrapper large"><span class="ph-email"></span><a href="https://www.facebook.com/tarh.paleo" class="BlockLink">Facebook</a><a href="https://github.com/tarh/woc.ts" class="BlockLink">Contribute</a><a href="https://github.com/tarh/woc-site" class="BlockLink noMargin">Improve this site</a></div>
+    </footer>
+    <script src="/js/main.js"></script>
+    <script src="/theme/prism.js"></script>
+  </body>
+</html>

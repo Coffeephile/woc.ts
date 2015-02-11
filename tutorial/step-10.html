@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 10 - Tutorial - Woc.ts</title>
+    <link rel="stylesheet" href="/theme/main.css">
+  </head>
+  <body class="ob-bgGreyArea">
+    <header class="SiteHeader">
+      <div class="ob-pageWrapper pos large">
+        <div class="SiteHeader-left"><a href="/" class="BlockLink light">Woc.ts</a></div>
+        <div class="SiteHeader-right"><a href="/presentation.html" class="BlockLink light">Presentation</a><a href="/tutorial/" class="BlockLink light noMargin">Tutorial</a></div>
+      </div>
+    </header>
+    <div class="PageBody ob-pageWrapper large">
+      <main class="PageBody-main">
+        <div class="Paper side ob-text longTitle"><h1 id="step-10-todos-start-several-pages-use-a-router-">Step 10 - <code>Todos.Start</code>: several pages <em>Use a router</em></h1>
+<p>In this step, our application becomes multi-pages.</p>
+<h2 id="make-the-component-todos-editpanel-">Make the component <code>Todos.EditPanel</code></h2>
+<p>First, a new component <code>Todos.EditPanel</code> has to be created.</p>
+<p>In the directory <code>todos.wocb/</code>, make a new directory <code>Todos.EditPanel.wocc/</code>. In this new directory, make a file <code>EditPanel.ts</code> with the code below:</p>
+<pre><code class="lang-typescript">/// &lt;reference path=&#39;../defs/todos.d.ts&#39; /&gt;
+
+module Todos {
+  &#39;use strict&#39;;
+
+  export class EditPanel implements Woc.Component {
+    private tplData = { taskId: null };
+
+    constructor(private cc: WocTeam.VueComponentContext) {
+    }
+
+    public attachTo(el: HTMLElement): void {
+      this.cc.bindTemplate({
+        el: el,
+        wocTemplate: &#39;TodosEditPanel&#39;,
+        data: this.tplData
+      });
+    }
+
+    public setTask(taskId: number) {
+      this.tplData.taskId = taskId;
+    }
+  }
+}
+</code></pre>
+<p>The full implementation will be see in the next steps, here the template data just contains a task identifier.</p>
+<p>In <code>Todos.EditPanel.wocc/</code>, create and edit a file <code>EditPanel.html</code>. Here is the code:</p>
+<pre><code class="lang-markup">&lt;!-- Template: TodosEditPanel --&gt;
+
+&lt;p&gt;{{taskId}}&lt;/p&gt;
+</code></pre>
+<p>Create and edit a file <code>component.json</code>. Here is the code:</p>
+<pre><code class="lang-javascript">{
+  <span class="string">"woc"</span>: <span class="string">"0.12"</span>,
+  <span class="string">"encoding"</span>: <span class="string">"UTF-8"</span>,
+  <span class="string">"contextPlugins"</span>: [<span class="string">"WocTeam.VueTemplateEngine"</span>],
+  <span class="string">"scripts"</span>: <span class="string">"EditPanel.js"</span>,
+  <span class="string">"templates"</span>: <span class="string">"EditPanel.html"</span>,
+  <span class="string">"name"</span>: <span class="string">"Todos.EditPanel"</span>
+}
+</code></pre>
+<h2 id="reference-the-component-todos-editpanel-in-the-bundle">Reference the component <code>Todos.EditPanel</code> in the bundle</h2>
+<p>Edit the file <code>todos.wocb/bundle.json</code> and add our new component <code>Todos.EditPanel</code>:</p>
+<pre><code class="lang-javascript">  <span class="string">"components"</span>: [<span class="string">"Todos.List"</span>, <span class="string">"Todos.CreateTask"</span>, <span class="string">"Todos.EditPanel"</span>],
+</code></pre>
+<p>Edit the file <code>todos.wocb/defs/todos.d.ts</code> and add the TypeScript class of our component:</p>
+<pre><code class="lang-typescript">/// &lt;reference path=&#39;../Todos.EditPanel.wocc/EditPanel.ts&#39; /&gt;
+</code></pre>
+<h2 id="configure-the-router-easyrouter-">Configure the router <code>EasyRouter</code></h2>
+<p>The project EasyRouter has been originally written for Woc.ts, but it is an independent JavaScript library. It is integrated in Woc.ts as a service <code>WocTeam.WocEasyRouter</code> that implements the core definition <code>Woc.Router</code>.</p>
+<p>Edit the TypeScript file <code>Todos.Start.wocs/Start.ts</code>, and replace the class with the code below:</p>
+<pre><code class="lang-typescript">export class Start implements Woc.StartingPoint {
+  private http: Woc.HttpClient;
+  private model: Todos.Model;
+
+  constructor(private sc: Woc.ServiceContext) {
+    this.http = sc.getService(&#39;Woc.HttpClient&#39;);
+    this.model = sc.getService(&#39;Todos.Model&#39;);
+  }
+
+  public start(el: HTMLElement) {
+    el.className = &#39;AppWrapper&#39;;
+    el.classList.add(&#39;ob-ajax&#39;);
+    this.http.get(this.sc.appConfig.wocUrl + &#39;/data.json&#39;).then((resp) =&gt; {
+      el.classList.remove(&#39;ob-ajax&#39;);
+      this.model.reset(resp.data.tasks);
+      this.initRouter(el);
+    }).catch((err) =&gt; {
+      this.sc.log.error(err);
+    });
+  }
+
+  private initRouter(el: HTMLElement) {
+    this.sc.createComponent(&#39;Public.ScreenRouter&#39;, [
+      {
+        route: &#39;&#39;,
+        comp: this.sc.createComponent(&#39;Todos.List&#39;),
+        title: &#39;Tasks&#39;,
+        activate: (query: EasyRouter.Query, comp: Todos.List) =&gt; {
+          comp.refresh();
+        }
+      },
+      {
+        route: &#39;task/:taskId&#39;,
+        comp: this.sc.createComponent(&#39;Todos.EditPanel&#39;),
+        canActivate: (query: EasyRouter.Query) =&gt; {
+          var id = parseInt(query.routeParams[&#39;taskId&#39;], 10);
+          return this.model.getTask(id) ? true : false;
+        },
+        title: (query: EasyRouter.Query) =&gt; {
+          var id = parseInt(query.routeParams[&#39;taskId&#39;], 10),
+            task = this.model.getTask(id);
+          return task.title + &#39; | Edition&#39;;
+        },
+        activate: (query: EasyRouter.Query, comp: Todos.EditPanel) =&gt; {
+          var id = parseInt(query.routeParams[&#39;taskId&#39;], 10);
+          comp.setTask(id);
+        }
+      }
+    ]).attachTo(el);
+  }
+}
+</code></pre>
+<p>In the method <code>start</code>, the component <code>Todos.List</code> is replaced by a call to a new method <code>initRouter</code>.</p>
+<p>The method <code>initRouter</code> creates an instance of the component <code>Public.ScreenRouter</code> which is located in the nested bundle <code>lib</code>. This is a very simple component that helps us to configure the service <code>WocTeam.WocEasyRouter</code>. Each “screen” is a component. The component <code>Public.ScreenRouter</code> will switch to the one that matches to the current route.</p>
+<p>The optional property <code>canActivate</code> sets a callback that returns a boolean or a promise that returns a boolean. The value <code>true</code> means the query is valid, <code>false</code> redirects to a 404 not found.</p>
+<p>The property <code>title</code> gives the title (defined in the HTML <code>&lt;head&gt;</code> element and in the browser history) of a valid query. The value can be a string or a callback. The callback returns a string or a promise that returns a string.</p>
+<p>The property <code>activate</code> sets a callback for a valid query, which is called each time when the component is showed as the current screen. It can returns nothing (<code>void</code>) or a promise that returns nothing.</p>
+<h2 id="then-the-configuration">Then the configuration</h2>
+<p>Edit the file <code>Todos.Start.wocs/service.json</code> and add the component <code>Public.ScreenRouter</code>:</p>
+<pre><code class="lang-javascript">  <span class="string">"useComponents"</span>: [<span class="string">"Public.ScreenRouter"</span>, <span class="string">"Todos.List"</span>, <span class="string">"Todos.EditPanel"</span>]
+</code></pre>
+<h2 id="run-in-the-browser">Run in the browser</h2>
+<p>Reload the application in the browser. In the list of tasks, click on a task: the list is replaced by the component <code>Todos.EditPanel</code> that shows the current task identifier.</p>
+
+        </div>
+      </main>
+      <div class="PageBody-side Sidebar">
+        <nav class="Widget">
+          <ul class="SimpleList">
+            <li class="SimpleList-li"><a href="step-00.html" class="SmallBlockLink">0 - Bootstrapping</a></li>
+            <li class="SimpleList-li"><a href="step-01.html" class="SmallBlockLink">1 - Hello, World! <em>Make a Starting Point</em></a></li>
+            <li class="SimpleList-li"><a href="step-02.html" class="SmallBlockLink">2 - Add a nested bundle <code>lib</code> <em>Add things from outside</em></a></li>
+            <li class="SimpleList-li"><a href="step-03.html" class="SmallBlockLink">3 - A Few Styles <em>Make a Theme</em></a></li>
+            <li class="SimpleList-li"><a href="step-04.html" class="SmallBlockLink">4 - <code>Todos.List</code> <em>Make a Component</em></a></li>
+            <li class="SimpleList-li"><a href="step-05.html" class="SmallBlockLink">5 - <code>Todos.List</code>: Dynamic template <em>Data binding with Vue.js</em></a></li>
+            <li class="SimpleList-li"><a href="step-06.html" class="SmallBlockLink">6 - Load data from the server <em>Use the service <code>Woc.Ajax</code></em></a></li>
+            <li class="SimpleList-li"><a href="step-07.html" class="SmallBlockLink">7 - <code>Todos.Model</code> <em>Make a service</em></a></li>
+            <li class="SimpleList-li"><a href="step-08.html" class="SmallBlockLink">8 - <code>Todos.List</code>: With the model</a></li>
+            <li class="SimpleList-li"><a href="step-09.html" class="SmallBlockLink">9 - <code>Todos.CreateTask</code> <em>A component managed by a template</em></a></li>
+            <li class="SimpleList-li"><a href="step-10.html" class="SmallBlockLink">10 - <code>Todos.Start</code>: several pages <em>Use a router</em></a></li>
+            <li class="SimpleList-li"><a href="step-11.html" class="SmallBlockLink">11 - <code>Todos.EditPanel</code> <em>Double bind</em></a></li>
+            <li class="SimpleList-li"><a href="step-12.html" class="SmallBlockLink">12 - <code>Todos.EditPanel</code>: with dialogs <em>Use the service <code>WocTeam.Dialogs</code></em></a></li>
+            <li class="SimpleList-li"><a href="step-13.html" class="SmallBlockLink">13 - <code>Todos.DateInput</code>: A custom date picker? <em>Use a jQuery-ui widget</em></a></li>
+            <li class="SimpleList-li"><a href="step-14.html" class="SmallBlockLink">14 - <code>Todos.Init</code>: Globally configure jQuery-ui <em>Make an initializer</em></a></li>
+            <li class="SimpleList-li"><a href="step-15.html" class="SmallBlockLink">15 - Deploy! <em>Use the tool <code>woc-make</code></em></a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <footer class="SiteFooter">
+      <div class="ob-pageWrapper large"><span class="ph-email"></span><a href="https://www.facebook.com/tarh.paleo" class="BlockLink">Facebook</a><a href="https://github.com/tarh/woc.ts" class="BlockLink">Contribute</a><a href="https://github.com/tarh/woc-site" class="BlockLink noMargin">Improve this site</a></div>
+    </footer>
+    <script src="/js/main.js"></script>
+    <script src="/theme/prism.js"></script>
+  </body>
+</html>

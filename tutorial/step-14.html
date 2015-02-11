@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 14 - Tutorial - Woc.ts</title>
+    <link rel="stylesheet" href="/theme/main.css">
+  </head>
+  <body class="ob-bgGreyArea">
+    <header class="SiteHeader">
+      <div class="ob-pageWrapper pos large">
+        <div class="SiteHeader-left"><a href="/" class="BlockLink light">Woc.ts</a></div>
+        <div class="SiteHeader-right"><a href="/presentation.html" class="BlockLink light">Presentation</a><a href="/tutorial/" class="BlockLink light noMargin">Tutorial</a></div>
+      </div>
+    </header>
+    <div class="PageBody ob-pageWrapper large">
+      <main class="PageBody-main">
+        <div class="Paper side ob-text longTitle"><h1 id="step-14-todos-init-globally-configure-jquery-ui-make-an-initializer-">Step 14 - <code>Todos.Init</code>: Globally configure jQuery-ui <em>Make an initializer</em></h1>
+<p>This step is not very useful for our Todos application, but it is an example of initializer.</p>
+<blockquote>
+<p>An <strong>initializer</strong> is executed once, just after the bundle is loaded and after the libraries are executed. Until it is deployed, an initializer is a directory named <code>&lt;InitializerName&gt;.woci</code>, that contains a file <code>initializer.json</code>.</p>
+</blockquote>
+<h2 id="create-an-initializer-todos-init-">Create an initializer <code>Todos.Init</code></h2>
+<p>In the directory <code>todos.wocb/</code>, make a new directory <code>Todos.Init.woci/</code>. In this new directory, make a file <code>Init.ts</code> with the code below:</p>
+<pre><code class="lang-typescript">/// &lt;reference path=&#39;../defs/todos.d.ts&#39; /&gt;
+
+module Todos {
+  &#39;use strict&#39;;
+
+  export class Init implements Woc.Initializer {
+    constructor(private ic: Woc.InitializerContext) {
+    }
+
+    public init(): void {
+      Init.initDatePickerFr();
+    }
+
+    private static initDatePickerFr() {
+      /* French initialisation for the jQuery UI date picker plugin. */
+      /* Written by Keith Wood (kbwood{at}iinet.com.au),
+       Stéphane Nahmani (sholby@sholby.net),
+       Stéphane Raimbault &lt;stephane.raimbault@gmail.com&gt; */
+      (function (factory) {
+        factory(jQuery.datepicker);
+      }(function (datepicker) {
+        datepicker.regional[&#39;fr&#39;] = {
+          closeText: &#39;Fermer&#39;,
+          prevText: &#39;Précédent&#39;,
+          nextText: &#39;Suivant&#39;,
+          currentText: &#39;Aujourd\&#39;hui&#39;,
+          monthNames: [&#39;janvier&#39;, &#39;février&#39;, &#39;mars&#39;, &#39;avril&#39;, &#39;mai&#39;, &#39;juin&#39;,
+            &#39;juillet&#39;, &#39;août&#39;, &#39;septembre&#39;, &#39;octobre&#39;, &#39;novembre&#39;, &#39;décembre&#39;],
+          monthNamesShort: [&#39;janv.&#39;, &#39;févr.&#39;, &#39;mars&#39;, &#39;avril&#39;, &#39;mai&#39;, &#39;juin&#39;,
+            &#39;juil.&#39;, &#39;août&#39;, &#39;sept.&#39;, &#39;oct.&#39;, &#39;nov.&#39;, &#39;déc.&#39;],
+          dayNames: [&#39;dimanche&#39;, &#39;lundi&#39;, &#39;mardi&#39;, &#39;mercredi&#39;, &#39;jeudi&#39;, &#39;vendredi&#39;, &#39;samedi&#39;],
+          dayNamesShort: [&#39;dim.&#39;, &#39;lun.&#39;, &#39;mar.&#39;, &#39;mer.&#39;, &#39;jeu.&#39;, &#39;ven.&#39;, &#39;sam.&#39;],
+          dayNamesMin: [&#39;D&#39;, &#39;L&#39;, &#39;M&#39;, &#39;M&#39;, &#39;J&#39;, &#39;V&#39;, &#39;S&#39;],
+          weekHeader: &#39;Sem.&#39;,
+          dateFormat: &#39;dd/mm/yy&#39;,
+          firstDay: 1,
+          isRTL: false,
+          showMonthAfterYear: false,
+          yearSuffix: &#39;&#39;
+        };
+        datepicker.setDefaults(datepicker.regional[&#39;fr&#39;]);
+        return datepicker.regional[&#39;fr&#39;];
+      }));
+    }
+  }
+}
+</code></pre>
+<p>The initializer just translates in french the jQueryUI date picker. In reality, the content of the method <code>initDatePickerFr</code> could be integrated as an external library, because it doesn’t use the Woc context. I choose to paste it in an initializer in order to show an example of initializer.</p>
+<p>Create and edit a file <code>initializer.json</code>. Here is the code:</p>
+<pre><code class="lang-javascript">{
+  <span class="string">"woc"</span>: <span class="string">"0.12"</span>,
+  <span class="string">"encoding"</span>: <span class="string">"UTF-8"</span>,
+  <span class="string">"useExternalLibraries"</span>: [<span class="string">"jQueryUI"</span>],
+  <span class="string">"scripts"</span>: <span class="string">"Init.js"</span>,
+  <span class="string">"name"</span>: <span class="string">"Todos.Init"</span>
+}
+</code></pre>
+<h2 id="reference-the-initializer-todos-init-in-the-bundle">Reference the initializer <code>Todos.Init</code> in the bundle</h2>
+<p>Edit the file <code>todos.wocb/bundle.json</code> and add our initializer:</p>
+<pre><code class="lang-javascript">  <span class="string">"initializers"</span>: [<span class="string">"Todos.Init"</span>],
+</code></pre>
+<h2 id="run-in-the-browser">Run in the browser</h2>
+<p>Reload the application in the browser. Open a task, click in the date field: the jQueryUI date picker is now localized in french.</p>
+
+        </div>
+      </main>
+      <div class="PageBody-side Sidebar">
+        <nav class="Widget">
+          <ul class="SimpleList">
+            <li class="SimpleList-li"><a href="step-00.html" class="SmallBlockLink">0 - Bootstrapping</a></li>
+            <li class="SimpleList-li"><a href="step-01.html" class="SmallBlockLink">1 - Hello, World! <em>Make a Starting Point</em></a></li>
+            <li class="SimpleList-li"><a href="step-02.html" class="SmallBlockLink">2 - Add a nested bundle <code>lib</code> <em>Add things from outside</em></a></li>
+            <li class="SimpleList-li"><a href="step-03.html" class="SmallBlockLink">3 - A Few Styles <em>Make a Theme</em></a></li>
+            <li class="SimpleList-li"><a href="step-04.html" class="SmallBlockLink">4 - <code>Todos.List</code> <em>Make a Component</em></a></li>
+            <li class="SimpleList-li"><a href="step-05.html" class="SmallBlockLink">5 - <code>Todos.List</code>: Dynamic template <em>Data binding with Vue.js</em></a></li>
+            <li class="SimpleList-li"><a href="step-06.html" class="SmallBlockLink">6 - Load data from the server <em>Use the service <code>Woc.Ajax</code></em></a></li>
+            <li class="SimpleList-li"><a href="step-07.html" class="SmallBlockLink">7 - <code>Todos.Model</code> <em>Make a service</em></a></li>
+            <li class="SimpleList-li"><a href="step-08.html" class="SmallBlockLink">8 - <code>Todos.List</code>: With the model</a></li>
+            <li class="SimpleList-li"><a href="step-09.html" class="SmallBlockLink">9 - <code>Todos.CreateTask</code> <em>A component managed by a template</em></a></li>
+            <li class="SimpleList-li"><a href="step-10.html" class="SmallBlockLink">10 - <code>Todos.Start</code>: several pages <em>Use a router</em></a></li>
+            <li class="SimpleList-li"><a href="step-11.html" class="SmallBlockLink">11 - <code>Todos.EditPanel</code> <em>Double bind</em></a></li>
+            <li class="SimpleList-li"><a href="step-12.html" class="SmallBlockLink">12 - <code>Todos.EditPanel</code>: with dialogs <em>Use the service <code>WocTeam.Dialogs</code></em></a></li>
+            <li class="SimpleList-li"><a href="step-13.html" class="SmallBlockLink">13 - <code>Todos.DateInput</code>: A custom date picker? <em>Use a jQuery-ui widget</em></a></li>
+            <li class="SimpleList-li"><a href="step-14.html" class="SmallBlockLink">14 - <code>Todos.Init</code>: Globally configure jQuery-ui <em>Make an initializer</em></a></li>
+            <li class="SimpleList-li"><a href="step-15.html" class="SmallBlockLink">15 - Deploy! <em>Use the tool <code>woc-make</code></em></a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <footer class="SiteFooter">
+      <div class="ob-pageWrapper large"><span class="ph-email"></span><a href="https://www.facebook.com/tarh.paleo" class="BlockLink">Facebook</a><a href="https://github.com/tarh/woc.ts" class="BlockLink">Contribute</a><a href="https://github.com/tarh/woc-site" class="BlockLink noMargin">Improve this site</a></div>
+    </footer>
+    <script src="/js/main.js"></script>
+    <script src="/theme/prism.js"></script>
+  </body>
+</html>

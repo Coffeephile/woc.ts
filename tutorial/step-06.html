@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Step 6 - Tutorial - Woc.ts</title>
+    <link rel="stylesheet" href="/theme/main.css">
+  </head>
+  <body class="ob-bgGreyArea">
+    <header class="SiteHeader">
+      <div class="ob-pageWrapper pos large">
+        <div class="SiteHeader-left"><a href="/" class="BlockLink light">Woc.ts</a></div>
+        <div class="SiteHeader-right"><a href="/presentation.html" class="BlockLink light">Presentation</a><a href="/tutorial/" class="BlockLink light noMargin">Tutorial</a></div>
+      </div>
+    </header>
+    <div class="PageBody ob-pageWrapper large">
+      <main class="PageBody-main">
+        <div class="Paper side ob-text longTitle"><h1 id="step-6-load-data-from-the-server-use-the-service-woc-httpclient-">Step 6 - Load data from the server <em>Use the service <code>Woc.HttpClient</code></em></h1>
+<p>In this step we are going to load data from the server, in the service <code>Todos.Start</code>, then the component <code>Todos.List</code> will display the loaded data.</p>
+<h2 id="add-a-file-data-json-">Add a file <code>data.json</code></h2>
+<p>Create a file <code>data.json</code> at the project root directory, using the code below:</p>
+<pre><code class="lang-javascript">{
+  <span class="string">"tasks"</span>: [
+    {
+      <span class="string">"id"</span>: <span class="number">1</span>,
+      <span class="string">"title"</span>: <span class="string">"First task… loaded from the server!"</span>
+    },
+    {
+      <span class="string">"id"</span>: <span class="number">2</span>,
+      <span class="string">"title"</span>: <span class="string">"Second task… loaded from the server!"</span>
+    }
+  ]
+}
+</code></pre>
+<h2 id="in-the-component-todos-list-">In the component <code>Todos.List</code></h2>
+<p>Edit the file <code>Todos.List.wocc/List.ts</code>, then replace the code of the constructor with the code below:</p>
+<pre><code class="lang-typescript">  constructor(private cc: WocTeam.VueComponentContext, props) {
+    this.tplData = props.tplData;
+  }
+</code></pre>
+<p>A component constructor expects two parameters. The first one is the component context, provided by Woc.ts with the help of the template engine. The second one is an object <code>props</code> provided when the component is created. The content of the properties is free. Here the component expects a property <code>tplData</code>.</p>
+<h2 id="in-the-service-todos-start-the-typescript-code">In the service <code>Todos.Start</code>, the TypeScript code</h2>
+<p>Edit the file <code>Todos.Start.wocs/Start.ts</code> and replace all the class with the code below:</p>
+<pre><code class="lang-typescript">export class Start implements Woc.StartingPoint {
+  private http: Woc.HttpClient;
+
+  constructor(private sc: Woc.ServiceContext) {
+    this.http = sc.getService(&#39;Woc.HttpClient&#39;);
+  }
+
+  public start(el: HTMLElement) {
+    el.className = &#39;AppWrapper&#39;;
+    el.classList.add(&#39;ob-ajax&#39;);
+    this.http.get(this.sc.appConfig.wocUrl + &#39;/data.json&#39;).then((resp) =&gt; {
+      el.classList.remove(&#39;ob-ajax&#39;);
+      var list: Todos.List = this.sc.createComponent(&#39;Todos.List&#39;, {
+        tplData: resp.data
+      });
+      list.attachTo(el);
+    }).catch((err) =&gt; {
+      this.sc.log.error(err);
+    });
+  }
+}
+</code></pre>
+<p>In the method <code>start</code>, the CSS class <code>ob-ajax</code> displays an animated GIF loader as a background image, during loading.</p>
+<p>The service <code>Woc.HttpClient</code> is retrieved in the constructor. Then it is used to load the file <code>data.json</code> with the HTTP method <code>GET</code>. The method <code>get</code> returns an ES6 Promise, the callbacks are passed to the method <code>then</code> of the promise, the first one will be called on success, the second one will be called on error.</p>
+<blockquote>
+<p>In order to learn how to use ES6 promises, I strongly suggest the article from <a href="http://www.html5rocks.com/en/tutorials/es6/promises/">HTML5 Rocks</a>. Woc.ts heavily use promises, it embeds the small polyfill <a href="https://github.com/jakearchibald/es6-promise">ES6-Promise</a> that implements the true standard.</p>
+</blockquote>
+<p>When the data is loaded, the method <code>createComponent</code> is called with a new properties parameter. The property <code>tplData</code> receives the data.</p>
+<p>In the error handler, we use the context object <code>log</code>. This object redirects to the log management system. Here we use the service <code>WocTeam.Log</code> in the nested bundle <code>lib</code>, but you can implement your own log management system.</p>
+<h2 id="in-the-service-todos-start-the-configuration">In the service <code>Todos.Start</code>, the configuration</h2>
+<p>Woc.ts will refuse to execute the method <code>getService</code> called in the previous section, because the service has to declare all the external resources it uses.</p>
+<p>Edit the file <code>Todos.Start.wocs/service.json</code> and add:</p>
+<pre><code class="lang-javascript">  <span class="string">"useServices"</span>: [<span class="string">"Woc.HttpClient"</span>]
+</code></pre>
+<p>The full code of the file is now:</p>
+<pre><code class="lang-javascript">{
+  <span class="string">"woc"</span>: <span class="string">"0.12"</span>,
+  <span class="string">"encoding"</span>: <span class="string">"UTF-8"</span>,
+  <span class="string">"scripts"</span>: <span class="string">"Start.js"</span>,
+  <span class="string">"name"</span>: <span class="string">"Todos.Start"</span>,
+  <span class="string">"useServices"</span>: [<span class="string">"Woc.HttpClient"</span>],
+  <span class="string">"useComponents"</span>: [<span class="string">"Todos.List"</span>]
+}
+</code></pre>
+<h2 id="run-in-the-browser">Run in the browser</h2>
+<p>Reload the application in the browser.</p>
+
+        </div>
+      </main>
+      <div class="PageBody-side Sidebar">
+        <nav class="Widget">
+          <ul class="SimpleList">
+            <li class="SimpleList-li"><a href="step-00.html" class="SmallBlockLink">0 - Bootstrapping</a></li>
+            <li class="SimpleList-li"><a href="step-01.html" class="SmallBlockLink">1 - Hello, World! <em>Make a Starting Point</em></a></li>
+            <li class="SimpleList-li"><a href="step-02.html" class="SmallBlockLink">2 - Add a nested bundle <code>lib</code> <em>Add things from outside</em></a></li>
+            <li class="SimpleList-li"><a href="step-03.html" class="SmallBlockLink">3 - A Few Styles <em>Make a Theme</em></a></li>
+            <li class="SimpleList-li"><a href="step-04.html" class="SmallBlockLink">4 - <code>Todos.List</code> <em>Make a Component</em></a></li>
+            <li class="SimpleList-li"><a href="step-05.html" class="SmallBlockLink">5 - <code>Todos.List</code>: Dynamic template <em>Data binding with Vue.js</em></a></li>
+            <li class="SimpleList-li"><a href="step-06.html" class="SmallBlockLink">6 - Load data from the server <em>Use the service <code>Woc.Ajax</code></em></a></li>
+            <li class="SimpleList-li"><a href="step-07.html" class="SmallBlockLink">7 - <code>Todos.Model</code> <em>Make a service</em></a></li>
+            <li class="SimpleList-li"><a href="step-08.html" class="SmallBlockLink">8 - <code>Todos.List</code>: With the model</a></li>
+            <li class="SimpleList-li"><a href="step-09.html" class="SmallBlockLink">9 - <code>Todos.CreateTask</code> <em>A component managed by a template</em></a></li>
+            <li class="SimpleList-li"><a href="step-10.html" class="SmallBlockLink">10 - <code>Todos.Start</code>: several pages <em>Use a router</em></a></li>
+            <li class="SimpleList-li"><a href="step-11.html" class="SmallBlockLink">11 - <code>Todos.EditPanel</code> <em>Double bind</em></a></li>
+            <li class="SimpleList-li"><a href="step-12.html" class="SmallBlockLink">12 - <code>Todos.EditPanel</code>: with dialogs <em>Use the service <code>WocTeam.Dialogs</code></em></a></li>
+            <li class="SimpleList-li"><a href="step-13.html" class="SmallBlockLink">13 - <code>Todos.DateInput</code>: A custom date picker? <em>Use a jQuery-ui widget</em></a></li>
+            <li class="SimpleList-li"><a href="step-14.html" class="SmallBlockLink">14 - <code>Todos.Init</code>: Globally configure jQuery-ui <em>Make an initializer</em></a></li>
+            <li class="SimpleList-li"><a href="step-15.html" class="SmallBlockLink">15 - Deploy! <em>Use the tool <code>woc-make</code></em></a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <footer class="SiteFooter">
+      <div class="ob-pageWrapper large"><span class="ph-email"></span><a href="https://www.facebook.com/tarh.paleo" class="BlockLink">Facebook</a><a href="https://github.com/tarh/woc.ts" class="BlockLink">Contribute</a><a href="https://github.com/tarh/woc-site" class="BlockLink noMargin">Improve this site</a></div>
+    </footer>
+    <script src="/js/main.js"></script>
+    <script src="/theme/prism.js"></script>
+  </body>
+</html>

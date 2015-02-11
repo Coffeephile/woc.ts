@@ -1,0 +1,172 @@
+@charset "UTF-8";
+@import "def";
+
+.ob-fgGreyArea {
+  color: #888;
+  .PageTitle,
+  strong {
+    color: #333;
+  }
+}
+
+.ob-bgGreyArea {
+  background-color: #ECECEC;
+}
+
+.ob-pageWrapper {
+  margin: 0 auto;
+  max-width: 600px;
+  &.pos {
+    position: relative;
+  }
+  &.large {
+    max-width: 960px;
+  }
+}
+
+.ob-text {
+  &::after {
+    @include clearFloats;
+  }
+
+  a {
+    color: $linkColorUnread;
+    font-weight: bold;
+  }
+  a:visited {
+    color: $linkColorRead;
+  }
+  a:focus,
+  a:hover {
+    text-decoration: none;
+  }
+  p,
+  li {
+    font-family: sans-serif;
+    font-size: $f14;
+    line-height: 1.3em;
+  }
+  p,
+  li,
+  blockquote {
+    text-align: justify;
+  }
+
+  blockquote {
+    background-color: #FFD7E6;
+    margin: 20px 0 20px 60px;
+    padding: 14px 30px 8px;
+  }
+
+  p {
+    margin-bottom: .4em;
+  }
+  ol,
+  ul {
+    margin: 0 0 .4em 1.5em;
+  }
+  ul {
+    list-style: square;
+  }
+  ol {
+    list-style: decimal;
+  }
+  ol ol {
+    list-style: upper-alpha;
+  }
+  ul ul,
+  ol ol,
+  ul ol,
+  ol ul {
+    margin-bottom: 0;
+  }
+
+  p,
+  ul,
+  ol,
+  dd,
+  pre,
+  hr {
+    margin-bottom: .5em;
+  }
+
+  h1 {
+    font-size: 3em;
+    margin: $rowH 0;
+    text-align: center;
+  }
+  &.longTitle h1 {
+    font-size: $f24;
+    font-weight: bold;
+  }
+
+  h2 {
+    font-size: $f20;
+    font-weight: bold;
+    margin: 1em 0;
+  }
+  &.longTitle h2 {
+    font-size: $f18;
+    margin: 1.5em 0;
+  }
+
+  h3 {
+    font-size: 1.05em;
+    font-style: italic;
+    margin: .4em 0 .2em 1em;
+  }
+
+  & > ul,
+  & > ol,
+  & > ul,
+  & > ol {
+    list-style-position: inside;
+  }
+
+  pre,
+  code {
+    color: #444;
+    font-family: monospace;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  pre,
+  pre[class*="language-"] {
+    background-color: #F4F4F4;
+    margin: 20px -50px;
+    padding: 20px 50px;
+  }
+
+	code,
+  code[class*="language-"],
+  pre,
+  pre[class*="language-"] {
+    font-family: Consolas, Monaco, 'Andale Mono', monospace;
+    font-size: $f14;
+    line-height: $f21;
+    -moz-tab-size: 2;
+    -o-tab-size: 2;
+    tab-size: 2;
+  }
+
+  code {
+    background-color: #DDD;
+    font-size: $f15; // 1.14286em
+    padding: 0 3px;
+  }
+
+  pre code,
+  pre[class*="language-"] code {
+    background-color: transparent;
+    font-size: inherit;
+  }
+
+  hr {
+    background-color: #E7E7E7;
+    border: 0;
+    clear: both;
+    height: .0625em;
+    margin-bottom: .5em;
+  }
+}

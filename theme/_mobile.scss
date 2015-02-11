@@ -1,0 +1,62 @@
+@charset "UTF-8";
+@import "def";
+
+@media print, (max-width: 640px) {
+  .SiteHeader {
+    &-left {
+      left: 5px;
+    }
+    &-right {
+      right: 5px;
+    }
+  }
+  .Paper {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .ob-text {
+    h1 {
+      font-size: $f38;
+      margin: ($rowH / 2) 0;
+    }
+  }
+}
+
+@media print, (max-width: 400px) {
+  .Paper {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+}
+
+@media print, (max-width: 980px) {
+  .ob-pageWrapper {
+    &.large {
+      .SiteHeader {
+        &-left {
+          left: 5px;
+        }
+        &-right {
+          right: 5px;
+        }
+      }
+    }
+  }
+  .Widget {
+    padding-left: 5px;
+  }
+  .Paper.side {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+@media print, (max-width: 720px) {
+  .PageBody {
+    &-main,
+    &-side {
+      float: none;
+      width: auto;
+    }
+  }
+}
