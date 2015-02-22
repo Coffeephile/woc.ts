@@ -10,7 +10,7 @@
     <header class="SiteHeader">
       <div class="ob-pageWrapper pos large">
         <div class="SiteHeader-left"><a href="/woc.ts/" class="BlockLink light">Woc.ts</a></div>
-        <div class="SiteHeader-right"><a href="/woc.ts/presentation.html" class="BlockLink light">Presentation</a><a href="/woc.ts/tutorial/" class="BlockLink light noMargin">Tutorial</a></div>
+        <div class="SiteHeader-right"><a href="/woc.ts/presentation.html" class="BlockLink light">Presentation</a><a href="/woc.ts/tutorial/step-00.html" class="BlockLink light noMargin">Tutorial</a></div>
       </div>
     </header>
     <div class="PageBody ob-pageWrapper large">
@@ -27,8 +27,12 @@
 <p>The SCSS variant of SASS is used in this tutorial. Please <a href="http://sass-lang.com/install">install SASS</a>.</p>
 <p>But SASS is not required. You can remove the SASS files (<code>.scss</code>) and directly work on CSS files. When the tutorial gives some SCSS code, just go to the step 14 and copy the matching CSS file.</p>
 <h2 id="get-the-code">Get the code</h2>
+<p>There are two way to fetch the same code.</p>
+<h3 id="from-git">From Git</h3>
+<p>The following command will fetch the tutorial in a directory <code>woc-tuto</code> :</p>
+<pre><code>git clone https://github.com/tarh/woc-site.git --branch installed --single-branch --depth 1 woc-tuto
+</code></pre><h3 id="or-from-a-tar-gz-archive">Or from a <code>tar.gz</code> archive</h3>
 <p>Download <a href="https://github.com/tarh/woc-site/releases">the last release of the tutorial</a>, then decompress it.</p>
-<h2 id="make-the-tutorial-ready">Make the tutorial ready</h2>
 <p>From the command line, run:</p>
 <pre><code>cd path/to/woc-tuto-N-N-N/
 node tuto-install

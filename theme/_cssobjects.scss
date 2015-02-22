@@ -111,9 +111,10 @@
   }
 
   h3 {
-    font-size: 1.05em;
+    font-size: $f16;
     font-style: italic;
-    margin: .4em 0 .2em 1em;
+    font-weight: bold;
+    margin: 1em 0;
   }
 
   & > ul,

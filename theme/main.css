@@ -313,9 +313,10 @@ pre.line-numbers > code {
   font-size: 1.125em;
   margin: 1.5em 0; }
 .ob-text h3 {
-  font-size: 1.05em;
+  font-size: 1em;
   font-style: italic;
-  margin: .4em 0 .2em 1em; }
+  font-weight: bold;
+  margin: 1em 0; }
 .ob-text > ul, .ob-text > ol, .ob-text > ul, .ob-text > ol {
   list-style-position: inside; }
 .ob-text pre,
