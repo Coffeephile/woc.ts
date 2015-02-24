@@ -16,6 +16,9 @@
     <div class="PageBody ob-pageWrapper large">
       <main class="PageBody-main">
         <div class="Paper side ob-text longTitle"><h1 id="step-4-todos-list-make-a-component-">Step 4 - <code>Todos.List</code> <em>Make a Component</em></h1>
+<blockquote>
+<p>[Tip] WebStorm allows to compare directories. Select the two directories <code>step-01</code> and <code>step-02</code>, then right click, and select “compare directories”. Use it to watch the differences between the step 1 and the step 2.</p>
+</blockquote>
 <p>We are going to create our first component.</p>
 <h2 id="a-dedicated-directory-todos-list-wocc-">A dedicated directory <code>Todos.List.wocc</code></h2>
 <p>In the directory <code>todos.wocb</code>, make a subdirectory <code>Todos.List.wocc</code>.</p>
@@ -59,8 +62,8 @@ module Todos {
 &lt;/section&gt;
 </code></pre>
 <p>A template file (suffixed with <code>.html</code>) can contain several templates. Each are named with an HTML comment:</p>
-  <!-- Template: <TemplateName> -->
-
+<pre><code class="lang-markup">&lt;!-- Template: &lt;TemplateName&gt; --&gt;
+</code></pre>
 <p>Then, it can be used from the TypeScript code with the property <code>wocTemplate</code> of the method <code>bindTemplate</code>.</p>
 <h2 id="css-rules">CSS rules</h2>
 <p>CSS files can be added to the component.</p>
@@ -159,7 +162,8 @@ module Todos {
 <pre><code class="lang-javascript">  <span class="string">"components"</span>: [<span class="string">"Todos.List"</span>]
 </code></pre>
 <p>Edit the file <code>todos.wocb/defs/todos.d.ts</code> and append the new TypeScript file:</p>
-<p>  /// <reference path='../Todos.List.wocc/List.ts' /></p>
+<pre><code class="lang-typescript">/// &lt;reference path=&#39;../Todos.List.wocc/List.ts&#39; /&gt;
+</code></pre>
 <h2 id="use-the-component">Use the component</h2>
 <p>Our component is added in the bundle. Let’s use it.</p>
 <p>Edit the file <code>Todos.Start.wocs/Start.ts</code>, and replace the line with the message <code>Hello, World!</code> with:</p>
